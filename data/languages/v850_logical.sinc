@@ -1,0 +1,86 @@
+
+# (8) Logical instructions
+# (14) Bit manipulation instructions
+
+
+# NOT reg1, reg2
+:not R0004, R1115 is op0510=0x01 & R0004 & R1115 {
+	R1115 = ~ R0004;
+	TODO(); # flags
+}
+
+# OR reg1, reg2
+:or R0004, R1115 is op0510=0x08 & R0004 & R1115 {
+	R1115 = R1115 | R0004;
+	TODO(); # flags
+}
+# XOR reg1, reg2
+:xor R0004, R1115 is op0510=0x09 & R0004 & R1115 {
+	R1115 = R1115 ^ R0004;
+	TODO(); # flags
+}
+# AND reg1, reg2
+:or R0004, R1115 is op0510=0x0A & R0004 & R1115 {
+	R1115 = R1115 & R0004;
+	TODO(); # flags
+}
+# TST reg1, reg2
+:tst R0004, R1115 is op0510=0x0B & R0004 & R1115 {
+	TODO(); # flags
+}
+
+# ORI imm16, reg1, reg2
+:ori s1631, R0004, R1115 is op0510=0x34 & R1115 & R0004; s1631 {
+	TODO();
+}
+# XORI imm16, reg1, reg2
+:xori s1631, R0004, R1115 is op0510=0x35 & R1115 & R0004; s1631 {
+	TODO();
+}
+# ANDI imm16, reg1, reg2
+:andi s1631, R0004, R1115 is op0510=0x36 & R1115 & R0004; s1631 {
+	TODO();
+}
+
+# SET1 bit3, disp16[reg1]
+:set1 op1113, s1631[R0004] is op0510=0x3E & op1415=0 & op1113 & R0004; s1631 {
+	local addr:4 = s1631 + R0004;
+	*:1 addr = *:1 addr | (1 << op1113);
+	TODO(); # flags
+}
+# NOT1 bit3, disp16[reg1]
+:not1 op1113, s1631[R0004] is op0510=0x3E & op1415=1 & op1113 & R0004; s1631 {
+	local addr:4 = s1631 + R0004;
+	*:1 addr = *:1 addr ^ (1 << op1113);
+	TODO(); # flags
+}
+# CLR1 bit3, disp16[reg1]
+:clr1 op1113, s1631[R0004] is op0510=0x3E & op1415=2 & op1113 & R0004; s1631 {
+	local addr:4 = s1631 + R0004;
+	*:1 addr = *:1 addr & ~(1 << op1113);
+	TODO(); # flags
+}
+# TST1 bit3, disp16[reg1]
+:tst1 op1113, s1631[R0004] is op0510=0x3E & op1415=3 & op1113 & R0004; s1631 {
+	# local addr:4 = s1631 + R0004;
+	TODO(); # flags
+}
+
+# SET1 reg1, [reg2]
+:set1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE0 {
+	TODO();
+}
+# NOT1 reg1, [reg2]
+:not1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE2 {
+	TODO();
+}
+# CLR1 reg1, [reg2]
+:clr1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE4 {
+	TODO();
+}
+# TST1 reg1, [reg2]
+:tst1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE6 {
+	TODO();
+}
+
+

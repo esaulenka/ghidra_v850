@@ -1,0 +1,32 @@
+
+# (6) Conditional arithmetic instructions
+# part of (9) Data manipulation instructions
+# part of (13) Branch instructions
+
+
+# Bcond disp9
+:bge disp9 is op0003=0xE & op0710=0xB & op0406 & s1115
+[ disp9 = (s1115 << 4) | (op0406 << 1); ] {
+	TODO();
+}
+# TODO others!!!
+
+# SETF cond, reg2
+:setf "cond," R1115 is op0410=0x7E & R1115; op1631=0
+unimpl # TODO
+
+# SASF cccc, reg2
+# TODO !!!
+
+# CMOV cccc, imm5, reg2, reg3
+# CMOV cccc, reg1, reg2, reg3
+# TODO!!!
+
+
+
+# SBF cccc, reg1, reg2, reg3
+# TODO!
+
+# ADF cccc, reg1, reg2, reg3
+# TODO!
+

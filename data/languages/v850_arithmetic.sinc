@@ -1,0 +1,209 @@
+
+# (3) Multiply instructions
+# (4) Multiply-accumulate instructions
+# (5) Arithmetic instructions
+# (7) Saturated operation instructions
+# (11) Divide instructions
+# (12) High-speed divide instructions
+
+
+# MOV reg1, reg2
+:mov R0004, r1115 is op0510=0x00 & R0004 & r1115 {
+	r1115 = R0004;
+}
+
+# DIVH reg1, reg2
+:divh R0004, r1115 is op0510=0x02 & R0004 & r1115 {
+	TODO();
+}
+
+# SATSUBR reg1, reg2
+:satsubr R0004, R1115 is op0510=0x04 & R0004 & R1115 & op1115!=0 {
+	TODO();
+}
+# SATSUB reg1, reg2
+:satsub R0004, R1115 is op0510=0x05 & R0004 & R1115 & op1115!=0 {
+	TODO();
+}
+# SATADD reg1, reg2
+:satadd R0004, R1115 is op0510=0x06 & R0004 & R1115 & op1115!=0 {
+	TODO();
+}
+
+# MULH reg1, reg2
+:mulh R0004, R1115 is op0510=0x07 & R0004 & R1115 & op1115!=0 {
+	local reg1 = sext(R0004[0,16]);
+	local reg2 = sext(R1115[0,16]);
+	R1115 = reg1 * reg2;
+	TODO(); # flags
+}
+
+# SUBR reg1, reg2
+:subr R0004, R1115 is op0510=0x0C & R0004 & R1115 {
+	TODO();
+}
+# SUB reg1, reg2
+:sub R0004, R1115 is op0510=0x0D & R0004 & R1115 {
+	TODO();
+}
+# ADD reg1, reg2
+:add R0004, R1115 is op0510=0x0E & R0004 & R1115 {
+	TODO();
+}
+# CMP reg1, reg2
+:cmp R0004, R1115 is op0510=0x0F & R0004 & R1115 {
+	TODO();
+}
+
+# MOV imm5, reg2
+:mov s0004, r1115 is op0510=0x10 & s0004 & r1115 & op1115!=0 {
+	# r1115 = sext(s0004);
+	TODO();
+}
+
+#SATADD imm5, reg2
+:satadd s0004, r1115 is op0510=0x11 & s0004 & r1115 & op1115!=0 {
+	TODO();
+}
+
+# ADD imm5, reg2
+:add s0004, r1115 is op0510=0x12 & s0004 & r1115 {
+	TODO();
+}
+
+# CMP imm5, reg2
+:cmp s0004, r1115 is op0510=0x13 & s0004 & r1115 {
+	TODO();
+}
+
+# MULH imm5, reg2
+:mulh op0004, r1115 is op0510=0x17 & op0004 & r1115 {
+	r1115 = r1115 * op0004;
+	TODO();
+}
+
+# ADDI imm16, reg1, reg2
+:addi s1631, R0004, R1115 is op0510=0x30 & R1115 & R0004; s1631 {
+	TODO();
+}
+
+# MOV imm32, reg1
+:mov imm32, R0004 is op0515=0x031 & R0004; op1631; op3247
+[ imm32 = (op3247 << 16) | op1631; ] {
+	R0004 = imm32;
+}
+# MOVEA imm16, reg1, reg2
+:movea s1631, R0004, r1115 is op0510=0x31 & op1115!=0 & R0004 & r1115; s1631 {
+	r1115 = R0004 + s1631;
+}
+# MOVHI imm16, reg1, reg2
+:movhi s1631, R0004, r1115 is op0510=0x32 & op1115!=0 & R0004 & r1115; s1631 {
+	r1115 = R0004 + (s1631 << 16);
+}
+
+# SATSUBI imm16, reg1, reg2
+:satsubi s1631, R0004, r1115 is op0510=0x33 & op1115!=0 & R0004 & r1115; s1631 {
+	TODO();
+}
+
+# MULHI imm16, reg1, reg2
+:mulhi s1631, R0004, R1115 is op0510=0x37 & R1115 & R0004; s1631 {
+	TODO();
+}
+
+# MUL reg1, reg2, reg3
+:mul R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x220 & R2731 {
+	local tmp:8 = sext(R1115) * sext(R0004);
+	R1115 = tmp[0,32];
+	R2731 = tmp[32,32];
+}
+# MULU reg1, reg2, reg3
+:mulu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x222 & R2731 {
+	local tmp:8 = zext(R1115) * zext(R0004);
+	R1115 = tmp[0,32];
+	R2731 = tmp[32,32];
+}
+# MUL imm9, reg2, reg3
+:mul imm9, R1115, R2731 is op0510=0x3F & s0004 & R1115; op2226=9 & op1617=0 & s1821 & R2731 
+[ imm9 = (s1821 << 5) | s0004; ] {
+	local tmp:8 = sext(R1115) * imm9;
+	R1115 = tmp[0,32];
+	R2731 = tmp[32,32];
+}
+# MULU imm9, reg2, reg3
+:mulu imm9, R1115, R2731 is op0510=0x3F & op0004 & R1115; op2226=9 & op1617=2 & op1821 & R2731 
+[ imm9 = (op1821 << 5) | op0004; ] {
+	local tmp:8 = zext(R1115) * imm9;
+	R1115 = tmp[0,32];
+	R2731 = tmp[32,32];
+}
+# DIVH reg1, reg2, reg3
+:divh R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x280 & R2731 {
+	local divisor:4 = sext(R0004[0,16]);
+	local quot:4 = R1115 s/ divisor;
+	local mod:4 = R1115 s% divisor;
+	R1115 = quot;
+	R2731 = mod;
+	TODO(); # flags
+}
+# DIVHU reg1, reg2, reg3
+:divhu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x282 & R2731 {
+	local divisor:4 = zext(R0004[0,16]);
+	local quot:4 = R1115 / divisor;
+	local mod:4 = R1115 % divisor;
+	R1115 = quot;
+	R2731 = mod;
+	TODO(); # flags
+}
+# DIV reg1, reg2, reg3
+:div R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2C0 & R2731 {
+	local quot:4 = R1115 s/ R0004;
+	local mod:4 = R1115 s% R0004;
+	R1115 = quot;
+	R2731 = mod;
+	TODO(); # flags
+}
+# DIVQ reg1, reg2, reg3
+:div R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2FC & R2731 {
+	local quot:4 = R1115 s/ R0004;
+	local mod:4 = R1115 s% R0004;
+	R1115 = quot;
+	R2731 = mod;
+	TODO(); # flags
+}
+# DIVU reg1, reg2, reg3
+:divu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2C2 & R2731 {
+	local quot:4 = R1115 / R0004;
+	local mod:4 = R1115 % R0004;
+	R1115 = quot;
+	R2731 = mod;
+	TODO(); # flags
+}
+# DIVQU reg1, reg2, reg3
+:divqu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2FE & R2731 {
+	local quot:4 = R1115 / R0004;
+	local mod:4 = R1115 % R0004;
+	R1115 = quot;
+	R2731 = mod;
+	TODO(); # flags
+}
+
+# SATSUB reg1, reg2, reg3
+:satsub R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x39A & R2731 {
+	TODO();
+}
+
+# SATADD reg1, reg2, reg3
+:satadd R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x3BA & R2731 {
+	TODO();
+}
+
+# MAC reg1, reg2, reg3, reg4
+:mac R0004, R1115, R2731odd, R1620odd is op0510=0x3F & R0004 & R1115; op2126=0x1E & R1620odd & R2731odd {
+	TODO();
+}
+# MACU reg1, reg2, reg3, reg4
+:macu R0004, R1115, R2731odd, R1620odd is op0510=0x3F & R0004 & R1115; op2126=0x1F & R1620odd & R2731odd {
+	TODO();
+}
+

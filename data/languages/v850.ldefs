@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<language_definitions>
+   <language processor="v850"
+            endian="little"
+            size="32"
+            variant="v850e2m"
+            version="0.1"
+            slafile="v850.sla"
+            processorspec="v850.pspec"
+            id="v850:LE:32:default">
+    <description>Renesas v850 Module</description>
+    <compiler name="default" spec="v850.cspec" id="default"/>
+  </language> 
+</language_definitions>

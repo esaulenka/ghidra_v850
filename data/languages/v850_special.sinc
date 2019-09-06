@@ -1,0 +1,101 @@
+
+# (15) Special instructions
+
+
+
+# NOP
+define pcodeop __nop;
+:nop is op0015=0x0000 {
+	__nop();
+}
+
+# SYNCE
+:synce is op0015=0x001D unimpl
+# SYNCM
+:syncm is op0015=0x001E unimpl
+# SYNCP
+:syncp is op0015=0x001F unimpl
+
+# RIE
+:rie is op0015=0x0040 unimpl
+
+# SWITCH reg1
+:switch R0004 is op0515=0x002 & R0004 {
+	TODO();
+}
+
+
+# FETRAP vector4
+# :fetrap op1114 is op0010=0x040 & op1515=0 & op1114 & op1114!=0 unimpl
+# TODO fails to compile
+
+
+
+
+# CALLT imm6
+:callt op0005 is op0615=0x080 & op0005 {
+	TODO();
+}
+
+
+# RIE
+:rie is op0410=0x7F; op1631=0
+unimpl # TODO
+# LDSR reg2, regID
+:ldsr r1115, "regID" is op0510=0x3F & r1115 & op0004; op1631=0x20 {
+	TODO();
+}
+# STSR regID, reg2
+:stsr "regID", r1115 is op0510=0x3F & r1115 & op0004; op1631=0x40 {
+	TODO();
+}
+
+# CAXI [reg1], reg2, reg3
+:caxi [R0004], R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0xEE & R2731 {
+	TODO();
+}
+
+# TRAP imm5
+:trap op0004 is op0515=0x3F & op0004; op1631=0x0100 
+unimpl # TODO
+# HALT
+define pcodeop __halt;
+:halt is op0515=0x3F; op1631=0x0120 {
+	__halt();
+}
+# RETI
+:reti is op0515=0x3F; op1631=0x0140 {
+	TODO();
+}
+# CTRET
+:ctret is op0515=0x3F; op1631=0x0144 {
+	TODO();
+}
+# EIRET
+:eiret is op0515=0x3F; op1631=0x0148 {
+	TODO();
+}
+# FERET
+:feret is op0515=0x3F; op1631=0x014A {
+	TODO();
+}
+
+# DI
+define pcodeop __disable_irq;
+:di is op0015=0x07E0; op1631=0x0160 {
+	$(PSW_ID) = 1;
+	__disable_irq();
+}
+# EI
+define pcodeop __enable_irq;
+:ei is op0015=0x87E0; op1631=0x0160 {
+	$(PSW_ID) = 0;
+	__enable_irq();
+}
+
+# SYSCALL vector8
+:syscall vector8 is op0515=0x6BF & op0004; op3031=0 & op2729 & op1626=0x160 
+[ vector8 = (op2729 << 5) | op0004; ] {
+	TODO();
+}
+

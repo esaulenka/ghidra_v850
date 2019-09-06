@@ -1,0 +1,111 @@
+
+# (9) Data manipulation instructions
+# (10) Bit search instructions
+
+
+# ZXB reg1
+:zxb R0004 is op0515=0x004 & R0004 {
+	R0004 = zext( R0004[0,8] );
+	TODO();	# flags
+}
+# SXB reg1
+:sxb R0004 is op0515=0x005 & R0004 {
+	R0004 = sext( R0004[0,8] );
+	TODO();	# flags
+}
+# ZXH reg1
+:zxh R0004 is op0515=0x006 & R0004 {
+	R0004 = zext( R0004[0,16] );
+	TODO();	# flags
+}
+# SXH reg1
+:sxh R0004 is op0515=0x007 & R0004 {
+	R0004 = sext( R0004[0,16] );
+	TODO();	# flags
+}
+
+# SHR imm5, reg2
+:shr op0004, r1115 is op0510=0x14 & op0004 & r1115 {
+	r1115 = r1115 >> op0004;
+	TODO(); 
+}
+# SAR imm5, reg2
+:sar op0004, r1115 is op0510=0x15 & op0004 & r1115 {
+	r1115 = r1115 >> op0004;
+	TODO();
+}
+# SHL imm5, reg2
+:shr op0004, r1115 is op0510=0x16 & op0004 & r1115 {
+	r1115 = r1115 << op0004;
+	TODO(); # flags
+}
+
+# SHR reg1, reg2
+:shr R0004, R1115 is op0510=0x3F & R0004 & R1115; op1631=0x80 {
+	TODO();
+}
+# SHR reg1, reg2, reg3
+:shr R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x82 & R2731 {
+	TODO();
+}
+# SAR reg1, reg2
+:sar R0004, R1115 is op0510=0x3F & R0004 & R1115; op1631=0xA0 {
+	TODO();
+}
+# SAR reg1, reg2, reg3
+:sar R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0xA2 & R2731 {
+	TODO();
+}
+# SHL reg1, reg2
+:shl R0004, R1115 is op0510=0x3F & R0004 & R1115; op1631=0xC0 {
+	TODO();
+}
+# SHL reg1, reg2, reg3
+:shl R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0xC2 & R2731 {
+	TODO();
+}
+
+# BSW reg2, reg3
+:bsw R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x340 & R2731 {
+	local x = R1115;
+	R2731 = zext(x[0,8] << 24) | zext(x[8,8] << 16) | zext(x[16,8] << 8) | zext(x[24,8]);
+	TODO(); # flags
+}
+# BSH reg2, reg3
+:bsh R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x342 & R2731 {
+	local x = R1115;
+	R2731 = zext(x[16,8] << 24) | zext(x[24,8] << 16) | zext(x[0,8] << 8) | zext(x[8,8]);
+	TODO(); # flags
+}
+# HSW reg2, reg3
+:hsw R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x344 & R2731 {
+	# GR [reg3] = GR [reg2] (15:0) || GR [reg2] (31:16)
+	local x = R1115;
+	R2731 = zext(x[0,16] << 16) | zext(x[16,16]);
+	TODO(); # flags
+}
+# HSH reg2, reg3
+:hsh R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x346 & R2731 {
+	R2731 = R1115;
+	TODO(); # flags
+}
+
+
+# SCH0R reg2, reg3
+:sch0r R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x360 & R2731 {
+	TODO();
+}
+# SCH1R reg2, reg3
+:sch1r R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x362 & R2731 {
+	TODO();
+}
+# SCH0L reg2, reg3
+:sch0l R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x364 & R2731 {
+	TODO();
+}
+# SCH1L reg2, reg3
+:sch1l R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x366 & R2731 {
+	TODO();
+}
+
+

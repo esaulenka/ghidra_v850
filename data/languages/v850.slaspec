@@ -1,0 +1,112 @@
+# sleigh specification file for Renesas v850
+#   >> see docs/languages/sleigh.htm or sleigh.pdf for Sleigh syntax
+
+define endian=little;
+define alignment=2;
+
+define space ram      type=ram_space      size=4  default;
+define space register type=register_space size=4;
+
+
+define register offset=0x00 size=4 [ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+define register offset=0x80 size=4 [ PC PSW ];
+
+@define PSW_PP  "PSW[19,1]"
+@define PSW_NPW "PSW[18,1]"
+@define PSW_DMP "PSW[17,1]"
+@define PSW_IMP "PSW[16,1]"
+@define PSW_NP  "PSW[7,1]"
+@define PSW_EP  "PSW[6,1]"
+@define PSW_ID  "PSW[5,1]"
+@define PSW_SAT "PSW[4,1]"
+@define PSW_CY  "PSW[3,1]"
+@define PSW_OV  "PSW[2,1]"
+@define PSW_S   "PSW[1,1]"
+@define PSW_Z   "PSW[0,1]"
+	
+
+define pcodeop TODO;
+
+
+macro ternary(res, cond, avar, bvar) {
+	res = (avar * zext(cond != 0)) + (bvar * zext(cond == 0));
+}
+
+
+define token instr(16)
+	op0000 = (0,0)
+	op0003 = (0,3)
+	op0004 = (0,4)
+	op0005 = (0,5)
+	op0006 = (0,6)
+	op0010 = (0,10)
+	op0015 = (0,15)
+	op0105 = (1,5)
+	op0106 = (1,6)
+	op0406 = (4,6)
+	op0410 = (4,10)
+	op0505 = (5,5)
+	op0510 = (5,10)
+	op0515 = (5,15)
+	op0610 = (6,10)
+	op0615 = (6,15)
+	op0710 = (7,10)
+	op1113 = (11,13)
+	op1114 = (11,14)
+	op1115 = (11,15)
+	op1415 = (14,15)
+	op1515 = (15,15)
+	R0004 = (0,4)
+	R1115 = (11,15)
+	r0004 = (0,4)
+	r1115 = (11,15)
+	s0003 = (0,3) signed
+	s0004 = (0,4) signed
+	s0005 = (0,5) signed
+	s1115 = (11,15) signed
+;
+define token instr2(16)
+	op1616 = (0,0)
+	op1617 = (0,1)
+	op1619 = (0,3)
+	op1620 = (0,4)
+	op1626 = (0,10)
+	op1631 = (0,15)
+	op1821 = (2,5)
+	op2026 = (4,10)
+	op2126 = (5,10)
+	op2131 = (5,15)
+	op2226 = (6,10)
+	op2729 = (11,13)
+	op3031 = (14,15)
+	r1620 = (0,4)
+	R2731 = (11,15)
+	R1620odd = (0,4)
+	R2731odd = (0,4)
+	s1631 = (0,15) signed
+	s1731 = (1,15) signed
+	s1821 = (2,5) signed
+;
+define token instr3(16)
+	op3247 = (0,15)
+	s3247 = (0,15) signed
+;
+define token instr4(16)
+	op4863 = (0,15);
+
+
+attach variables [ R0004 R1115 R2731 ] [ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+attach variables [ r0004 r1115 r1620 ] [ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+attach variables [ R1620odd R2731odd ] [ r0 _  r2 _  gp _  r6 _  r8 _  r10 _   r12 _   r14 _   r16 _   r18 _   r20 _   r22 _   r24 _   r26 _   r28 _   ep _  ];
+
+
+
+@include "v850_load_store.sinc"
+@include "v850_arithmetic.sinc"
+@include "v850_logical.sinc"
+@include "v850_data_manipulation.sinc"
+@include "v850_cond.sinc"
+@include "v850_func.sinc"
+@include "v850_special.sinc"
+
+

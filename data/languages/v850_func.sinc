@@ -4,8 +4,8 @@
 
 
 # JMP [reg1]
-:jmp [r0004] is op0515=0x003 & r0004 {
-	TODO();
+:jmp [R0004] is op0515=0x003 & R0004 {
+	goto [R0004];
 }
 
 # JR disp32

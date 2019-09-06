@@ -43,9 +43,10 @@ cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV) | $(PSW_Z)) == 0; ex
 
 # Bcond disp9
 :b^cc0003 disp9 is op0710=0xB & cc0003 & op0406 & s1115
-[ disp9 = (s1115 << 4) | (op0406 << 1); ] {
-	# if (cc0003) goto disp9;
-	TODO();
+[ disp9 = ((s1115 << 4) | (op0406 << 1)) + inst_start; ] {
+	local addr:4 = disp9;
+	# if (cc0003) goto addr;
+	TODO(addr);
 }
 
 # SETF cond, reg2

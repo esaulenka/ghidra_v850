@@ -102,12 +102,12 @@ attach variables [ R1620odd R2731odd ] [ r0 _  r2 _  gp _  r6 _  r8 _  r10 _   r
 
 
 
-@include "v850_load_store.sinc"
 @include "v850_arithmetic.sinc"
 @include "v850_logical.sinc"
 @include "v850_data_manipulation.sinc"
 @include "v850_cond.sinc"
 @include "v850_func.sinc"
 @include "v850_special.sinc"
+@include "v850_load_store.sinc"
 
 

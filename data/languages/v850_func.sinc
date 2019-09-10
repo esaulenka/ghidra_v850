@@ -5,42 +5,63 @@
 
 # JMP [reg1]
 :jmp [R0004] is op0515=0x003 & R0004 {
-	goto [R0004];
+	PC = R0004;
+	return [R0004];
 }
 
 # JR disp32
-:jr disp32 is op0015=0x02E0; op1631; op3247
-[ disp32 = (op3247 << 16) | op1631; ] {
-	TODO();
+:jr addr32 is op0015=0x02E0; addr32 {
+	PC = addr32;
+	call addr32;
 }
 
 # JARL disp32, reg1
-:jarl disp32 is op0515=0x017 & r0004; op1631; op3247
-[ disp32 = (op3247 << 16) | op1631; ] {
-	TODO();
+:jarl addr32, r0004 is op0515=0x017 & r0004; addr32 {
+	r0004 = PC + 6;
+	PC = addr32;
+	call addr32;
 }
 
 # DISPOSE imm5, list12
 :dispose op0105, list12 is op0615=0x19 & op0105 & op0000; op1620=0 & op2131
 [ list12 = (op0000 << 11) | op2131; ] {
+	local adr = sp + (op0105 << 2);
+	# foreach (all regs in list12)
+	# 	reg in list12 = Load-memory (adr, Word)Note
+	# 	adr = adr + 4
 	TODO();
+	sp = adr;
 }
 # DISPOSE imm5, list12 [reg1]
 :dispose op0105, list12 [r1620] is op0615=0x19 & op0105 & op0000; r1620 & op2131
 [ list12 = (op0000 << 11) | op2131; ] {
+	local adr = sp + (op0105 << 2);
+	# foreach (all regs in list12)
+	# 	reg in list12 = Load-memory (adr, Word)Note
+	# 	adr = adr + 4
 	TODO();
+	sp = adr;
+	PC = r1620;
+	return [PC];
 }
 
 # JMP disp32[reg1]
-:jmp disp32[R0004] is op0515=0x037 & R0004; op1631; op3247
-[ disp32 = (op3247 << 16) | op1631; ] {
-	TODO();
+:jmp addr32[R0004] is op0515=0x037 & R0004; addr32 {
+	local addr = addr32 + R0004;
+	goto [addr];
 }
+
+
 
 # PREPARE list12, imm5
 :prepare list12, op0105 is op0615=0x1E & op0105 & op0000; op1620=0x01 & op2131
 [ list12 = (op0000 << 11) | op2131; ] {
+	local adr = sp;
 	TODO();
+	# foreach (all regs in list12)
+	#	adr = adr - 4;
+	#	Store-memory (adr, reg in list12, Word);
+	sp = adr - (op0105 << 2);
 }
 # PREPARE list12, imm5, sp
 :prepare list12, op0105, "sp" is op0615=0x1E & op0105 & op0000; op1620=0x03 & op2131; s3247
@@ -66,14 +87,20 @@
 }
 
 # JR disp22
-:jr disp22 is op0615=0x1E & s0005; op1631 & op1616=0
-[ disp22 = (s0005 << 16) | op1631; ] {
-	TODO();
+:jr disp22 is op0615=0x1E & s0005; op1631 & op1616=0 
+[ disp22 = ((s0005 << 16) | op1631) + inst_start; ] {
+	local addr:4 = disp22;
+	PC = addr;
+	call [addr];
 }
+
 # JARL disp22, reg2
 :jarl disp22, r1115 is op0610=0x1E & s0005 & r1115; op1631 & op1616=0
-[ disp22 = (s0005 << 16) | op1631; ] {
-	TODO();
+[ disp22 = ((s0005 << 16) | op1631) + inst_start; ] {
+	r1115 = PC + 4;
+	local addr:4 = disp22;
+	PC = addr;
+	call [addr];
 }
 
 

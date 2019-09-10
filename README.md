@@ -17,8 +17,8 @@ Based on **User’s Manual: V850E2M Architecture**
 
 ## TODOs
 
-* conditional instructions
-* prepare/dispose
+* sub/add flags
+* prepare/dispose list of registers
 * PCODEs in constructors
 * float-point support
 * fix a lot of bugs

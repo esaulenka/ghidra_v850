@@ -14,7 +14,9 @@
 
 # DIVH reg1, reg2
 :divh R0004, r1115 is op0510=0x02 & R0004 & r1115 {
-	TODO();
+	local reg2:4 = r1115;
+	local reg1:4 = sext(R0004:2);
+	reg2 = reg2 / reg1;
 }
 
 # SATSUBR reg1, reg2
@@ -32,33 +34,37 @@
 
 # MULH reg1, reg2
 :mulh R0004, R1115 is op0510=0x07 & R0004 & R1115 & op1115!=0 {
-	local reg1 = sext(R0004[0,16]);
-	local reg2 = sext(R1115[0,16]);
+	local reg1 = sext(R0004:2);
+	local reg2 = sext(R1115:2);
 	R1115 = reg1 * reg2;
-	TODO(); # flags
 }
 
 # SUBR reg1, reg2
 :subr R0004, R1115 is op0510=0x0C & R0004 & R1115 {
-	TODO();
+	local res = R0004 - R1115;
+	flags_sub(R0004, R1115);
+	R1115 = res;
 }
 # SUB reg1, reg2
 :sub R0004, R1115 is op0510=0x0D & R0004 & R1115 {
-	TODO();
+	local res = R1115 - R0004;
+	flags_sub(R1115, R0004);
+	R1115 = res;
 }
 # ADD reg1, reg2
 :add R0004, R1115 is op0510=0x0E & R0004 & R1115 {
-	TODO();
+	local res = R1115 + R0004;
+	R1115 = res;
+	flags_add(R1115, R0004);
 }
 # CMP reg1, reg2
 :cmp R0004, R1115 is op0510=0x0F & R0004 & R1115 {
-	TODO();
+	flags_sub(R1115, R0004);
 }
 
 # MOV imm5, reg2
 :mov s0004, r1115 is op0510=0x10 & s0004 & r1115 & op1115!=0 {
-	# r1115 = sext(s0004);
-	TODO();
+	r1115 = s0004;
 }
 
 #SATADD imm5, reg2
@@ -68,23 +74,25 @@
 
 # ADD imm5, reg2
 :add s0004, r1115 is op0510=0x12 & s0004 & r1115 {
-	TODO();
+	local res = r1115 + s0004;
+	r1115 = res;
+	flags_add (r1115, s0004);
 }
 
 # CMP imm5, reg2
 :cmp s0004, r1115 is op0510=0x13 & s0004 & r1115 {
-	TODO();
+	flags_sub(r1115, s0004);
 }
 
 # MULH imm5, reg2
-:mulh op0004, r1115 is op0510=0x17 & op0004 & r1115 {
-	r1115 = r1115 * op0004;
-	TODO();
+:mulh s0004, r1115 is op0510=0x17 & s0004 & r1115 {
+	r1115 = sext(r1115:2) * s0004;
 }
 
 # ADDI imm16, reg1, reg2
 :addi s1631, R0004, R1115 is op0510=0x30 & R1115 & R0004; s1631 {
-	TODO();
+	R1115 = R0004 + s1631;
+	flags_add (R0004, s1631);
 }
 
 # MOV imm32, reg1
@@ -108,7 +116,7 @@
 
 # MULHI imm16, reg1, reg2
 :mulhi s1631, R0004, R1115 is op0510=0x37 & R1115 & R0004; s1631 {
-	TODO();
+	R1115 = sext(R0004:2) * s1631;
 }
 
 # MUL reg1, reg2, reg3
@@ -200,10 +208,10 @@
 
 # MAC reg1, reg2, reg3, reg4
 :mac R0004, R1115, R2731odd, R1620odd is op0510=0x3F & R0004 & R1115; op2126=0x1E & R1620odd & R2731odd {
-	TODO();
+	R1620odd = R2731odd + sext(R0004) * sext(R1115);
 }
 # MACU reg1, reg2, reg3, reg4
 :macu R0004, R1115, R2731odd, R1620odd is op0510=0x3F & R0004 & R1115; op2126=0x1F & R1620odd & R2731odd {
-	TODO();
+	R1620odd = R2731odd + zext(R0004) * zext(R1115);
 }
 

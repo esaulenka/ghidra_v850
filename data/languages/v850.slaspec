@@ -7,9 +7,18 @@ define alignment=2;
 define space ram      type=ram_space      size=4  default;
 define space register type=register_space size=4;
 
+# general purpose registers
+define register offset=0x00 size=4 
+	[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+define register offset=0x00 size=8 
+	[ r0r1  r2sp  gptp  r6r7  r8r9  r10r11  r12r13  r14r15  r16r17  r18r19  r20r21  r22r23  r24r25  r26r27  r28r29  eplp  ];
 
-define register offset=0x00 size=4 [ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
-define register offset=0x80 size=4 [ PC PSW ];
+# special registers
+define register offset=0x80 size=4 [ 
+	EIPC EIPSW FEPC FEPSW ECR PSW SCCFG SCBP EIIC FEIC DBIC 
+	CTPC CTPSW DBPC DBPSW CTBP DIR EIWR FEWR DBWR BSEL ];
+
+define register offset=0x100 size=4 [ PC ];
 
 @define PSW_PP  "PSW[19,1]"
 @define PSW_NPW "PSW[18,1]"
@@ -23,7 +32,8 @@ define register offset=0x80 size=4 [ PC PSW ];
 @define PSW_OV  "PSW[2,1]"
 @define PSW_S   "PSW[1,1]"
 @define PSW_Z   "PSW[0,1]"
-	
+
+
 
 define pcodeop TODO;
 
@@ -64,6 +74,7 @@ define token instr(16)
 	s0004 = (0,4) signed
 	s0005 = (0,5) signed
 	s1115 = (11,15) signed
+	SR0004 = (0,4)
 ;
 define token instr2(16)
 	op1616 = (0,0)
@@ -96,9 +107,46 @@ define token instr4(16)
 	op4863 = (0,15);
 
 
-attach variables [ R0004 R1115 R2731 ] [ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
-attach variables [ r0004 r1115 r1620 ] [ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
-attach variables [ R1620odd R2731odd ] [ r0 _  r2 _  gp _  r6 _  r8 _  r10 _   r12 _   r14 _   r16 _   r18 _   r20 _   r22 _   r24 _   r26 _   r28 _   ep _  ];
+
+attach variables [ R0004 R1115 R2731 ] 
+	[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+attach variables [ r0004 r1115 r1620 ] 
+	[ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+attach variables [ R1620odd R2731odd ] 
+	[ r0r1 _ r2sp _ gptp _ r6r7 _ r8r9 _ r10r11 _ r12r13 _ r14r15 _ r16r17 _ r18r19 _ r20r21 _ r22r23 _ r24r25 _ r26r27 _ r28r29 _ eplp _ ];
+
+attach variables [ SR0004 ] [
+	EIPC EIPSW FEPC FEPSW ECR PSW _ _ _ _ _ SCCFG SCBP EIIC FEIC DBIC 
+	CTPC CTPSW DBPC DBPSW CTBP DIR _ _ _ _ _ _ EIWR FEWR DBWR BSEL ];
+
+
+addr9: rel is op0406 & s1115
+[ rel = ((s1115 << 4) | (op0406 << 1)) + inst_start; ] { export *:4 rel; }
+# TODO not working!!
+# addr22: rel is s0005; op1631 & op1616=0
+# [ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+addr32: rel is op1631 & op1616=0; op3247
+[ rel = ((op3247 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+
+
+
+# PSW flags manipulations
+macro setZ(res) {	$(PSW_Z) = ((res) == 0);	}
+macro setS(res) {	$(PSW_S) = (((res) & 0x80000000) != 0); }
+macro clrOV() 	{	$(PSW_OV) = 0;	}
+macro set_S_Z(res)	{ setS(res); setZ(res);	}
+macro set_nOV_S_Z(res)	{ clrOV(); set_S_Z(res); }
+macro flags_add(op1,op2) {
+  $(PSW_CY) = carry(op1,op2);
+  $(PSW_OV) = scarry(op1,op2);
+  set_S_Z (op1 + op2);
+}
+macro flags_sub(op1,op2) {
+  $(PSW_CY) = op1 < op2;
+  $(PSW_OV) = sborrow(op1,op2);
+  set_S_Z (op1 - op2);
+}
+
 
 
 
@@ -109,5 +157,4 @@ attach variables [ R1620odd R2731odd ] [ r0 _  r2 _  gp _  r6 _  r8 _  r10 _   r
 @include "v850_func.sinc"
 @include "v850_special.sinc"
 @include "v850_load_store.sinc"
-
 

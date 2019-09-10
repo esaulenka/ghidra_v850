@@ -6,81 +6,95 @@
 # NOT reg1, reg2
 :not R0004, R1115 is op0510=0x01 & R0004 & R1115 {
 	R1115 = ~ R0004;
-	TODO(); # flags
+	set_nOV_S_Z (R1115);
 }
 
 # OR reg1, reg2
 :or R0004, R1115 is op0510=0x08 & R0004 & R1115 {
 	R1115 = R1115 | R0004;
-	TODO(); # flags
+	set_nOV_S_Z(R1115);
 }
 # XOR reg1, reg2
 :xor R0004, R1115 is op0510=0x09 & R0004 & R1115 {
 	R1115 = R1115 ^ R0004;
-	TODO(); # flags
+	set_nOV_S_Z(R1115);
 }
 # AND reg1, reg2
 :or R0004, R1115 is op0510=0x0A & R0004 & R1115 {
 	R1115 = R1115 & R0004;
-	TODO(); # flags
+	set_nOV_S_Z(R1115);
 }
 # TST reg1, reg2
 :tst R0004, R1115 is op0510=0x0B & R0004 & R1115 {
-	TODO(); # flags
+	set_nOV_S_Z(R1115);
 }
 
 # ORI imm16, reg1, reg2
-:ori s1631, R0004, R1115 is op0510=0x34 & R1115 & R0004; s1631 {
-	TODO();
+:ori op1631, R0004, R1115 is op0510=0x34 & R1115 & R0004; op1631 {
+	R1115 = R0004 | op1631;
+	set_nOV_S_Z(R1115);
 }
 # XORI imm16, reg1, reg2
-:xori s1631, R0004, R1115 is op0510=0x35 & R1115 & R0004; s1631 {
-	TODO();
+:xori op1631, R0004, R1115 is op0510=0x35 & R1115 & R0004; op1631 {
+	R1115 = R0004 ^ op1631;
+	set_nOV_S_Z(R1115);
 }
 # ANDI imm16, reg1, reg2
-:andi s1631, R0004, R1115 is op0510=0x36 & R1115 & R0004; s1631 {
-	TODO();
+:andi op1631, R0004, R1115 is op0510=0x36 & R1115 & R0004; op1631 {
+	R1115 = R0004 & op1631;
+	set_nOV_S_Z(R1115);
 }
 
 # SET1 bit3, disp16[reg1]
 :set1 op1113, s1631[R0004] is op0510=0x3E & op1415=0 & op1113 & R0004; s1631 {
 	local addr:4 = s1631 + R0004;
-	*:1 addr = *:1 addr | (1 << op1113);
-	TODO(); # flags
+	local var = *:1 addr;
+	*:1 addr = var | (1 << op1113);
+	setZ(var & (1 << op1113));
 }
 # NOT1 bit3, disp16[reg1]
 :not1 op1113, s1631[R0004] is op0510=0x3E & op1415=1 & op1113 & R0004; s1631 {
 	local addr:4 = s1631 + R0004;
-	*:1 addr = *:1 addr ^ (1 << op1113);
-	TODO(); # flags
+	local var = *:1 addr;
+	*:1 addr = var ^ (1 << op1113);
+	setZ(var & (1 << op1113));
 }
 # CLR1 bit3, disp16[reg1]
 :clr1 op1113, s1631[R0004] is op0510=0x3E & op1415=2 & op1113 & R0004; s1631 {
 	local addr:4 = s1631 + R0004;
-	*:1 addr = *:1 addr & ~(1 << op1113);
-	TODO(); # flags
+	local var = *:1 addr;
+	*:1 addr = var & ~(1 << op1113);
+	setZ(var & (1 << op1113));
 }
 # TST1 bit3, disp16[reg1]
 :tst1 op1113, s1631[R0004] is op0510=0x3E & op1415=3 & op1113 & R0004; s1631 {
-	# local addr:4 = s1631 + R0004;
-	TODO(); # flags
+	local addr:4 = s1631 + R0004;
+	local var = *:1 addr;
+	setZ(var & (1 << op1113));
 }
 
 # SET1 reg1, [reg2]
 :set1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE0 {
-	TODO();
+	local var = *:1 R0004;
+	*:1 R0004 = var | (1 << R0004);
+	setZ(var & (1 << R0004));
 }
 # NOT1 reg1, [reg2]
 :not1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE2 {
-	TODO();
+	local var = *:1 R0004;
+	*:1 R0004 = var ^ (1 << R0004);
+	setZ(var & (1 << R0004));
 }
 # CLR1 reg1, [reg2]
 :clr1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE4 {
-	TODO();
+	local var = *:1 R0004;
+	*:1 R0004 = var & ~(1 << R0004);
+	setZ(var & (1 << R0004));
 }
 # TST1 reg1, [reg2]
 :tst1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE6 {
-	TODO();
+	local var = *:1 R0004;
+	setZ(var & (1 << R0004));
 }
 
 

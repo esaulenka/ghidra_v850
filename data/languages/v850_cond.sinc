@@ -10,16 +10,16 @@ cc0003: "c"		is op0003=0x1		{ tmp:1 = ($(PSW_CY)) == 1; export tmp; }
 cc0003: "nc"	is op0003=0x9		{ tmp:1 = ($(PSW_CY)) == 0; export tmp; }
 cc0003: "e"		is op0003=0x2		{ tmp:1 = ($(PSW_Z)) == 1; export tmp; }
 cc0003: "ne"	is op0003=0xA		{ tmp:1 = ($(PSW_Z)) == 0; export tmp; }
-cc0003: "nh"	is op0003=0x3		{ tmp:1 = ($(PSW_CY) | $(PSW_Z)) == 1; export tmp; }
-cc0003: "h"		is op0003=0xB		{ tmp:1 = ($(PSW_CY) | $(PSW_Z)) == 0; export tmp; }
+cc0003: "nh"	is op0003=0x3		{ tmp:1 = ($(PSW_CY) || $(PSW_Z)) == 1; export tmp; }
+cc0003: "h"		is op0003=0xB		{ tmp:1 = ($(PSW_CY) || $(PSW_Z)) == 0; export tmp; }
 cc0003: "n"		is op0003=0x4		{ tmp:1 = ($(PSW_S)) == 1; export tmp; }
 cc0003: "p"		is op0003=0xC		{ tmp:1 = ($(PSW_S)) == 0; export tmp; }
 cc0003: "r"		is op0003=0x5		{ tmp:1 = 1; export tmp; }
 cc0003: "sa"	is op0003=0xD		{ tmp:1 = ($(PSW_SAT)) == 1; export tmp; }
-cc0003: "lt"	is op0003=0x6		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV)) == 1; export tmp; }
-cc0003: "ge"	is op0003=0xE		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV)) == 0; export tmp; }
-cc0003: "le"	is op0003=0x7		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV) | $(PSW_Z)) == 1; export tmp; }
-cc0003: "gt"	is op0003=0xF		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV) | $(PSW_Z)) == 0; export tmp; }
+cc0003: "lt"	is op0003=0x6		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV)) == 1; export tmp; }
+cc0003: "ge"	is op0003=0xE		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV)) == 0; export tmp; }
+cc0003: "le"	is op0003=0x7		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 1; export tmp; }
+cc0003: "gt"	is op0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0; export tmp; }
 
 # same as cc0003 with another condition bits
 cc1720: "v"		is op1720=0x0		{ tmp:1 = ($(PSW_OV)) == 1; export tmp; }
@@ -28,25 +28,21 @@ cc1720: "c"		is op1720=0x1		{ tmp:1 = ($(PSW_CY)) == 1; export tmp; }
 cc1720: "nc"	is op1720=0x9		{ tmp:1 = ($(PSW_CY)) == 0; export tmp; }
 cc1720: "e"		is op1720=0x2		{ tmp:1 = ($(PSW_Z)) == 1; export tmp; }
 cc1720: "ne"	is op1720=0xA		{ tmp:1 = ($(PSW_Z)) == 0; export tmp; }
-cc1720: "nh"	is op1720=0x3		{ tmp:1 = ($(PSW_CY) | $(PSW_Z)) == 1; export tmp; }
-cc1720: "h"		is op1720=0xB		{ tmp:1 = ($(PSW_CY) | $(PSW_Z)) == 0; export tmp; }
+cc1720: "nh"	is op1720=0x3		{ tmp:1 = ($(PSW_CY) || $(PSW_Z)) == 1; export tmp; }
+cc1720: "h"		is op1720=0xB		{ tmp:1 = ($(PSW_CY) || $(PSW_Z)) == 0; export tmp; }
 cc1720: "n"		is op1720=0x4		{ tmp:1 = ($(PSW_S)) == 1; export tmp; }
 cc1720: "p"		is op1720=0xC		{ tmp:1 = ($(PSW_S)) == 0; export tmp; }
 cc1720: "r"		is op1720=0x5		{ tmp:1 = 1; export tmp; }
 cc1720: "sa"	is op1720=0xD		{ tmp:1 = ($(PSW_SAT)) == 1; export tmp; }
-cc1720: "lt"	is op1720=0x6		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV)) == 1; export tmp; }
-cc1720: "ge"	is op1720=0xE		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV)) == 0; export tmp; }
-cc1720: "le"	is op1720=0x7		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV) | $(PSW_Z)) == 1; export tmp; }
-cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV) | $(PSW_Z)) == 0; export tmp; }
+cc1720: "lt"	is op1720=0x6		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV)) == 1; export tmp; }
+cc1720: "ge"	is op1720=0xE		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV)) == 0; export tmp; }
+cc1720: "le"	is op1720=0x7		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 1; export tmp; }
+cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0; export tmp; }
 
 
-
-# Bcond disp9
-:b^cc0003 disp9 is op0710=0xB & cc0003 & op0406 & s1115
-[ disp9 = ((s1115 << 4) | (op0406 << 1)) + inst_start; ] {
-	local addr:4 = disp9;
-	# if (cc0003) goto addr;
-	TODO(addr);
+#Bcond addr9
+:b^cc0003 addr9 is op0710=0xB & cc0003 & addr9 {
+	if (cc0003) goto addr9;
 }
 
 # SETF cond, reg2
@@ -71,15 +67,23 @@ cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^ $(PSW_OV) | $(PSW_Z)) == 0; ex
 
 # SBF cccc, reg1, reg2, reg3
 :sbf^cc1720 R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op2126=0x1C & op1616=0 & cc1720 & R2731 {
-	local lsb:4 = zext(cc1720);
-	R2731 = R1115 - R0004 - lsb;
+	local lsb:5 = zext(cc1720);
+	local res:5 = sext(R1115) - sext(R0004) - lsb;
+	R2731 = res:4;
+	set_S_Z (res);
+	$(PSW_CY) = res[32,1];
+	# $(PSW_OV) = ;
 	TODO(); # flags
 }
 # ADF cccc, reg1, reg2, reg3
 :adf^cc1720 R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op2126=0x1D & op1616=0 & cc1720 & R2731 {
-	local lsb:4 = zext(cc1720);
-	R2731 = R1115 + R0004 + lsb;
-	TODO(); # flags
+	local lsb:5 = zext(cc1720);
+	local res:5 = sext(R1115) + sext(R0004) + lsb;
+	R2731 = res:4;
+	set_S_Z (res);
+	$(PSW_CY) = res[32,1];
+	# $(PSW_OV) = ;
+	TODO(); # flags_add (res);
 }
 
 

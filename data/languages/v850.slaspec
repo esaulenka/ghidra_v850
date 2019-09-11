@@ -131,11 +131,12 @@ addr32: rel is op1631 & op1616=0; op3247
 
 
 # PSW flags manipulations
-macro setZ(res) {	$(PSW_Z) = ((res) == 0);	}
-macro setS(res) {	$(PSW_S) = (((res) & 0x80000000) != 0); }
-macro clrOV() 	{	$(PSW_OV) = 0;	}
+macro setZ(res) 	{	$(PSW_Z) = ((res) == 0);	}
+macro setS(res) 	{	$(PSW_S) = (((res) & 0x80000000) != 0); }
+macro clrOV() 		{	$(PSW_OV) = 0;	}
 macro set_S_Z(res)	{ setS(res); setZ(res);	}
 macro set_nOV_S_Z(res)	{ clrOV(); set_S_Z(res); }
+macro set_C(res) 	{	$(PSW_Z) = (res != 0);	}
 macro flags_add(op1,op2) {
   $(PSW_CY) = carry(op1,op2);
   $(PSW_OV) = scarry(op1,op2);
@@ -146,6 +147,7 @@ macro flags_sub(op1,op2) {
   $(PSW_OV) = sborrow(op1,op2);
   set_S_Z (op1 - op2);
 }
+
 
 
 

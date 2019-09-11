@@ -6,88 +6,119 @@
 # ZXB reg1
 :zxb R0004 is op0515=0x004 & R0004 {
 	R0004 = zext( R0004[0,8] );
-	TODO();	# flags
 }
 # SXB reg1
 :sxb R0004 is op0515=0x005 & R0004 {
 	R0004 = sext( R0004[0,8] );
-	TODO();	# flags
 }
 # ZXH reg1
 :zxh R0004 is op0515=0x006 & R0004 {
 	R0004 = zext( R0004[0,16] );
-	TODO();	# flags
 }
 # SXH reg1
 :sxh R0004 is op0515=0x007 & R0004 {
 	R0004 = sext( R0004[0,16] );
-	TODO();	# flags
 }
+
+macro shift_right_u (res, _val, _shift) {
+	local val = _val;
+	local shift = _shift;
+	res = val >> shift;
+	set_nOV_S_Z (val >> shift);
+	local lsb = (val >> (shift - 1)) != 0;
+	set_C (lsb && shift);
+}
+macro shift_right_s (res, _val, _shift) {
+	local val = _val;
+	local shift = _shift;
+	res = val s>> shift;
+	set_nOV_S_Z (val s>> shift);
+	local lsb = (val s>> (shift - 1)) != 0;
+	set_C (lsb && shift);
+}
+macro shift_left (res, _val, _shift) {
+	local val = _val;
+	local shift = _shift;
+	res = val << shift;
+	set_nOV_S_Z (val << shift);
+	local c:5 = zext(val) << shift;
+	set_C (c[32,1]);
+}
+
 
 # SHR imm5, reg2
 :shr op0004, r1115 is op0510=0x14 & op0004 & r1115 {
-	r1115 = r1115 >> op0004;
-	TODO(); 
+	shift_right_u (r1115, r1115, op0004);
 }
 # SAR imm5, reg2
 :sar op0004, r1115 is op0510=0x15 & op0004 & r1115 {
-	r1115 = r1115 >> op0004;
-	TODO();
+	shift_right_s (r1115, r1115, op0004);
 }
 # SHL imm5, reg2
-:shr op0004, r1115 is op0510=0x16 & op0004 & r1115 {
-	r1115 = r1115 << op0004;
-	TODO(); # flags
+:shl op0004, r1115 is op0510=0x16 & op0004 & r1115 {
+	shift_left (r1115, r1115, op0004);
 }
 
 # SHR reg1, reg2
 :shr R0004, R1115 is op0510=0x3F & R0004 & R1115; op1631=0x80 {
-	TODO();
+	shift_right_u (R1115, R1115, R0004);
 }
 # SHR reg1, reg2, reg3
 :shr R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x82 & R2731 {
-	TODO();
+	shift_right_u (R2731, R1115, R0004);
 }
 # SAR reg1, reg2
 :sar R0004, R1115 is op0510=0x3F & R0004 & R1115; op1631=0xA0 {
-	TODO();
+	shift_right_s (R1115, R1115, R0004);
 }
 # SAR reg1, reg2, reg3
 :sar R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0xA2 & R2731 {
-	TODO();
+	shift_right_s (R2731, R1115, R0004);
 }
 # SHL reg1, reg2
 :shl R0004, R1115 is op0510=0x3F & R0004 & R1115; op1631=0xC0 {
-	TODO();
+	shift_left (R1115, R1115, R0004);
 }
 # SHL reg1, reg2, reg3
 :shl R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0xC2 & R2731 {
-	TODO();
+	shift_left (R2731, R1115, R0004);
 }
 
 # BSW reg2, reg3
 :bsw R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x340 & R2731 {
-	local x = R1115;
-	R2731 = zext(x[0,8] << 24) | zext(x[8,8] << 16) | zext(x[16,8] << 8) | zext(x[24,8]);
-	TODO(); # flags
+	local x0 = R1115[0,8];
+	local x1 = R1115[8,8];
+	local x2 = R1115[16,8];
+	local x3 = R1115[24,8];
+	R2731 = zext(x0 << 24) | zext(x1 << 16) | zext(x2 << 8) | zext(x3);
+	set_nOV_S_Z (R2731);
+	set_C ((x0 == 0) || (x1 == 0) || (x2 == 0) || (x3 == 0));
 }
 # BSH reg2, reg3
 :bsh R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x342 & R2731 {
-	local x = R1115;
-	R2731 = zext(x[16,8] << 24) | zext(x[24,8] << 16) | zext(x[0,8] << 8) | zext(x[8,8]);
-	TODO(); # flags
+	local x0 = R1115[0,8];
+	local x1 = R1115[8,8];
+	local x2 = R1115[16,8];
+	local x3 = R1115[24,8];
+	R2731 = zext(x2 << 24) | zext(x3 << 16) | zext(x0 << 8) | zext(x1);
+	set_nOV_S_Z (R2731);
+	set_C ((x0 == 0) || (x1 == 0));
 }
 # HSW reg2, reg3
 :hsw R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x344 & R2731 {
-	# GR [reg3] = GR [reg2] (15:0) || GR [reg2] (31:16)
-	local x = R1115;
-	R2731 = zext(x[0,16] << 16) | zext(x[16,16]);
-	TODO(); # flags
+	# reg3 = reg2(15:0) || reg2(31:16)
+	local x0 = R1115[0,16];
+	local x1 = R1115[16,16];
+	R2731 = zext(x0 << 16) | zext(x1);
+	set_nOV_S_Z (R2731);
+	set_C ((x0 == 0) || (x1 == 0));
 }
 # HSH reg2, reg3
 :hsh R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x346 & R2731 {
+	local x0 = R1115[0,16];
 	R2731 = R1115;
-	TODO(); # flags
+	set_nOV_S_Z (R2731);
+	set_C (x0 == 0);
 }
 
 

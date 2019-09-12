@@ -4,9 +4,13 @@
 
 
 # JMP [reg1]
-:jmp [R0004] is op0515=0x003 & R0004 {
+:jmp [R0004] is op0515=0x003 & R0004 & op0004=31 {
 	PC = R0004;
 	return [R0004];
+}
+:jmp [R0004] is op0515=0x003 & R0004 & op0004 != 31 {
+	PC = R0004;
+	call [R0004];
 }
 
 # JR disp32

@@ -5,19 +5,19 @@
 
 # ZXB reg1
 :zxb R0004 is op0515=0x004 & R0004 {
-	R0004 = zext( R0004[0,8] );
+	R0004 = zext( R0004:1 );
 }
 # SXB reg1
 :sxb R0004 is op0515=0x005 & R0004 {
-	R0004 = sext( R0004[0,8] );
+	R0004 = sext( R0004:1 );
 }
 # ZXH reg1
 :zxh R0004 is op0515=0x006 & R0004 {
-	R0004 = zext( R0004[0,16] );
+	R0004 = zext( R0004:2 );
 }
 # SXH reg1
 :sxh R0004 is op0515=0x007 & R0004 {
-	R0004 = sext( R0004[0,16] );
+	R0004 = sext( R0004:2 );
 }
 
 macro shift_right_u (res, _val, _shift) {

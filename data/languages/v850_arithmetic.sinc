@@ -16,7 +16,9 @@
 :divh R0004, r1115 is op0510=0x02 & R0004 & r1115 {
 	local reg2:4 = r1115;
 	local reg1:4 = sext(R0004:2);
-	reg2 = reg2 / reg1;
+	setOV ((reg2 == 0x80000000 && reg1 == 0xFFFFFFFF) || reg1 == 0);
+	r1115 = reg2 / reg1;
+	set_S_Z (r1115);
 }
 
 # SATSUBR reg1, reg2
@@ -54,8 +56,8 @@
 # ADD reg1, reg2
 :add R0004, R1115 is op0510=0x0E & R0004 & R1115 {
 	local res = R1115 + R0004;
-	R1115 = res;
 	flags_add(R1115, R0004);
+	R1115 = res;
 }
 # CMP reg1, reg2
 :cmp R0004, R1115 is op0510=0x0F & R0004 & R1115 {
@@ -75,8 +77,8 @@
 # ADD imm5, reg2
 :add s0004, r1115 is op0510=0x12 & s0004 & r1115 {
 	local res = r1115 + s0004;
-	r1115 = res;
 	flags_add (r1115, s0004);
+	r1115 = res;
 }
 
 # CMP imm5, reg2
@@ -150,50 +152,56 @@
 	local divisor:4 = sext(R0004[0,16]);
 	local quot:4 = R1115 s/ divisor;
 	local mod:4 = R1115 s% divisor;
+	setOV ((R1115 == 0x80000000 && divisor == 0xFFFFFFFF) || divisor == 0);
+	set_S_Z (quot);
 	R1115 = quot;
 	R2731 = mod;
-	TODO(); # flags
 }
 # DIVHU reg1, reg2, reg3
 :divhu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x282 & R2731 {
 	local divisor:4 = zext(R0004[0,16]);
 	local quot:4 = R1115 / divisor;
 	local mod:4 = R1115 % divisor;
+	setOV (divisor == 0);
+	set_S_Z (quot);
 	R1115 = quot;
 	R2731 = mod;
-	TODO(); # flags
 }
 # DIV reg1, reg2, reg3
 :div R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2C0 & R2731 {
 	local quot:4 = R1115 s/ R0004;
 	local mod:4 = R1115 s% R0004;
+	setOV ((R1115 == 0x80000000 && R0004 == 0xFFFFFFFF) || R0004 == 0);
+	set_S_Z (quot);
 	R1115 = quot;
 	R2731 = mod;
-	TODO(); # flags
 }
 # DIVQ reg1, reg2, reg3
 :div R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2FC & R2731 {
 	local quot:4 = R1115 s/ R0004;
 	local mod:4 = R1115 s% R0004;
+	setOV ((R1115 == 0x80000000 && R0004 == 0xFFFFFFFF) || R0004 == 0);
+	set_S_Z (quot);
 	R1115 = quot;
 	R2731 = mod;
-	TODO(); # flags
 }
 # DIVU reg1, reg2, reg3
 :divu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2C2 & R2731 {
 	local quot:4 = R1115 / R0004;
 	local mod:4 = R1115 % R0004;
+	setOV (R0004 == 0);
+	set_S_Z (quot);
 	R1115 = quot;
 	R2731 = mod;
-	TODO(); # flags
 }
 # DIVQU reg1, reg2, reg3
 :divqu R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x2FE & R2731 {
 	local quot:4 = R1115 / R0004;
 	local mod:4 = R1115 % R0004;
+	setOV (R0004 == 0);
+	set_S_Z (quot);
 	R1115 = quot;
 	R2731 = mod;
-	TODO(); # flags
 }
 
 # SATSUB reg1, reg2, reg3

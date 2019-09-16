@@ -133,36 +133,41 @@ addr32: rel is op1631 & op1616=0; op3247
 # PSW flags manipulations
 macro setZ(res) 	{	$(PSW_Z) = ((res) == 0);	}
 macro setS(res) 	{	$(PSW_S) = (((res) & 0x80000000) != 0); }
-macro clrOV() 		{	$(PSW_OV) = 0;	}
+macro setOV(res)	{	$(PSW_OV) = res;	}
+macro clrOV() 		{	$(PSW_OV) = 0;		}
 macro set_S_Z(res)	{ setS(res); setZ(res);	}
 macro set_nOV_S_Z(res)	{ clrOV(); set_S_Z(res); }
 macro set_C(res) 	{	$(PSW_Z) = (res != 0);	}
 macro flags_add(op1,op2) {
-  $(PSW_CY) = carry(op1,op2);
-  $(PSW_OV) = scarry(op1,op2);
-  set_S_Z (op1 + op2);
+	local A:4 = op1;		local B:4 = op2;		local R = A + B;
+	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];
+	$(PSW_OV) = (sA == sB) && (sB != sR);
+	$(PSW_CY) = carry(A, B);
+	set_S_Z (R);
 }
 macro flags_sub(op1,op2) {
-  $(PSW_CY) = op1 < op2;
-  $(PSW_OV) = sborrow(op1,op2);
-  set_S_Z (op1 - op2);
+	local A:4 = op1;		local B:4 = op2;		local R = A - B;
+	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];
+	$(PSW_OV) = (sA != sB) && (sB == sR);
+	$(PSW_CY) = carry(A, -B);	# check this!
+	set_S_Z (R);
 }
 
 # read r0 always return zero
 R0004: xR0004 is xR0004 {
-	local addr:4 = &xR0004;
-	local val:4 = xR0004 * zext(addr != 0);
-	export val;
+	local addr:4 = & xR0004;
+	xR0004 = xR0004 * zext(addr != 0);
+	export xR0004;
 }
 R1115: xR1115 is xR1115 {
-	local addr:4 = &xR1115;
-	local val:4 = xR1115 * zext(addr != 0);
-	export val;
+	local addr:4 = & xR1115;
+	xR1115 = xR1115 * zext(addr != 0);
+	export xR1115;
 }
 R2731: xR2731 is xR2731 {
-	local addr:4 = &xR2731;
-	local val:4 = xR2731 * zext(addr != 0);
-	export val;
+	local addr:4 = & xR2731;
+	xR2731 = xR2731 * zext(addr != 0);
+	export xR2731;
 }
 
 

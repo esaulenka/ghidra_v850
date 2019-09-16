@@ -12,8 +12,7 @@
 
 # SLD.HU disp5[ep],reg2
 :sld.bu disp5"[ep]," r1115 is op0410=0x07 & r1115 & op0003 
-[ disp5 = op0003*2; ]
-{
+[ disp5 = op0003*2; ] {
 	local addr:4 = ep + disp5;
 	r1115 = zext(*:2 addr);
 }
@@ -26,7 +25,7 @@
 # SST.B disp7[ep], reg2
 :sld.b op0006"[ep]," R1115 is op0710=0x07 & op0006 & R1115 {
 	local addr:4 = op0006 + ep;
-	*:1 addr = R1115;
+	*:1 addr = R1115 : 1;
 }
 # SLD.H disp8[ep], reg2
 :sld.b disp8"[ep]," R1115 is op0710=0x08 & op0006 & R1115 
@@ -38,7 +37,7 @@
 :sld.b disp8"[ep]," R1115 is op0710=0x09 & op0006 & R1115 
 [ disp8 = op0006 * 2; ] {
 	local addr:4 = disp8 + ep;
-	*:2 addr = R1115;
+	*:2 addr = R1115 : 2;
 }
 # SLD.W disp8[ep], reg2
 :sld.b disp8"[ep]," R1115 is op0710=0x0A & op0000 = 0 & op0106 & R1115 
@@ -72,12 +71,12 @@
 # ST.B reg2, disp16[reg1]
 :st.b R1115, s1631[R0004] is op0510=0x3A & R0004 & R1115; s1631 {
 	local addr:4 = s1631 + R0004;
-	*:1 addr = R1115;
+	*:1 addr = R1115 : 1;
 }
 # ST.H reg2, disp16[reg1]
 :st.h R1115, s1631[R0004] is op0510=0x3B & R0004 & R1115; s1631 & op1616=0 {
 	local addr:4 = s1631 + R0004;
-	*:2 addr = R1115;
+	*:2 addr = R1115 : 2;
 }
 # ST.W reg2, disp16[reg1]
 :st.w R1115, disp16[R0004] is op0510=0x3B & R0004 & R1115; s1731 & op1616=1 
@@ -108,13 +107,13 @@
 :st.b R2731, disp23[R0004] is op0515=0x03C & R0004; R2731 & op2026 & op1619=0xD; s3247
 [ disp23 = (s3247 << 7) | op2026; ] {
 	local addr:4 = disp23 + R0004;
-	*:1 addr = R2731;
+	*:1 addr = R2731 : 1;
 }
 # ST.W reg3, disp23[reg1]
 :st.w R2731, disp23[R0004] is op0515=0x03C & R0004; R2731 & op2126 & op1620=0xF; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
 	local addr:4 = disp23 + R0004;
-	*:2 addr = R2731;
+	*:2 addr = R2731 : 2;
 }
 # LD.BU disp23[reg1], reg3
 :ld.bu disp23[R0004], R2731 is op0515=0x03D & R0004; R2731 & op2026 & op1619=5; s3247
@@ -132,7 +131,7 @@
 :st.h R2731, disp23[R0004] is op0515=0x03D & R0004; R2731 & op2126 & op1620=0xD; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
 	local addr:4 = disp23 + R0004;
-	*:2 addr = R2731;
+	*:2 addr = R2731 : 2;
 }
 
 # LD.BU disp16[reg1], reg2

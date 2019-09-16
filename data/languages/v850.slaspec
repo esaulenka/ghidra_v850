@@ -137,7 +137,7 @@ macro setOV(res)	{	$(PSW_OV) = res;	}
 macro clrOV() 		{	$(PSW_OV) = 0;		}
 macro set_S_Z(res)	{ setS(res); setZ(res);	}
 macro set_nOV_S_Z(res)	{ clrOV(); set_S_Z(res); }
-macro set_C(res) 	{	$(PSW_Z) = (res != 0);	}
+macro set_C(res) 	{	$(PSW_CY) = (res != 0);	}
 macro flags_add(op1,op2) {
 	local A:4 = op1;		local B:4 = op2;		local R = A + B;
 	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];

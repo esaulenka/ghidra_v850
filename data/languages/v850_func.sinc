@@ -68,7 +68,7 @@
 	sp = adr - (op0105 << 2);
 }
 # PREPARE list12, imm5, sp
-:prepare list12, op0105, "sp" is op0615=0x1E & op0105 & op0000; op1620=0x03 & op2131; s3247
+:prepare list12, op0105, sp is op0615=0x1E & op0105 & op0000; op1620=0x03 & op2131; s3247 & sp
 [ list12 = (op0000 << 11) | op2131; ] {
 	TODO();
 }

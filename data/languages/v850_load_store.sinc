@@ -5,48 +5,48 @@
 
 
 # SLD.BU disp4[ep],reg2
-:sld.bu op0003"[ep]," r1115 is op0410=0x06 & r1115 & op0003 {
+:sld.bu op0003[ep], r1115 is op0410=0x06 & r1115 & op0003 & ep {
 	local addr:4 = ep + op0003;
 	r1115 = zext(*:1 addr);
 }
 
 # SLD.HU disp5[ep],reg2
-:sld.bu disp5"[ep]," r1115 is op0410=0x07 & r1115 & op0003 
+:sld.bu disp5[ep], r1115 is op0410=0x07 & r1115 & op0003 & ep
 [ disp5 = op0003*2; ] {
 	local addr:4 = ep + disp5;
 	r1115 = zext(*:2 addr);
 }
 
 # SLD.B disp7[ep], reg2
-:sld.b op0006"[ep]," R1115 is op0710=0x06 & op0006 & R1115 {
+:sld.b op0006[ep], R1115 is op0710=0x06 & op0006 & R1115 & ep {
 	local addr:4 = ep + op0006;
 	R1115 = zext(*:1 addr);
 }
 # SST.B disp7[ep], reg2
-:sld.b op0006"[ep]," R1115 is op0710=0x07 & op0006 & R1115 {
+:sld.b op0006[ep], R1115 is op0710=0x07 & op0006 & R1115 & ep {
 	local addr:4 = op0006 + ep;
 	*:1 addr = R1115 : 1;
 }
 # SLD.H disp8[ep], reg2
-:sld.b disp8"[ep]," R1115 is op0710=0x08 & op0006 & R1115 
+:sld.b disp8[ep], R1115 is op0710=0x08 & op0006 & R1115 & ep
 [ disp8 = op0006 * 2; ] {
 	local addr:4 = ep + disp8;
 	R1115 = zext(*:2 addr);
 }
 # SST.H disp8[ep], reg2
-:sld.b disp8"[ep]," R1115 is op0710=0x09 & op0006 & R1115 
+:sld.b disp8[ep], R1115 is op0710=0x09 & op0006 & R1115 & ep
 [ disp8 = op0006 * 2; ] {
 	local addr:4 = disp8 + ep;
 	*:2 addr = R1115 : 2;
 }
 # SLD.W disp8[ep], reg2
-:sld.b disp8"[ep]," R1115 is op0710=0x0A & op0000 = 0 & op0106 & R1115 
+:sld.b disp8[ep], R1115 is op0710=0x0A & op0000 = 0 & op0106 & R1115 & ep
 [ disp8 = op0106 * 4; ] {
 	local addr:4 = ep + disp8;
 	R1115 = *:4 addr;
 }
 # SST.W disp8[ep], reg2
-:sld.b disp8"[ep]," R1115 is op0710=0x0A & op0000 = 1 & op0106 & R1115 
+:sld.b disp8[ep], R1115 is op0710=0x0A & op0000 = 1 & op0106 & R1115 & ep
 [ disp8 = op0106 * 4; ] {
 	local addr:4 = disp8 + ep;
 	*:4 addr = R1115;

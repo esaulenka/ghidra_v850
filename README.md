@@ -18,8 +18,7 @@ Based on **User’s Manual: V850E2M Architecture**
 ## TODOs
 
 * sub/add flags
-* prepare/dispose list of registers
-* PCODEs in constructors
+* saturating math
 * float-point support
 * fix a lot of bugs
 

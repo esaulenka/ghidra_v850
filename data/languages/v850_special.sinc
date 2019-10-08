@@ -53,8 +53,8 @@ define pcodeop __synchronize;
 :rie is op0410=0x7F; op1631=0 unimpl # reserved instruction for future expansion
 
 # LDSR reg2, regID
-:ldsr r0004, SR1115 is op0510=0x3F & SR1115 & r0004; op1631=0x20 {
-	SR1115 = r0004;
+:ldsr R0004, SR1115 is op0510=0x3F & SR1115 & R0004; op1631=0x20 {
+	SR1115 = R0004;
 }
 # STSR regID, reg2
 :stsr SR0004, r1115 is op0510=0x3F & r1115 & SR0004; op1631=0x40 {

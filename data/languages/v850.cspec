@@ -18,6 +18,9 @@
         <pentry minsize="1" maxsize="4">
           <register name="r8"/>
         </pentry>
+        <pentry minsize="1" maxsize="4">
+          <register name="r9"/>
+        </pentry>
       </input>
       <output>
         <pentry minsize="1" maxsize="4">
@@ -26,7 +29,11 @@
       </output>
       <unaffected>
         <register name="sp"/>
+        <register name="gp"/>
+        <register name="tp"/>
       </unaffected>
+
+
     </prototype>
   </default_proto>
 </compiler_spec>

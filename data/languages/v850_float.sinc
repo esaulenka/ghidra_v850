@@ -1,0 +1,9 @@
+# CTVF.SUW reg2, reg3
+:cvtf.suw R1115, R2731 is op0510=0x3F & R1115; R2731 & op2126=0x22 & op1620=0x2 {
+	R2731 = trunc(R1115);
+}
+
+# MULF.S. reg1, reg2, reg3
+:mulf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0x23 & op1620=0x4 {
+  R2731 = R1115 f* R0004;
+}

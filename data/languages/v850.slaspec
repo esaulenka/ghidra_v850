@@ -207,4 +207,5 @@ R2731: xR2731 is xR2731 {
 @include "v850_func.sinc"
 @include "v850_special.sinc"
 @include "v850_load_store.sinc"
+@include "v850_float.sinc"
 

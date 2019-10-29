@@ -1,9 +1,182 @@
-# CTVF.SUW reg2, reg3
-:cvtf.suw R1115, R2731 is op0510=0x3F & R1115; R2731 & op2126=0x22 & op1620=0x2 {
-	R2731 = trunc(R1115);
+# ABSF.S.SUW reg2, reg3
+:absf.s R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00000; R2731 & op2126=0b100010 & op1620=0b01000 {
+  R2731 = abs(R1115);
+}
+
+# ADDF.S. reg1, reg2, reg3
+:addf.s R0004, R1115, R2731 is R1115 & op0510=0x3F & R0004 ; R2731 & op2126=0b100011 & op1620=0b00000 {
+  R2731 = R1115 f+ R0004;
+}
+
+# CEILF.SL reg2, reg3
+:ceilf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00010; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
+  local tmp:8 = ceil(float2float(R1115));
+  Rs2731odd = trunc(tmp);
+}
+
+# CEILF.SUL reg2, reg3
+:ceilf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10010; R2731odd & op2126=0b100010 & op1620=0b00100 {
+  local tmp:8 = ceil(float2float(R1115));
+  R2731odd = trunc(tmp);
+}
+
+# CEILF.SUW reg2, reg3
+:ceilf.sul R1115, R2731 is R1115 & op0510=0x3F & op0004=0b10010; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(ceil(R1115));
+}
+
+# CEILF.SW reg2, reg3
+:ceilf.sl R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00010; Rs2731 & op2126=0b100010 & op1620=0b00000 {
+  Rs2731 = trunc(ceil(R1115));
+}
+
+# TODO CMOVF.S, dont understand where fcbit is defined
+# TODO CMPF.S, dont understand where cond is defined
+
+# CVTF.LS reg2, reg3
+:cvtf.ls Rs1115odd, R2731 is Rs1115odd & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(Rs1115odd);
+}
+
+# CVTF.SL reg2, reg3
+:cvtf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00100; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
+  Rs2731odd = trunc(R1115);
+}
+
+# CVTF.SUL reg2, reg3
+:cvtf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10100; R2731odd & op2126=0b100010 & op1620=0b00100 {
+  R2731odd = trunc(R1115);
+}
+
+# CVTF.SUW reg2, reg3
+:cvtf.suw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b10100; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(R1115);
+}
+
+# CVTF.SW reg2, reg3
+:cvtf.sw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00100; Rs2731 & op2126=0b100010 & op1620=0b00000 {
+  Rs2731 = trunc(R1115);
+}
+
+# CVTF.ULS reg2, reg3
+:cvtf.uls R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(R1115odd);
+}
+
+# CVTF.UWS reg2, reg3
+:cvtf.uws R1115, R2731 is R1115 & op0510=0x3F & op0004=0b10000; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(R1115);
+}
+
+# CVTF.WS reg2, reg3
+:cvtf.uws Rs1115, R2731 is Rs1115 & op0510=0x3F & op0004=0b00000; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(Rs1115);
+}
+
+# DIVF.S. reg1, reg2, reg3
+:mulf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01110 {
+  R2731 = R1115 f/ R0004;
+}
+
+# FLOORF.SL reg2, reg3
+:floorf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00011; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
+  local tmp:8 = floor(float2float(R1115));
+  Rs2731odd = trunc(tmp);
+}
+
+# FLOORF.SUL reg2, reg3
+:floorf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10011; R2731odd & op2126=0b100010 & op1620=0b00100 {
+  local tmp:8 = floor(float2float(R1115));
+  R2731odd = trunc(tmp);
+}
+
+# FLOORF.SUW reg2, reg3
+:floorf.suw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b10011; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(floor(R1115));
+}
+
+# FLOORF.SW reg2, reg3
+:floorf.suw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00011; Rs2731 & op2126=0b100010 & op1620=0b00000 {
+  Rs2731 = trunc(floor(R1115));
+}
+
+# TODO: this has a weird concatenation in reg4
+# MADDF.S. reg1, reg2, reg3, reg4
+# MSUBF.S. reg1, reg2, reg3, reg4
+# NMADDF.S. reg1, reg2, reg3, reg4
+# NMSUBF.S. reg1, reg2, reg3, reg4
+
+
+# MAXF.S. reg1, reg2, reg3
+:maxf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01000 {
+  tmp_cond:1 = R1115 f> R0004;
+  R2731 = (R1115 * zext(tmp_cond == 1)) | (R0004 * zext(tmp_cond == 0) );
+}
+
+# MINF.S. reg1, reg2, reg3
+:minf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01010 {
+  tmp_cond:1 = R1115 f< R0004;
+  R2731 = (R1115 * zext(tmp_cond == 1)) | (R0004 * zext(tmp_cond == 0) );
 }
 
 # MULF.S. reg1, reg2, reg3
-:mulf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0x23 & op1620=0x4 {
+:mulf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b00100 {
   R2731 = R1115 f* R0004;
 }
+
+# NEGF.S reg2, reg3
+:negf.s R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b01000 {
+  R2731 = f- R1115;
+}
+
+# RECIPF.S reg2, reg3
+:recipf.s R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b01110 {
+  R2731 = 1 f/ R1115;
+}
+
+# RSQRTF.S reg2, reg3
+:rsqrtf.s R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00010; R2731 & op2126=0b100010 & op1620=0b01110 {
+  R2731 = 1 f/ sqrt(R1115);
+}
+
+# SQRTF.S reg2, reg3
+:sqrtf.s R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00000; R2731 & op2126=0b100010 & op1620=0b01110 {
+  R2731 = sqrt(R1115);
+}
+
+
+# SUBF.S. reg1, reg2, reg3
+:subf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b00010 {
+  R2731 = R1115 f- R0004;
+}
+
+# TODO: TRFSR
+
+# TRNCF.SL reg2, reg3
+:trncf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00001; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
+  tmp_cond:1 = R1115 f< 0;
+  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
+  Rs2731odd = trunc(tmp);
+}
+
+# TRNCF.SUL reg2, reg3
+:trncf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10001; R2731odd & op2126=0b100010 & op1620=0b00100 {
+  tmp_cond:1 = R1115 f< 0;
+  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
+  R2731odd = trunc(tmp);
+}
+
+# TRNCF.SUW reg2, reg3
+:trncf.suw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b00000 {
+  tmp_cond:1 = R1115 f< 0;
+  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
+  R2731 = trunc(tmp);
+}
+
+# TRNCF.SW reg2, reg3
+:trncf.sw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00001; Rs2731 & op2126=0b100010 & op1620=0b00000 {
+  tmp_cond:1 = R1115 f< 0;
+  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
+  Rs2731 = trunc(tmp);
+}
+

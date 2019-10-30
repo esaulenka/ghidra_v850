@@ -17,8 +17,7 @@ Based on **User’s Manual: V850E2M Architecture**
 
 ## TODOs
 
-* sub/add flags
-* saturating math
+* SCHxx - count zeros/ones 
 * float-point support
 * fix a lot of bugs
 

@@ -95,7 +95,7 @@ define token instr2(16)
 	r1620 = (0,4)
 	xR2731 = (11,15)
 	R1620odd = (0,4)
-	R2731odd = (0,4)
+	R2731odd = (11,15)
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
 	s1821 = (2,5) signed
@@ -107,6 +107,7 @@ define token instr3(16)
 define token instr4(16)
 	op4863 = (0,15);
 
+# used only in PREPARE/DISPOSE instructions
 define token prep(32)
 	prep0615 = (6,15)
 	prep0105 = (1,5)
@@ -178,7 +179,7 @@ macro flags_sub(op1,op2) {
 	local A:4 = op1;		local B:4 = op2;		local R = A - B;
 	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];
 	$(PSW_OV) = (sA != sB) && (sB == sR);
-	$(PSW_CY) = carry(A, -B);	# check this!
+	$(PSW_CY) = (A < B);
 	set_S_Z (R);
 }
 

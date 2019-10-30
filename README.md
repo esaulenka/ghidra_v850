@@ -17,7 +17,6 @@ Based on **User’s Manual: V850E2M Architecture**
 
 ## TODOs
 
-* SCHxx - count zeros/ones 
 * float-point support
 * fix a lot of bugs
 

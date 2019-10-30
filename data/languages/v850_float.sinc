@@ -34,7 +34,12 @@
 
 # CMPF.S reg2, reg3
 :cmpf.s fcond, R1115, R0004, fcbit is R1115 & op0510=0x3F & R0004; op3131=0 & fcond & op2126=0b100001 & op2020=0 & fcbit & op1616=0 {
-# TODO: implementation
+  # TODO: implement other fcond options
+  local cond:4 = zext(R1115 f< R0004);
+
+  local newbit:4 = cond << (24 + fcbit);
+  local ones:4 = 1 << (24 + fcbit);
+  FPSR = (FPSR & ~ones) | newbit;
 }
 
 # CVTF.LS reg2, reg3
@@ -154,7 +159,11 @@
   R2731 = R1115 f- R0004;
 }
 
-# TODO: TRFSR
+# TRFSR fcbit
+:trfsr fcbit is op1115=0 & op0510=0x3F & op0004=0; op2731=0 & op2126=0b100000 & op2020=0 & fcbit & op1616=0 {
+  local tmp:4 = (FPSR >> (fcbit:1 + 24:1)) & 0x1;
+  $(PSW_Z) = (tmp != 0);
+}
 
 # TRNCF.SL reg2, reg3
 :trncf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00001; Rs2731odd & op2126=0b100010 & op1620=0b00100 {

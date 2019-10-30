@@ -47,6 +47,7 @@
   R2731 = int2float(Rs1115odd);
 }
 
+# TODO: do something with the current rounding mode
 # CVTF.SL reg2, reg3
 :cvtf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00100; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
   Rs2731odd = trunc(R1115);
@@ -167,29 +168,21 @@
 
 # TRNCF.SL reg2, reg3
 :trncf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00001; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
-  tmp_cond:1 = R1115 f< 0;
-  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
-  Rs2731odd = trunc(tmp);
+  Rs2731odd = trunc(R1115);
 }
 
 # TRNCF.SUL reg2, reg3
 :trncf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10001; R2731odd & op2126=0b100010 & op1620=0b00100 {
-  tmp_cond:1 = R1115 f< 0;
-  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
-  R2731odd = trunc(tmp);
+  R2731odd = trunc(R1115);
 }
 
 # TRNCF.SUW reg2, reg3
 :trncf.suw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b00000 {
-  tmp_cond:1 = R1115 f< 0;
-  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
-  R2731 = trunc(tmp);
+  R2731 = trunc(R1115);
 }
 
 # TRNCF.SW reg2, reg3
 :trncf.sw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00001; Rs2731 & op2126=0b100010 & op1620=0b00000 {
-  tmp_cond:1 = R1115 f< 0;
-  local tmp = (ceil(R1115) * zext(tmp_cond == 1)) | (floor(R1115) * zext(tmp_cond == 0) );
-  Rs2731 = trunc(tmp);
+  Rs2731 = trunc(R1115);
 }
 

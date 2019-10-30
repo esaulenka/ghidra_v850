@@ -88,12 +88,17 @@ define token instr2(16)
 	op1626 = (0,10)
 	op1631 = (0,15)
 	op1720 = (1,4)
+	op0_1720 = (1,4)
+	op1_1720 = (1,4)
 	op1821 = (2,5)
 	op2020 = (4,4)
 	op2026 = (4,10)
 	op2126 = (5,10)
+	op2122 = (5,6)
 	op2131 = (5,15)
 	op2226 = (6,10)
+	op2323 = (7,7)
+	op2426 = (8,10)
 	op2729 = (11,13)
 	op2731 = (11,15)
 	op3031 = (14,15)
@@ -145,8 +150,13 @@ define token prep(32)
 ;
 
 
+attach variables [op0_1720] [r0 r2 gp r6 r8 r10 r12 r14 r16 r18 r20 r22 r24 r26 r28 ep];
+attach variables [op1_1720] [r1 sp tp r7 r9 r11 r13 r15 r17 r19 r21 r23 r25 r27 r29 lp];
 
-attach variables [ xR0004 xR1115 xRs1115 xR2731 xRs2731 ]
+reg4: op0_1720 is op2323=0 & op0_1720 { export op0_1720; }
+reg4: op1_1720 is op2323=1 & op1_1720 { export op1_1720; }
+
+attach variables [ xR0004 xR1115 xRs1115 xR2731 xRs2731]
 	[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
 attach variables [ r0004 r1115 r1620 prep1620r ]
 	[ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];

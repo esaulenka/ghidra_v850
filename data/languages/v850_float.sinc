@@ -119,6 +119,11 @@
 # NMADDF.S. reg1, reg2, reg3, reg4
 # NMSUBF.S. reg1, reg2, reg3, reg4
 
+# MADDF.S. reg1, reg2, reg3, reg4
+:maddf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b00 & op1616=0 & reg4 {
+  reg4 = (R1115 f* R0004) f+ R2731;
+}
+
 
 # MAXF.S. reg1, reg2, reg3
 :maxf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01000 {

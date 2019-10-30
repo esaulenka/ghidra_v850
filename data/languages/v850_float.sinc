@@ -30,8 +30,12 @@
   Rs2731 = trunc(ceil(R1115));
 }
 
-# TODO CMOVF.S, dont understand where fcbit is defined
-# TODO CMPF.S, dont understand where cond is defined
+# TODO CMOVF.S
+
+# CMPF.S reg2, reg3
+:cmpf.s fcond, R1115, R0004, fcbit is R1115 & op0510=0x3F & R0004; op3131=0 & fcond & op2126=0b100001 & op2020=0 & fcbit & op1616=0 {
+# TODO: implementation
+}
 
 # CVTF.LS reg2, reg3
 :cvtf.ls Rs1115odd, R2731 is Rs1115odd & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00010 {

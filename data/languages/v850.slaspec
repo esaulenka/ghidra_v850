@@ -15,7 +15,7 @@ define register offset=0x00 size=8
 
 # special registers
 define register offset=0x80 size=4 [ 
-	EIPC EIPSW FEPC FEPSW ECR PSW SR6 SR7 FPST FPCC FPCFG SCCFG SCBP EIIC FEIC DBIC 
+	EIPC EIPSW FEPC FEPSW ECR PSW FPSR FPEPC FPST FPCC FPCFG SCCFG SCBP EIIC FEIC DBIC 
 	CTPC CTPSW DBPC DBPSW CTBP DIR DBG22 DBG23 DBG24 DBG25 DBG26 DBG27 EIWR FEWR DBWR BSEL ];
 
 define register offset=0x100 size=4 [ PC ];
@@ -89,12 +89,14 @@ define token instr2(16)
 	op1631 = (0,15)
 	op1720 = (1,4)
 	op1821 = (2,5)
+	op2020 = (4,4)
 	op2026 = (4,10)
 	op2126 = (5,10)
 	op2131 = (5,15)
 	op2226 = (6,10)
 	op2729 = (11,13)
 	op3031 = (14,15)
+	op3131 = (15,15)
 	r1620 = (0,4)
 	xR2731 = (11,15)
 	xRs2731 = (11,15) signed
@@ -105,6 +107,8 @@ define token instr2(16)
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
 	s1821 = (2,5) signed
+	fcond = (11,14)
+	fcbit = (1,3)
 ;
 define token instr3(16)
 	op3247 = (0,15)
@@ -148,8 +152,11 @@ attach variables [ r0004 r1115 r1620 prep1620r ]
 attach variables [ R1115odd Rs1115odd R1620odd R2731odd Rs1620odd Rs2731odd ]
 	[ r0r1 _ r2sp _ _ _ r6r7 _ r8r9 _ r10r11 _ r12r13 _ r14r15 _ r16r17 _ r18r19 _ r20r21 _ r22r23 _ r24r25 _ r26r27 _ r28r29 _ _ _ ];
 
+attach names [fcond]
+  ["F" "UN" "EQ" "UEQ" "OLT" "ULT" "OLE" "ULE" "SD" "NGLE" "SEQ" "NGL" "LT" "NGE" "LE" "NGT"];
+
 attach variables [ SR0004 SR1115 ] [
-	EIPC EIPSW FEPC FEPSW ECR PSW SR6 SR7
+	EIPC EIPSW FEPC FEPSW ECR PSW FPSR FPEPC
 	FPST FPCC FPCFG SCCFG SCBP EIIC FEIC DBIC
 	CTPC CTPSW DBPC DBPSW CTBP DIR DBG22 DBG23
 	DBG24 DBG25 DBG26 DBG27 EIWR FEWR DBWR BSEL ];

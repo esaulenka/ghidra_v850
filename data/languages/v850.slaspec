@@ -161,13 +161,13 @@ addr32: rel is op1631 & op1616=0; op3247
 
 
 # PSW flags manipulations
-macro setZ(res) 	{	$(PSW_Z) = ((res) == 0);	}
-macro setS(res) 	{	$(PSW_S) = (((res) & 0x80000000) != 0); }
-macro setOV(res)	{	$(PSW_OV) = res;	}
-macro clrOV() 		{	$(PSW_OV) = 0;		}
-macro set_S_Z(res)	{ setS(res); setZ(res);	}
-macro set_nOV_S_Z(res)	{ clrOV(); set_S_Z(res); }
-macro set_C(res) 	{	$(PSW_CY) = (res != 0);	}
+macro setZ(res) 		{	$(PSW_Z) = ((res) == 0);	}
+macro setS(res) 		{	$(PSW_S) = ((res) s< 0);	}
+macro setOV(res)		{	$(PSW_OV) = res;	}
+macro clrOV() 			{	$(PSW_OV) = 0;		}
+macro set_S_Z(res)		{	setS(res); setZ(res);	}
+macro set_nOV_S_Z(res)	{	clrOV(); set_S_Z(res);	}
+macro set_C(res) 		{	$(PSW_CY) = (res != 0);	}
 macro flags_add(op1,op2) {
 	local A:4 = op1;		local B:4 = op2;		local R = A + B;
 	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];

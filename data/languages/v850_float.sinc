@@ -34,10 +34,13 @@
 
 # CMPF.S reg2, reg3
 :cmpf.s fcond, R1115, R0004, fcbit is R1115 & op0510=0x3F & R0004; op3131=0 & fcond & op2126=0b100001 & op2020=0 & fcbit & op1616=0 {
-  # TODO: implement other fcond options
-  local cond:4 = zext(R1115 f< R0004);
+  # TODO: handle case with NaNs
+  # TODO: handle all cases
+  local eq:4 = zext((R1115 f== R0004) && (fcond:1 == 2));
+  local lt:4 = zext((R1115 f< R0004) && (fcond:1 == 12));
+  local le:4 = zext((R1115 f<= R0004) && (fcond:1 == 14));
 
-  local newbit:4 = cond << (24 + fcbit);
+  local newbit:4 = (lt | eq | le) << (24 + fcbit);
   local ones:4 = 1 << (24 + fcbit);
   FPSR = (FPSR & ~ones) | newbit;
 }

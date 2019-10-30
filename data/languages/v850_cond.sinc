@@ -71,9 +71,9 @@ cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0; 
 	local res:5 = sext(R1115) - sext(R0004) - lsb;
 	R2731 = res:4;
 	set_S_Z (res);
-	$(PSW_CY) = res[32,1];
-	# $(PSW_OV) = ;
-	TODO(); # flags
+	local sA  = R0004[31,1];	local sB  = R1115[31,1];	local sR = res[31,1];
+	$(PSW_OV) = (sA != sB) && (sB == sR);
+	$(PSW_CY) = (R1115 < (R0004 + lsb:4));
 }
 # ADF cccc, reg1, reg2, reg3
 :adf^cc1720 R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op2126=0x1D & op1616=0 & cc1720 & R2731 {
@@ -82,8 +82,8 @@ cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0; 
 	R2731 = res:4;
 	set_S_Z (res);
 	$(PSW_CY) = res[32,1];
-	# $(PSW_OV) = ;
-	TODO(); # flags_add (res);
+	local sA  = R0004[31,1];	local sB  = R1115[31,1];	local sR = res[31,1];
+	$(PSW_OV) = (sA == sB) && (sB != sR);
 }
 
 

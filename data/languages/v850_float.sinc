@@ -9,9 +9,9 @@
 }
 
 # CEILF.SL reg2, reg3
-:ceilf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00010; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
+:ceilf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00010; R2731odd & op2126=0b100010 & op1620=0b00100 {
   local tmp:8 = ceil(float2float(R1115));
-  Rs2731odd = trunc(tmp);
+  R2731odd = trunc(tmp);
 }
 
 # CEILF.SUL reg2, reg3
@@ -26,8 +26,8 @@
 }
 
 # CEILF.SW reg2, reg3
-:ceilf.sl R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00010; Rs2731 & op2126=0b100010 & op1620=0b00000 {
-  Rs2731 = trunc(ceil(R1115));
+:ceilf.sl R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00010; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(ceil(R1115));
 }
 
 # TODO CMOVF.S
@@ -46,14 +46,14 @@
 }
 
 # CVTF.LS reg2, reg3
-:cvtf.ls Rs1115odd, R2731 is Rs1115odd & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00010 {
-  R2731 = int2float(Rs1115odd);
+:cvtf.ls R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(R1115odd);
 }
 
 # TODO: do something with the current rounding mode
 # CVTF.SL reg2, reg3
-:cvtf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00100; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
-  Rs2731odd = trunc(R1115);
+:cvtf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00100; R2731odd & op2126=0b100010 & op1620=0b00100 {
+  R2731odd = trunc(R1115);
 }
 
 # CVTF.SUL reg2, reg3
@@ -67,8 +67,8 @@
 }
 
 # CVTF.SW reg2, reg3
-:cvtf.sw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00100; Rs2731 & op2126=0b100010 & op1620=0b00000 {
-  Rs2731 = trunc(R1115);
+:cvtf.sw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00100; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(R1115);
 }
 
 # CVTF.ULS reg2, reg3
@@ -82,8 +82,8 @@
 }
 
 # CVTF.WS reg2, reg3
-:cvtf.uws Rs1115, R2731 is Rs1115 & op0510=0x3F & op0004=0b00000; R2731 & op2126=0b100010 & op1620=0b00010 {
-  R2731 = int2float(Rs1115);
+:cvtf.uws R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00000; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(R1115);
 }
 
 # DIVF.S. reg1, reg2, reg3
@@ -109,8 +109,8 @@
 }
 
 # FLOORF.SW reg2, reg3
-:floorf.suw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00011; Rs2731 & op2126=0b100010 & op1620=0b00000 {
-  Rs2731 = trunc(floor(R1115));
+:floorf.suw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00011; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(floor(R1115));
 }
 
 # TODO: this has a weird concatenation in reg4
@@ -122,6 +122,21 @@
 # MADDF.S. reg1, reg2, reg3, reg4
 :maddf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b00 & op1616=0 & reg4 {
   reg4 = (R1115 f* R0004) f+ R2731;
+}
+
+# MSUBF.S. reg1, reg2, reg3, reg4
+:msubf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b01 & op1616=0 & reg4 {
+  reg4 = (R1115 f* R0004) f- R2731;
+}
+
+# NMADDF.S. reg1, reg2, reg3, reg4
+:nmaddf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b10 & op1616=0 & reg4 {
+  reg4 = f-((R1115 f* R0004) f+ R2731);
+}
+
+# NMSUBF.S. reg1, reg2, reg3, reg4
+:nmsubf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b11 & op1616=0 & reg4 {
+  reg4 = f-((R1115 f* R0004) f- R2731);
 }
 
 
@@ -175,8 +190,8 @@
 }
 
 # TRNCF.SL reg2, reg3
-:trncf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00001; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
-  Rs2731odd = trunc(R1115);
+:trncf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00001; R2731odd & op2126=0b100010 & op1620=0b00100 {
+  R2731odd = trunc(R1115);
 }
 
 # TRNCF.SUL reg2, reg3
@@ -190,7 +205,7 @@
 }
 
 # TRNCF.SW reg2, reg3
-:trncf.sw R1115, Rs2731 is R1115 & op0510=0x3F & op0004=0b00001; Rs2731 & op2126=0b100010 & op1620=0b00000 {
-  Rs2731 = trunc(R1115);
+:trncf.sw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00000 {
+  R2731 = trunc(R1115);
 }
 

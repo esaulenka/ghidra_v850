@@ -99,6 +99,7 @@ define token instr2(16)
 	op2226 = (6,10)
 	op2323 = (7,7)
 	op2426 = (8,10)
+	op2727 = (11,11)
 	op2729 = (11,13)
 	op2731 = (11,15)
 	op3031 = (14,15)
@@ -107,8 +108,8 @@ define token instr2(16)
 	xR2731 = (11,15)
 	xRs2731 = (11,15) signed
 	R1620odd = (0,4)
-	R2731odd = (11,15)
 	Rs1620odd = (0,4) signed
+	R2731odd = (11,15)
 	Rs2731odd = (11,15) signed
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
@@ -231,7 +232,7 @@ R2731: xR2731 is xR2731 {
 }
 
 Rs2731: xRs2731 is xRs2731 {
-	local addr:4 = & xRs2731;
+  local addr:4 = & xRs2731;
 	xRs2731 = xRs2731 * zext(addr != 0);
 	export xRs2731;
 }

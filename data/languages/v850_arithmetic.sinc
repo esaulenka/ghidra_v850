@@ -104,8 +104,8 @@ macro saturate(value) {
 }
 
 # CMP imm5, reg2
-:cmp s0004, r1115 is op0510=0x13 & s0004 & r1115 {
-	flags_sub(r1115, s0004);
+:cmp s0004, R1115 is op0510=0x13 & s0004 & R1115 {
+	flags_sub(R1115, s0004);
 }
 
 # MULH imm5, reg2

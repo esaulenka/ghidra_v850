@@ -121,22 +121,56 @@ macro shift_left (res, _val, _shift) {
 	set_C (x0 == 0);
 }
 
+macro SearchRight(count, value, pattern) {
+	local tmp:4 = value;
+	<loop>
+		if ((tmp & 1) == pattern) goto <end>;
+		tmp = tmp >> 1;
+		count = count + 1;
+		if (count < 32) goto <loop>;
+	<end>
+}
+macro SearchLeft(count, value, pattern) {
+	local tmp:4 = value;
+	<loop>
+		if ((tmp >> 31) == pattern) goto <end>;
+		tmp = tmp << 1;
+		count = count + 1;
+		if (count < 32) goto <loop>;
+	<end>
+}
 
 # SCH0R reg2, reg3
 :sch0r R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x360 & R2731 {
-	TODO();
+	local count:4 = 0;
+	SearchRight(count, R1115, 0);
+	$(PSW_Z)  = (R1115 == 0xFFFFFFFF);	# zero bit not found
+	$(PSW_CY) = (R1115 != 0xFFFFFFFF);	# zero bit found
+	R2731 = count;
 }
 # SCH1R reg2, reg3
 :sch1r R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x362 & R2731 {
-	TODO();
+	local count:4 = 0;
+	SearchRight(count, R1115, 1);
+	$(PSW_Z)  = (R1115 == 0);	# one bit not found
+	$(PSW_CY) = (R1115 != 0);	# one bit found}
+	R2731 = count;
 }
 # SCH0L reg2, reg3
 :sch0l R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x364 & R2731 {
-	TODO();
+	local count:4 = 0;
+	SearchLeft(count, R1115, 0);
+	$(PSW_Z)  = (R1115 == 0xFFFFFFFF);	# zero bit not found
+	$(PSW_CY) = (R1115 != 0xFFFFFFFF);	# zero bit found
+	R2731 = count;
 }
 # SCH1L reg2, reg3
 :sch1l R1115, R2731 is op0010=0x7E0 & R1115; op1626=0x366 & R2731 {
-	TODO();
+	local count:4 = 0;
+	SearchLeft(count, R1115, 0);
+	$(PSW_Z)  = (R1115 == 0);	# one bit not found
+	$(PSW_CY) = (R1115 != 0);	# one bit found
+	R2731 = count;
 }
 
 

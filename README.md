@@ -17,8 +17,6 @@ Based on **User’s Manual: V850E2M Architecture**
 
 ## TODOs
 
-* sub/add flags
-* saturating math
 * float-point support
 * fix a lot of bugs
 

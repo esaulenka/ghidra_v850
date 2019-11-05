@@ -21,17 +21,35 @@
 	set_S_Z (r1115);
 }
 
+macro saturate(value) {
+	# result, condition, true_val, false_val
+	ternary (value, value s>  0x7fffffff, 0x7fffffff, value);
+	ternary (value, value s< -0x80000000, 0x80000000, value);
+}
+
 # SATSUBR reg1, reg2
-:satsubr R0004, R1115 is op0510=0x04 & R0004 & R1115 & op1115!=0 {
-	TODO();
+:satsubr R0004, r1115 is op0510=0x04 & R0004 & r1115 & op1115!=0 {
+	local res:5 = sext(R0004) - sext(r1115);
+	flags_sub(R0004, r1115);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	r1115 = res:4;
 }
 # SATSUB reg1, reg2
-:satsub R0004, R1115 is op0510=0x05 & R0004 & R1115 & op1115!=0 {
-	TODO();
+:satsub R0004, r1115 is op0510=0x05 & R0004 & r1115 & op1115!=0 {
+	local res:5 = sext(r1115) - sext(R0004);
+	flags_sub(r1115, R0004);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	r1115 = res:4;
 }
 # SATADD reg1, reg2
-:satadd R0004, R1115 is op0510=0x06 & R0004 & R1115 & op1115!=0 {
-	TODO();
+:satadd R0004, r1115 is op0510=0x06 & R0004 & r1115 & op1115!=0 {
+	local res:5 = sext(R0004) + sext(r1115);
+	flags_add(R0004, r1115);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	r1115 = res:4;
 }
 
 # MULH reg1, reg2
@@ -71,7 +89,11 @@
 
 #SATADD imm5, reg2
 :satadd s0004, r1115 is op0510=0x11 & s0004 & r1115 & op1115!=0 {
-	TODO();
+	local res:5 = s0004 + sext(r1115);
+	flags_add(s0004, r1115);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	r1115 = res:4;
 }
 
 # ADD imm5, reg2
@@ -82,8 +104,8 @@
 }
 
 # CMP imm5, reg2
-:cmp s0004, r1115 is op0510=0x13 & s0004 & r1115 {
-	flags_sub(r1115, s0004);
+:cmp s0004, R1115 is op0510=0x13 & s0004 & R1115 {
+	flags_sub(R1115, s0004);
 }
 
 # MULH imm5, reg2
@@ -113,8 +135,11 @@
 
 # SATSUBI imm16, reg1, reg2
 :satsubi s1631, R0004, r1115 is op0510=0x33 & op1115!=0 & R0004 & r1115; s1631 {
-	TODO();
-}
+	local res:5 = sext(R0004) - s1631;
+	flags_sub(R0004, s1631);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	r1115 = res:4;}
 
 # MULHI imm16, reg1, reg2
 :mulhi s1631, R0004, R1115 is op0510=0x37 & R1115 & R0004; s1631 {
@@ -206,12 +231,20 @@
 
 # SATSUB reg1, reg2, reg3
 :satsub R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x39A & R2731 {
-	TODO();
+	local res:5 = sext(R1115) - sext(R0004);
+	flags_sub(R1115, R0004);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	R2731 = res:4;
 }
 
 # SATADD reg1, reg2, reg3
 :satadd R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0x3BA & R2731 {
-	TODO();
+	local res:5 = sext(R0004) + sext(R1115);
+	flags_add(R0004, R1115);
+	$(PSW_SAT) = $(PSW_SAT) || $(PSW_CY);
+	saturate(res);
+	R2731 = res:4;
 }
 
 # MAC reg1, reg2, reg3, reg4

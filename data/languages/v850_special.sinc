@@ -1,6 +1,9 @@
 
 # (15) Special instructions
 
+# exception cause
+@define ECR_EICC  "ECR[0,16]"
+@define ECR_FECC  "ECR[16,16]"
 
 
 # NOP
@@ -36,7 +39,16 @@ define pcodeop __synchronize;
 
 # FETRAP vector4
 :fetrap op1114 is op0010=0x040 & op1515=0 & op1114 & op1115!=0 {
-	TODO();
+	FEPC = inst_next;
+	FEPSW = PSW;
+	FEIC = op1114 + 0x30;	 # exception code 0x30..0x3F
+	$(ECR_FECC) = op1114 + 0x30;
+	$(PSW_EP) = 1;
+	$(PSW_ID) = 1;
+	$(PSW_NP) = 1;
+	# there some flags should be cleared when MPM.AUE==1
+	PC = 0x30;
+	goto [PC];
 }
 
 # CALLT imm6
@@ -61,10 +73,6 @@ define pcodeop __synchronize;
 	r1115 = SR0004;
 }
 
-
-macro _ternary(res, cond, avar, bvar)
-{ res = (avar * zext(cond != 0)) + (bvar * zext(cond == 0)); }
-
 # CAXI [reg1], reg2, reg3
 :caxi [R0004], R1115, R2731 is op0510=0x3F & R0004 & R1115; op1626=0xEE & R2731 {
 	local token = *:4 R0004;
@@ -77,7 +85,18 @@ macro _ternary(res, cond, avar, bvar)
 
 # TRAP imm5
 :trap op0004 is op0515=0x3F & op0004; op1631=0x0100 {
-	TODO();
+	local vector5:4 = op0004;
+	EIPC = inst_next;
+	EIPSW = PSW;
+	EIIC = vector5 + 0x40;	 # exception code 0x40..0x5F
+	$(ECR_EICC) = vector5:2 + 0x40;
+	$(PSW_EP) = 1;
+	$(PSW_ID) = 1;
+	# there some flags should be cleared when MPM.AUE==1
+	local addr:4 = 0;
+	ternary (addr, (vector5 <= 15), 0x40, 0x50);
+	PC = addr;
+	call [PC];
 }
 
 # HALT
@@ -87,7 +106,17 @@ define pcodeop __halt;
 }
 # RETI
 :reti is op0515=0x3F; op1631=0x0140 {
-	TODO();
+# if PSW.EP = 1			then PC = EIPC, PSW = EIPSW
+# else if PSW.NP == 1	then PC = FEPC, PSW = FEPSW
+# else 						 PC = EIPC, PSW = EIPSW
+	if ($(PSW_EP) == 0) && $(PSW_NP) goto <fe_exc>;
+		PC = EIPC;
+		PSW = EIPSW;
+		return [PC];
+	<fe_exc>
+		PC = FEPC;
+		PSW = FEPSW;
+		return [PC];
 }
 # CTRET
 :ctret is op0515=0x3F; op1631=0x0144 {
@@ -124,6 +153,16 @@ define pcodeop __enable_irq;
 # SYSCALL vector8
 :syscall vector8 is op0515=0x6BF & op0004; op3031=0 & op2729 & op1626=0x160 
 [ vector8 = (op2729 << 5) | op0004; ] {
-	TODO();
+	EIPC = inst_next;
+	EIPSW = PSW;
+	EIIC = vector8 + 0x8000;	 # exception code 0x8000..0x80FF
+	$(ECR_EICC) = vector8 + 0x8000;
+	$(PSW_EP) = 1;
+	$(PSW_ID) = 1;
+	# there some flags should be cleared when MPM.AUE==1
+	local addr:4 = 0;
+	ternary (addr, (vector8 <= SCCFG), SCBP + (vector8 << 2), SCBP);
+	PC = SCBP + (*:4 addr);
+	call [PC];
 }
 

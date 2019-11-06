@@ -30,7 +30,11 @@
   R2731 = trunc(ceil(R1115));
 }
 
-# TODO CMOVF.S
+# CMOVF.S fcbit, reg1, reg2, reg3
+:cmovf.s fcbit, R1115, R0004, R2731 is R1115 & op0510=0x3F & R0004; R2731 & op2126=0b100000 & op2020=0 & fcbit & op1616=0 {
+  local tmp:4 = (FPSR >> (fcbit:1 + 24:1)) & 0x1;
+  R2731 = (tmp * R1115) | ((1-tmp) * R0004);
+}
 
 # CMPF.S reg2, reg3
 :cmpf.s fcond, R1115, R0004, fcbit is R1115 & op0510=0x3F & R0004; op3131=0 & fcond & op2126=0b100001 & op2020=0 & fcbit & op1616=0 {
@@ -92,9 +96,9 @@
 }
 
 # FLOORF.SL reg2, reg3
-:floorf.sl R1115, Rs2731odd is R1115 & op0510=0x3F & op0004=0b00011; Rs2731odd & op2126=0b100010 & op1620=0b00100 {
+:floorf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00011; R2731odd & op2126=0b100010 & op1620=0b00100 {
   local tmp:8 = floor(float2float(R1115));
-  Rs2731odd = trunc(tmp);
+  R2731odd = trunc(tmp);
 }
 
 # FLOORF.SUL reg2, reg3
@@ -112,12 +116,6 @@
 :floorf.suw R1115, R2731 is R1115 & op0510=0x3F & op0004=0b00011; R2731 & op2126=0b100010 & op1620=0b00000 {
   R2731 = trunc(floor(R1115));
 }
-
-# TODO: this has a weird concatenation in reg4
-# MADDF.S. reg1, reg2, reg3, reg4
-# MSUBF.S. reg1, reg2, reg3, reg4
-# NMADDF.S. reg1, reg2, reg3, reg4
-# NMSUBF.S. reg1, reg2, reg3, reg4
 
 # MADDF.S. reg1, reg2, reg3, reg4
 :maddf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b00 & op1616=0 & reg4 {
@@ -138,7 +136,6 @@
 :nmsubf.s R0004, R1115, R2731, reg4 is R0004 & op0510=0x3F & R1115; R2731 & op2426=0b101 & op2122=0b11 & op1616=0 & reg4 {
   reg4 = f-((R1115 f* R0004) f- R2731);
 }
-
 
 # MAXF.S. reg1, reg2, reg3
 :maxf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01000 {

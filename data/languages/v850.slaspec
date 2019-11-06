@@ -70,9 +70,7 @@ define token instr(16)
 	xR1115 = (11,15)
 	r0004 = (0,4)
 	r1115 = (11,15)
-	xRs1115 = (11,15)
 	R1115odd = (11,15)
-	Rs1115odd = (11,15) signed
 	s0003 = (0,3) signed
 	s0004 = (0,4) signed
 	s0005 = (0,5) signed
@@ -106,11 +104,8 @@ define token instr2(16)
 	op3131 = (15,15)
 	r1620 = (0,4)
 	xR2731 = (11,15)
-	xRs2731 = (11,15) signed
 	R1620odd = (0,4)
-	Rs1620odd = (0,4) signed
 	R2731odd = (11,15)
-	Rs2731odd = (11,15) signed
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
 	s1821 = (2,5) signed
@@ -158,11 +153,11 @@ attach variables [op1_1720] [r1 sp tp r7 r9 r11 r13 r15 r17 r19 r21 r23 r25 r27 
 reg4: op0_1720 is op2323=0 & op0_1720 { export op0_1720; }
 reg4: op1_1720 is op2323=1 & op1_1720 { export op1_1720; }
 
-attach variables [ xR0004 xR1115 xRs1115 xR2731 xRs2731]
+attach variables [ xR0004 xR1115 xR2731]
 	[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
 attach variables [ r0004 r1115 r1620 prep1620r ]
 	[ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
-attach variables [ R1115odd Rs1115odd R1620odd R2731odd Rs1620odd Rs2731odd ]
+attach variables [ R1115odd R1620odd R2731odd ]
 	[ r0r1 _ r2sp _ _ _ r6r7 _ r8r9 _ r10r11 _ r12r13 _ r14r15 _ r16r17 _ r18r19 _ r20r21 _ r22r23 _ r24r25 _ r26r27 _ r28r29 _ _ _ ];
 
 attach names [fcond]
@@ -221,21 +216,10 @@ R1115: xR1115 is xR1115 {
 	export xR1115;
 }
 
-Rs1115: xRs1115 is xRs1115 {
-	local addr:4 = & xRs1115;
-	xRs1115 = xRs1115 * zext(addr != 0);
-	export xRs1115;
-}
 R2731: xR2731 is xR2731 {
 	local addr:4 = & xR2731;
 	xR2731 = xR2731 * zext(addr != 0);
 	export xR2731;
-}
-
-Rs2731: xRs2731 is xRs2731 {
-  local addr:4 = & xRs2731;
-	xRs2731 = xRs2731 * zext(addr != 0);
-	export xRs2731;
 }
 
 

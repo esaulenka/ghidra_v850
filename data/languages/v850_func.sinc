@@ -37,7 +37,7 @@
 [ disp22 = ((s0005 << 16) | op1631) + inst_start; ] {
 	local addr:4 = disp22;
 	PC = addr;
-	call [addr];
+	goto [addr];
 }
 
 # JARL disp22, reg2

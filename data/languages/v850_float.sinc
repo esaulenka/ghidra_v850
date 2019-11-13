@@ -63,41 +63,42 @@
 }
 
 # CMOVF.D fcbit, reg1, reg2, reg3
-:cmovf.d fcbit, R1115odd, R0004odd, R2731odd is R1115odd & op0510=0x3F & R0004odd; R2731odd & op2126=0b100000 & op2020=1 & fcbit & op1616=0 {
-  local tmp:4 = (FPSR >> (fcbit:1 + 24:1)) & 0x1;
-  local tmp2:8 = zext(tmp);
-  R2731odd = (tmp2 * R1115odd) | ((1-tmp2) * R0004odd);
+:cmovf.d fcbit1719, R1115odd, R0004odd, R2731odd is R1115odd & op0510=0x3F & R0004odd; R2731odd & op2126=0b100000 & op2020=1 & fcbit1719 & op1616=0 {
+  local tmp:8 = zext(FPSR >> (fcbit1719:1 + 24:1)) & 0x1;
+  R2731odd = (tmp * R1115odd) | ((1-tmp) * R0004odd);
 }
 
 # CMOVF.S fcbit, reg1, reg2, reg3
-:cmovf.s fcbit, R1115, R0004, R2731 is R1115 & op0510=0x3F & R0004; R2731 & op2126=0b100000 & op2020=0 & fcbit & op1616=0 {
-  local tmp:4 = (FPSR >> (fcbit:1 + 24:1)) & 0x1;
+:cmovf.s fcbit1719, R1115, R0004, R2731 is R1115 & op0510=0x3F & R0004; R2731 & op2126=0b100000 & op2020=0 & fcbit1719 & op1616=0 {
+  local tmp:4 = (FPSR >> (fcbit1719:1 + 24:1)) & 0x1;
   R2731 = (tmp * R1115) | ((1-tmp) * R0004);
 }
 
-# CMPF.D reg2, reg3
-:cmpf.d fcond, R1115odd, R0004odd, fcbit is R1115odd & op0510=0x3F & R0004odd; op3131=0 & fcond & op2126=0b100001 & op2020=1 & fcbit & op1616=0 {
-  # TODO: handle case with NaNs
-  # TODO: handle all cases
-  local eq:4 = zext((R1115odd f== R0004odd) && (fcond:1 == 2));
-  local lt:4 = zext((R1115odd f< R0004odd) && (fcond:1 == 12));
-  local le:4 = zext((R1115odd f<= R0004odd) && (fcond:1 == 14));
+macro compare_float(fcond, reg2, reg1, result) {
+  local un = (fcond & 1) && (nan(reg2) || nan(reg1));
+  local eq = (fcond & 2) && (reg2 f== reg1);
+  local lt = (fcond & 4) && (reg2 f<  reg1);
+  # TODO (fcond & 8) throws exception when unordered
+  result = zext(un || eq || lt);
+}
 
-  local newbit:4 = (lt | eq | le) << (24 + fcbit);
-  local ones:4 = 1 << (24 + fcbit);
+# CMPF.D reg2, reg3
+:cmpf.d fcond2730, R1115odd, R0004odd, fcbit1719 is R1115odd & op0510=0x3F & R0004odd; op3131=0 & fcond2730 & op2126=0b100001 & op2020=1 & fcbit1719 & op1616=0 {
+  local res:4 = 0;
+  compare_float (fcond2730:1, R1115odd, R0004odd, res);
+
+  local newbit:4 = res << (24 + fcbit1719);
+  local ones:4 = 1 << (24 + fcbit1719);
   FPSR = (FPSR & ~ones) | newbit;
 }
 
 # CMPF.S reg2, reg3
-:cmpf.s fcond, R1115, R0004, fcbit is R1115 & op0510=0x3F & R0004; op3131=0 & fcond & op2126=0b100001 & op2020=0 & fcbit & op1616=0 {
-  # TODO: handle case with NaNs
-  # TODO: handle all cases
-  local eq:4 = zext((R1115 f== R0004) && (fcond:1 == 2));
-  local lt:4 = zext((R1115 f< R0004) && (fcond:1 == 12));
-  local le:4 = zext((R1115 f<= R0004) && (fcond:1 == 14));
+:cmpf.s fcond2730, R1115, R0004, fcbit1719 is R1115 & op0510=0x3F & R0004; op3131=0 & fcond2730 & op2126=0b100001 & op2020=0 & fcbit1719 & op1616=0 {
+  local res:4 = 0;
+  compare_float (fcond2730:1, R1115, R0004, res);
 
-  local newbit:4 = (lt | eq | le) << (24 + fcbit);
-  local ones:4 = 1 << (24 + fcbit);
+  local newbit:4 = res << (24 + fcbit1719);
+  local ones:4 = 1 << (24 + fcbit1719);
   FPSR = (FPSR & ~ones) | newbit;
 }
 
@@ -352,8 +353,8 @@
 }
 
 # TRFSR fcbit
-:trfsr fcbit is op1115=0 & op0510=0x3F & op0004=0; op2731=0 & op2126=0b100000 & op2020=0 & fcbit & op1616=0 {
-  local tmp:4 = (FPSR >> (fcbit:1 + 24:1)) & 0x1;
+:trfsr fcbit1719 is op1115=0 & op0510=0x3F & op0004=0; op2731=0 & op2126=0b100000 & op2020=0 & fcbit1719 & op1616=0 {
+  local tmp:4 = (FPSR >> (fcbit1719 + 24)) & 0x1;
   $(PSW_Z) = (tmp != 0);
 }
 

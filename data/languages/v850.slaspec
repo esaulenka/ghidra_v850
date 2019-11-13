@@ -110,8 +110,8 @@ define token instr2(16)
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
 	s1821 = (2,5) signed
-	fcond = (11,14)
-	fcbit = (1,3)
+	fcond2730 = (11,14)
+	fcbit1719 = (1,3)
 ;
 define token instr3(16)
 	op3247 = (0,15)
@@ -161,8 +161,8 @@ attach variables [ r0004 r1115 r1620 prep1620r ]
 attach variables [ R0004odd R1115odd R1620odd R2731odd ]
 	[ r0r1 _ r2sp _ _ _ r6r7 _ r8r9 _ r10r11 _ r12r13 _ r14r15 _ r16r17 _ r18r19 _ r20r21 _ r22r23 _ r24r25 _ r26r27 _ r28r29 _ _ _ ];
 
-attach names [fcond]
-  ["F" "UN" "EQ" "UEQ" "OLT" "ULT" "OLE" "ULE" "SD" "NGLE" "SEQ" "NGL" "LT" "NGE" "LE" "NGT"];
+attach names [fcond2730]
+  ["f" "un" "eq" "ueq" "olt" "ult" "ole" "ule" "sd" "ngle" "seq" "ngl" "lt" "nge" "le" "ngt"];
 
 attach variables [ SR0004 SR1115 ] [
 	EIPC EIPSW FEPC FEPSW ECR PSW FPSR FPEPC

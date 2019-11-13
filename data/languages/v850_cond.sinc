@@ -59,13 +59,21 @@ cc1720: "gt"	is op1720=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0; 
 
 # CMOV cccc, imm5, reg2, reg3
 :cmov^cc1720 s0004, R1115, R2731 is op0510=0x3F & s0004 & R1115; op2126=0x18 & op1616=0 & cc1720 & R2731 {
-	local cond = cc1720;
-	ternary (R2731, cond, s0004, R1115);
+	if (cc1720) goto <true>;
+	# false
+		R2731 = R1115;
+		goto inst_next;
+	<true>
+		R2731 = s0004;
 }
 # CMOV cccc, reg1, reg2, reg3
 :cmov^cc1720 R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op2126=0x19 & op1616=0 & cc1720 & R2731 {
-	local cond = cc1720;
-	ternary (R2731, cond, R0004, R1115);
+	if (cc1720) goto <true>;
+	# false
+		R2731 = R1115;
+		goto inst_next;
+	<true>
+		R2731 = R0004;
 }
 
 # SBF cccc, reg1, reg2, reg3

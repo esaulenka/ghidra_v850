@@ -25,16 +25,16 @@ macro shift_right_u (res, _val, _shift) {
 	local shift = _shift;
 	res = val >> shift;
 	set_nOV_S_Z (val >> shift);
-	local lsb = (val >> (shift - 1)) != 0;
-	set_C (lsb && shift);
+	local lsb = val & (1 << (shift - 1));
+	set_C ((lsb != 0) && (shift != 0));
 }
 macro shift_right_s (res, _val, _shift) {
 	local val = _val;
 	local shift = _shift;
 	res = val s>> shift;
 	set_nOV_S_Z (val s>> shift);
-	local lsb = (val s>> (shift - 1)) != 0;
-	set_C (lsb && shift);
+	local lsb = val & (1 << (shift - 1));
+	set_C ((lsb != 0) && (shift != 0));
 }
 macro shift_left (res, _val, _shift) {
 	local val = _val;
@@ -43,6 +43,8 @@ macro shift_left (res, _val, _shift) {
 	set_nOV_S_Z (val << shift);
 	local c:5 = zext(val) << shift;
 	set_C (c[32,1]);
+	local msb = (val & (1 << (shift - 1))) >> 32;
+	set_C ((msb != 0) && (shift != 0));
 }
 
 

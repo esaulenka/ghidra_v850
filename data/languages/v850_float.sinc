@@ -75,11 +75,12 @@
 }
 
 macro compare_float(fcond, reg2, reg1, result) {
-  local un = (fcond & 1) && (nan(reg2) || nan(reg1));
-  local eq = (fcond & 2) && (reg2 f== reg1);
-  local lt = (fcond & 4) && (reg2 f<  reg1);
+  local un = (fcond & 1)        && (nan(reg2) || nan(reg1));
+  local eq = ((fcond & 6) == 2) && (reg2 f== reg1);
+  local lt = ((fcond & 6) == 4) && (reg2 f<  reg1);
+  local le = ((fcond & 6) == 6) && (reg2 f<= reg1);
   # TODO (fcond & 8) throws exception when unordered
-  result = zext(un || eq || lt);
+  result = zext(un || eq || lt || le);
 }
 
 # CMPF.D reg2, reg3
@@ -358,7 +359,7 @@ macro compare_float(fcond, reg2, reg1, result) {
 
 # TRFSR fcbit
 :trfsr fcbit1719 is op1115=0 & op0510=0x3F & op0004=0; op2731=0 & op2126=0b100000 & op2020=0 & fcbit1719 & op1616=0 {
-  local tmp:4 = (FPSR >> (fcbit1719 + 24)) & 0x1;
+  local tmp:4 = FPSR & (1 << (fcbit1719 + 24));
   $(PSW_Z) = (tmp != 0);
 }
 

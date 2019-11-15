@@ -41,6 +41,14 @@ define pcodeop TODO;
 macro ternary(res, cond, avar, bvar) {
 	res = (avar * zext(cond != 0)) + (bvar * zext(cond == 0));
 }
+macro condition(res, cond, true_val, false_val) {
+	if (cond) goto <true>;
+		res = false_val;
+		goto <end>;
+	<true>
+		res = true_val;
+	<end>
+}
 
 
 define token instr(16)

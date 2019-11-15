@@ -255,25 +255,29 @@ macro compare_float(fcond, reg2, reg1, result) {
 # MAXF.D reg1, reg2, reg3
 :maxf.d R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b11000 {
   tmp_cond:1 = R1115odd f> R0004odd;
-  R2731odd = (R1115odd * zext(tmp_cond == 1)) | (R0004odd * zext(tmp_cond == 0) );
+  # R2731odd = (R1115odd * zext(tmp_cond == 1)) | (R0004odd * zext(tmp_cond == 0) );
+  condition(R2731odd, tmp_cond, R1115odd, R0004odd);
 }
 
 # MAXF.S reg1, reg2, reg3
 :maxf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01000 {
   tmp_cond:1 = R1115 f> R0004;
-  R2731 = (R1115 * zext(tmp_cond == 1)) | (R0004 * zext(tmp_cond == 0) );
+  # R2731 = (R1115 * zext(tmp_cond == 1)) | (R0004 * zext(tmp_cond == 0) );
+  condition(R2731, tmp_cond, R1115, R0004);
 }
 
 # MINF.D reg1, reg2, reg3
 :minf.d R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b11010 {
   tmp_cond:1 = R1115odd f< R0004odd;
-  R2731odd = (R1115odd * zext(tmp_cond == 1)) | (R0004odd * zext(tmp_cond == 0) );
+  # R2731odd = (R1115odd * zext(tmp_cond == 1)) | (R0004odd * zext(tmp_cond == 0) );
+  condition(R2731odd, tmp_cond, R1115odd, R0004odd);
 }
 
 # MINF.S reg1, reg2, reg3
 :minf.s R0004, R1115, R2731 is R0004 & op0510=0x3F & R1115; R2731 & op2126=0b100011 & op1620=0b01010 {
   tmp_cond:1 = R1115 f< R0004;
-  R2731 = (R1115 * zext(tmp_cond == 1)) | (R0004 * zext(tmp_cond == 0) );
+  # R2731 = (R1115 * zext(tmp_cond == 1)) | (R0004 * zext(tmp_cond == 0) );
+  condition(R2731, tmp_cond, R1115, R0004);
 }
 
 # MSUBF.S reg1, reg2, reg3, reg4

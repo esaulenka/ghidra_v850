@@ -22,9 +22,12 @@
 }
 
 macro saturate(value) {
-	# result, condition, true_val, false_val
-	ternary (value, value s>  0x7fffffff, 0x7fffffff, value);
-	ternary (value, value s< -0x80000000, 0x80000000, value);
+	if (value s>  0x7fffffff) goto <pos_sat>;
+	if (value s< -0x80000000) goto <neg_sat>;
+	goto <end>;
+	<pos_sat> value =  0x7fffffff; goto <end>;
+	<neg_sat> value = -0x80000000; goto <end>;
+	<end>
 }
 
 # SATSUBR reg1, reg2

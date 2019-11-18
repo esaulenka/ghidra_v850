@@ -17,6 +17,5 @@ Based on **User’s Manual: V850E2M Architecture**
 
 ## TODOs
 
-* float-point support
 * fix a lot of bugs
 

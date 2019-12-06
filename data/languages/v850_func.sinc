@@ -15,14 +15,14 @@
 
 # JR disp32
 :jr addr32 is op0015=0x02E0; addr32 {
-	PC = addr32;
+	PC = & addr32;
 	goto addr32;
 }
 
 # JARL disp32, reg1
 :jarl addr32, r0004 is op0515=0x017 & r0004; addr32 {
 	r0004 = inst_next;
-	PC = addr32;
+	PC = & addr32;
 	call addr32;
 }
 
@@ -33,20 +33,17 @@
 }
 
 # JR disp22
-:jr disp22 is op0615=0x1E & s0005; op1631 & op1616=0 
-[ disp22 = ((s0005 << 16) | op1631) + inst_start; ] {
-	local addr:4 = disp22;
-	PC = addr;
-	goto [addr];
+:jr addr22 is op0615=0x1E ... & addr22 {
+	PC = & addr22;
+	goto addr22;
 }
 
+
 # JARL disp22, reg2
-:jarl disp22, r1115 is op0610=0x1E & s0005 & r1115; op1631 & op1616=0
-[ disp22 = ((s0005 << 16) | op1631) + inst_start; ] {
+:jarl addr22, r1115 is (op0610=0x1E & r1115) ... & addr22 {
 	r1115 = inst_next;
-	local addr:4 = disp22;
-	PC = addr;
-	call [addr];
+	PC = & addr22;
+	call addr22;
 }
 
 macro pop(reg) { reg = *:4 sp; sp = sp + 4; }

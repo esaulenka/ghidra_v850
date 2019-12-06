@@ -181,9 +181,8 @@ attach variables [ SR0004 SR1115 ] [
 
 addr9: rel is op0406 & s1115
 [ rel = ((s1115 << 4) | (op0406 << 1)) + inst_start; ] { export *:4 rel; }
-# TODO not working!!
-# addr22: rel is s0005; op1631 & op1616=0
-# [ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+addr22: rel is s0005; op1631 & op1616=0
+[ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
 addr32: rel is op1631 & op1616=0; op3247
 [ rel = ((op3247 << 16) | op1631) + inst_start; ] { export *:4 rel; }
 

@@ -8,6 +8,7 @@
             version="0.1"
             slafile="v850.sla"
             processorspec="v850.pspec"
+            manualindexfile="../manuals/v850.idx"
             id="v850:LE:32:default">
     <description>Renesas v850 Module</description>
     <compiler name="default" spec="v850.cspec" id="default"/>

@@ -52,7 +52,7 @@ define pcodeop __synchronize;
 }
 
 # CALLT imm6
-:callt op0005 is op0615=0x080 & op0005 {
+:callt op0005 is op0615=0x008 & op0005 {
 	CTPC = inst_next;
 	CTPSW = PSW;
 	local lbl:4 = CTBP + (op0005 << 1);

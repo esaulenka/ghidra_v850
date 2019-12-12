@@ -20,7 +20,7 @@
 	set_nOV_S_Z(R1115);
 }
 # AND reg1, reg2
-:or R0004, R1115 is op0510=0x0A & R0004 & R1115 {
+:and R0004, R1115 is op0510=0x0A & R0004 & R1115 {
 	R1115 = R1115 & R0004;
 	set_nOV_S_Z(R1115);
 }

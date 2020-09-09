@@ -20,6 +20,48 @@ define register offset=0x80 size=4 [
 
 define register offset=0x100 size=4 [ PC ];
 
+# More special registers
+define register offset=0x104 size=4 [
+    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
+    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+
+	htcfg0   _   _   _   _  htctl  mea  asid
+    mei  ispr  pmr  icsr  intcfg   _   _   _
+    tlbsch   _   _   _   _   _   _  htscctl
+    htsctbl0  htsctbl1  htsctbl2  htsctbl3
+    htsctbl4  htsctbl5  htsctbl6  htsctbl7
+
+
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+
+	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
+    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
+    ictagl ictagh icdatl icdath
+    dctagl dctagh dcdatl dcdath
+    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+
+
+    mpm mprc _ _ mpbrgn mptrgn _ _
+    mca mcs mcc mcr _ _ _ _
+    _ _ _ _ mpprt0 mpprt1 mpprt2 _
+    _ _ _ _ _ _ _ _
+
+	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
+    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
+    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
+    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+
+    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
+    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
+    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
+    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+];
+
 @define PSW_PP  "PSW[19,1]"
 @define PSW_NPW "PSW[18,1]"
 @define PSW_DMP "PSW[17,1]"
@@ -50,6 +92,16 @@ macro condition(res, cond, true_val, false_val) {
 	<end>
 }
 
+# When making a table instruction contructor, for some reason the '...' operator can't be used
+# Error: Pattern size cannot vary (missing ... ?): for table "instruction" constructor from v850_cond.sinc:62
+define token exinstr(32)
+       xop0003 = (0,3)
+       xop0414 = (4,14)
+       xop0514 = (5,14)
+       xop1731 = (17,31)
+       xop1616 = (16,16)
+       xs0404 = (4,4) signed
+;
 
 define token instr(16)
 	op0000 = (0,0)
@@ -58,11 +110,13 @@ define token instr(16)
 	op0005 = (0,5)
 	op0006 = (0,6)
 	op0010 = (0,10)
+	op0014 = (0,14)
 	op0015 = (0,15)
 	op0105 = (1,5)
 	op0106 = (1,6)
 	op0406 = (4,6)
 	op0410 = (4,10)
+	op0414 = (4,14)
 	op0505 = (5,5)
 	op0510 = (5,10)
 	op0515 = (5,15)
@@ -82,9 +136,17 @@ define token instr(16)
 	R1115odd = (11,15)
 	s0003 = (0,3) signed
 	s0004 = (0,4) signed
+	s0404 = (4,4) signed
 	s0005 = (0,5) signed
 	s1115 = (11,15) signed
 	SR0004 = (0,4)
+	SR1 = (0,4)
+	SR2 = (0,4)
+	SR3 = (0,4)
+	SR4 = (0,4)
+	SR5 = (0,4)
+	SR6 = (0,4)
+	SR7 = (0,4)
 	SR1115 = (11,15)
 ;
 define token instr2(16)
@@ -95,6 +157,7 @@ define token instr2(16)
 	op1626 = (0,10)
 	op1631 = (0,15)
 	op1720 = (1,4)
+	op1731 = (1,15)
 	op0_1720 = (1,4)
 	op1_1720 = (1,4)
 	op1821 = (2,5)
@@ -109,6 +172,7 @@ define token instr2(16)
 	op2727 = (11,11)
 	op2729 = (11,13)
 	op2731 = (11,15)
+	selID = (11,15)
 	op3031 = (14,15)
 	op3131 = (15,15)
 	r1620 = (0,4)
@@ -177,6 +241,53 @@ attach variables [ SR0004 SR1115 ] [
 	FPST FPCC FPCFG SCCFG SCBP EIIC FEIC DBIC
 	CTPC CTPSW DBPC DBPSW CTBP DIR DBG22 DBG23
 	DBG24 DBG25 DBG26 DBG27 EIWR FEWR DBWR BSEL ];
+attach variables [ SR1 ] [
+	    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
+    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+];
+
+attach variables [ SR2 ] [
+	htcfg0   _   _   _   _  htctl  mea  asid
+    mei  ispr  pmr  icsr  intcfg   _   _   _
+    tlbsch   _   _   _   _   _   _  htscctl
+    htsctbl0  htsctbl1  htsctbl2  htsctbl3
+    htsctbl4  htsctbl5  htsctbl6  htsctbl7
+
+];
+
+
+
+attach variables [ SR4 ] [
+	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
+    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
+    ictagl ictagh icdatl icdath
+    dctagl dctagh dcdatl dcdath
+    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+
+];
+
+attach variables [ SR5 ] [
+    mpm mprc _ _ mpbrgn mptrgn _ _
+    mca mcs mcc mcr _ _ _ _
+    _ _ _ _ mpprt0 mpprt1 mpprt2 _
+    _ _ _ _ _ _ _ _
+];
+
+attach variables [ SR6 ] [
+	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
+    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
+    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
+    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+];
+
+attach variables [ SR7 ] [
+    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
+    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
+    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
+    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+];
 
 
 addr9: rel is op0406 & s1115
@@ -185,6 +296,8 @@ addr22: rel is s0005; op1631 & op1616=0
 [ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
 addr32: rel is op1631 & op1616=0; op3247
 [ rel = ((op3247 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+addr22b: rel is xs0404 & xop1731 & xop1616=1
+[ rel = (xs0404 << 16 | (xop1731 << 1)) + inst_start + 4; ] { export *:4 rel; }
 
 
 

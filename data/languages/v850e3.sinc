@@ -1,0 +1,177 @@
+# V850E3 (RH850) specific instructions
+# got from gcc binutils sources
+
+
+# More special registers
+define register offset=0x104 size=4 [
+    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
+    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+
+	htcfg0   _   _   _   _  htctl  mea  asid
+    mei  ispr  pmr  icsr  intcfg   _   _   _
+    tlbsch   _   _   _   _   _   _  htscctl
+    htsctbl0  htsctbl1  htsctbl2  htsctbl3
+    htsctbl4  htsctbl5  htsctbl6  htsctbl7
+
+
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+
+	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
+    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
+    ictagl ictagh icdatl icdath
+    dctagl dctagh dcdatl dcdath
+    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+
+
+    mpm mprc _ _ mpbrgn mptrgn _ _
+    mca mcs mcc mcr _ _ _ _
+    _ _ _ _ mpprt0 mpprt1 mpprt2 _
+    _ _ _ _ _ _ _ _
+
+	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
+    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
+    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
+    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+
+    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
+    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
+    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
+    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+];
+
+
+attach variables [ SR1 ] [
+	    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
+    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+];
+attach variables [ SR2 ] [
+	htcfg0   _   _   _   _  htctl  mea  asid
+    mei  ispr  pmr  icsr  intcfg   _   _   _
+    tlbsch   _   _   _   _   _   _  htscctl
+    htsctbl0  htsctbl1  htsctbl2  htsctbl3
+    htsctbl4  htsctbl5  htsctbl6  htsctbl7
+
+];
+attach variables [ SR4 ] [
+	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
+    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
+    ictagl ictagh icdatl icdath
+    dctagl dctagh dcdatl dcdath
+    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+
+];
+attach variables [ SR5 ] [
+    mpm mprc _ _ mpbrgn mptrgn _ _
+    mca mcs mcc mcr _ _ _ _
+    _ _ _ _ mpprt0 mpprt1 mpprt2 _
+    _ _ _ _ _ _ _ _
+];
+attach variables [ SR6 ] [
+	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
+    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
+    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
+    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+];
+attach variables [ SR7 ] [
+    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
+    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
+    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
+    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+];
+
+
+# ST.DW reg3, disp23[reg1]
+:st.dw R2731, disp23[R0004] is op0515=0x3D & R0004; R2731 & op2126 & op1620=0xF; s3247
+[ disp23 = (s3247 << 7) | (op2126 << 1); ] {
+	local addr:4 = disp23 + R0004;
+	*:4 addr = R2731 : 4;
+}
+
+# ld.dw 0x7a00009 0xffe0001f
+# LD.DW
+:ld.dw disp23[R0004], R2731 is op0515=0x03d & R0004; R2731 & op2126 & op1620=0x09; s3247
+[ disp23 = (s3247 << 7) | (op2126 << 1); ] {
+      local addr:4 = disp23 + R0004;
+      R2731 = *:8 addr;
+}
+
+
+#jarl 0xc7e00160 0xffe007ff
+:jarl [r0004],R2731 is op0515=0x63f & r0004; R2731{
+	R2731 = inst_next;
+	PC = r0004;
+	call [r0004];
+}
+
+
+
+xcc0003: "v" 	is xop0003=0x0		{ tmp:1 = ($(PSW_OV)) == 1; export tmp; }
+xcc0003: "nv"	is xop0003=0x8		{ tmp:1 = ($(PSW_OV)) == 0; export tmp; }
+xcc0003: "c" 	is xop0003=0x1		{ tmp:1 = ($(PSW_CY)) == 1; export tmp; }
+xcc0003: "nc"	is xop0003=0x9		{ tmp:1 = ($(PSW_CY)) == 0; export tmp; }
+xcc0003: "e" 	is xop0003=0x2		{ tmp:1 = ($(PSW_Z)) == 1; export tmp; }
+xcc0003: "ne"	is xop0003=0xA		{ tmp:1 = ($(PSW_Z)) == 0; export tmp; }
+xcc0003: "nh"	is xop0003=0x3		{ tmp:1 = ($(PSW_CY) || $(PSW_Z)) == 1; export tmp; }
+xcc0003: "h" 	is xop0003=0xB		{ tmp:1 = ($(PSW_CY) || $(PSW_Z)) == 0; export tmp; }
+xcc0003: "n" 	is xop0003=0x4		{ tmp:1 = ($(PSW_S)) == 1; export tmp; }
+xcc0003: "p" 	is xop0003=0xC		{ tmp:1 = ($(PSW_S)) == 0; export tmp; }
+xcc0003: "r" 	is xop0003=0x5		{ tmp:1 = 1; export tmp; }
+xcc0003: "sa"	is xop0003=0xD		{ tmp:1 = ($(PSW_SAT)) == 1; export tmp; }
+xcc0003: "lt"	is xop0003=0x6		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV)) == 1; export tmp; }
+xcc0003: "ge"	is xop0003=0xE		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV)) == 0; export tmp; }
+xcc0003: "le"	is xop0003=0x7		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 1; export tmp; }
+xcc0003: "gt"	is xop0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0; export tmp; }
+
+#Bcond addr22b
+:b^xcc0003 addr22b  is xop0514=0x3f & xcc0003 & addr22b  {
+	if (xcc0003) goto addr22b;
+}
+:br addr22b  is xop0514=0x3f & xop0003=0x5 & addr22b  {
+	goto addr22b;
+}
+
+
+
+
+
+# STSR regID, reg2, 1
+:stsr SR1, r1115, selID is op0510=0x3F & r1115 & SR1; op1626=0x40 & op2731=0x01 & selID {
+        r1115 = SR1;
+}
+
+# STSR regID, reg2, 2
+:stsr SR2, r1115, selID is op0510=0x3F & r1115 & SR2; op1626=0x40 & op2731=0x02 & selID {
+        r1115 = SR2;
+}
+
+# STSR regID, reg2, 3
+:stsr SR0004, r1115, selID is op0510=0x3F & r1115 & SR0004; op1626=0x40 & op2731=0x03 & selID {
+        r1115 = SR0004;
+}
+
+# STSR regID, reg2, 4
+:stsr SR4, r1115, selID is op0510=0x3F & r1115 & SR4; op1626=0x40 & op2731=0x04 & selID {
+        r1115 = SR4;
+}
+
+# STSR regID, reg2, 5
+:stsr SR5, r1115, selID is op0510=0x3F & r1115 & SR5; op1626=0x40 & op2731=0x05 & selID {
+        r1115 = SR5;
+}
+
+# STSR regID, reg2, 6
+:stsr SR6, r1115, selID is op0510=0x3F & r1115 & SR6; op1626=0x40 & op2731=0x06 & selID {
+        r1115 = SR6;
+}
+
+# STSR regID, reg2, 7
+:stsr SR7, r1115, selID is op0510=0x3F & r1115 & SR7; op1626=0x40 & op2731=0x07 & selID {
+        r1115 = SR7;
+}

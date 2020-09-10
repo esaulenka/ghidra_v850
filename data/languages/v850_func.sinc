@@ -19,14 +19,6 @@
 	goto addr32;
 }
 
-
-#jarl 0xc7e00160 0xffe007ff
-:jarl [r0004],R2731 is op0515=0x63f & r0004; R2731{
-	R2731 = inst_next;
-	PC = r0004;
-	call [r0004];
-}
-
 # JARL disp32, reg1
 :jarl addr32, r0004 is op0515=0x017 & r0004; addr32 {
 	r0004 = inst_next;

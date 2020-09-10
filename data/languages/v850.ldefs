@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <language_definitions>
-   <language processor="v850"
+  <language processor="v850"
             endian="little"
             size="32"
-            variant="v850e2m"
+            variant="V850E2M"
             version="0.1"
-            slafile="v850.sla"
+            slafile="v850e2.sla"
             processorspec="v850.pspec"
             manualindexfile="../manuals/v850.idx"
             id="v850:LE:32:default">
+    <description>Renesas v850 Module</description>
+    <compiler name="default" spec="v850.cspec" id="default"/>
+  </language> 
+  <language processor="v850"
+            endian="little"
+            size="32"
+            variant="V850E3 (RH850)"
+            version="0.1"
+            slafile="v850e3.sla"
+            processorspec="v850.pspec"
+            manualindexfile="../manuals/v850.idx"
+            id="v850e3:LE:32:default">
     <description>Renesas v850 Module</description>
     <compiler name="default" spec="v850.cspec" id="default"/>
   </language> 

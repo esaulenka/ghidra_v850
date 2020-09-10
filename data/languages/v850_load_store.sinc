@@ -85,6 +85,13 @@
 	*:4 addr = R1115;
 }
 
+# ST.dW reg3, disp23[reg1]
+:st.dw R2731, disp23[R0004] is op0515=0x3D & R0004; R2731 & op2126 & op1620=0xF; s3247
+[ disp23 = (s3247 << 7) | (op2126 << 1); ] {
+	local addr:4 = disp23 + R0004;
+	*:4 addr = R2731 : 4;
+}
+
 # LD.B disp23[reg1], reg3
 :ld.b disp23[R0004], R2731 is op0515=0x03C & R0004; R2731 & op2026 & op1619=5; s3247
 [ disp23 = (s3247 << 7) | op2026; ] {
@@ -102,6 +109,13 @@
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
 	local addr:4 = disp23 + R0004;
 	R2731 = *:4 addr;
+}
+# ld.dw 0x7a00009 0xffe0001f
+# LD.DW
+:ld.dw disp23[R0004], R2731 is op0515=0x03d & R0004; R2731 & op2126 & op1620=0x09; s3247
+[ disp23 = (s3247 << 7) | (op2126 << 1); ] {
+      local addr:4 = disp23 + R0004;
+      R2731 = *:8 addr;
 }
 # ST.B reg3, disp23[reg1]
 :st.b R2731, disp23[R0004] is op0515=0x03C & R0004; R2731 & op2026 & op1619=0xD; s3247

@@ -69,8 +69,8 @@ define pcodeop __synchronize;
 	SR1115 = R0004;
 }
 # STSR regID, reg2
-:stsr SR0004, r1115 is op0510=0x3F & r1115 & SR0004; op1631=0x40 {
-	r1115 = SR0004;
+:stsr SR0004, R1115 is op0510=0x3F & R1115 & SR0004; op1631=0x40 {
+	R1115 = SR0004;
 }
 
 # CAXI [reg1], reg2, reg3

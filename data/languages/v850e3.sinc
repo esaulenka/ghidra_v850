@@ -12,8 +12,7 @@ define register offset=0x104 size=4 [
 	htcfg0   _   _   _   _  htctl  mea  asid
     mei  ispr  pmr  icsr  intcfg   _   _   _
     tlbsch   _   _   _   _   _   _  htscctl
-    htsctbl0  htsctbl1  htsctbl2  htsctbl3
-    htsctbl4  htsctbl5  htsctbl6  htsctbl7
+    htsctbl0 htsctbl1 htsctbl2 htsctbl3 htsctbl4 htsctbl5 htsctbl6 htsctbl7
 
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
@@ -22,8 +21,7 @@ define register offset=0x104 size=4 [
 
 	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
     _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
-    ictagl ictagh icdatl icdath
-    dctagl dctagh dcdatl dcdath
+    ictagl ictagh icdatl icdath dctagl dctagh dcdatl dcdath
     icctrl dcctrl iccfg dccfg icerr dcerr _ _
 
     mpm mprc _ _ mpbrgn mptrgn _ _
@@ -43,41 +41,39 @@ define register offset=0x104 size=4 [
 ];
 
 
-attach variables [ SR1 ] [
-	    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+attach variables [ SR0004_1 SR1115_1 ] [
+	mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
     _ _ tcsel sccfg scbp hvccfg hvcbp vsel
     vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
     vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
 ];
-attach variables [ SR2 ] [
+attach variables [ SR0004_2 SR1115_2 ] [
 	htcfg0   _   _   _   _  htctl  mea  asid
     mei  ispr  pmr  icsr  intcfg   _   _   _
     tlbsch   _   _   _   _   _   _  htscctl
-    htsctbl0  htsctbl1  htsctbl2  htsctbl3
-    htsctbl4  htsctbl5  htsctbl6  htsctbl7
+    htsctbl0 htsctbl1 htsctbl2 htsctbl3 htsctbl4 htsctbl5 htsctbl6 htsctbl7
 
 ];
-attach variables [ SR4 ] [
+attach variables [ SR0004_4 SR1115_4 ] [
 	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
     _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
-    ictagl ictagh icdatl icdath
-    dctagl dctagh dcdatl dcdath
+    ictagl ictagh icdatl icdath dctagl dctagh dcdatl dcdath
     icctrl dcctrl iccfg dccfg icerr dcerr _ _
 
 ];
-attach variables [ SR5 ] [
+attach variables [ SR0004_5 SR1115_5 ] [
     mpm mprc _ _ mpbrgn mptrgn _ _
     mca mcs mcc mcr _ _ _ _
     _ _ _ _ mpprt0 mpprt1 mpprt2 _
     _ _ _ _ _ _ _ _
 ];
-attach variables [ SR6 ] [
+attach variables [ SR0004_6 SR1115_6 ] [
 	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
     mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
     mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
     mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
 ];
-attach variables [ SR7 ] [
+attach variables [ SR0004_7 SR1115_7 ] [
     mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
     mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
     mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
@@ -93,7 +89,7 @@ attach variables [ SR7 ] [
 }
 
 # ld.dw 0x7a00009 0xffe0001f
-# LD.DW
+# LD.DW disp23[reg1], reg3
 :ld.dw disp23[R0004], R2731odd is op0515=0x03d & R0004; R2731odd & op2126 & op1620=0x09; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
       local addr:4 = disp23 + R0004;
@@ -102,7 +98,7 @@ attach variables [ SR7 ] [
 
 
 #jarl 0xc7e00160 0xffe007ff
-:jarl [r0004],R2731 is op0515=0x63f & r0004; R2731{
+:jarl [r0004],R2731 is op0515=0x63f & r0004; R2731 {
 	R2731 = inst_next;
 	PC = r0004;
 	call [r0004];
@@ -138,41 +134,23 @@ xcc0003: "gt"	is xop0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0
 
 
 
+# STSR regID, reg2, selId
+:stsr SR0004_1, R1115, 1	is op0510=0x3F & R1115 & SR0004_1; op1626=0x40 & op2731=0x01 { R1115 = SR0004_1; }
+:stsr SR0004_2, R1115, 2	is op0510=0x3F & R1115 & SR0004_2; op1626=0x40 & op2731=0x02 { R1115 = SR0004_2; }
+:stsr SR0004, R1115, 3  	is op0510=0x3F & R1115 & SR0004;   op1626=0x40 & op2731=0x03 { R1115 = SR0004; }
+:stsr SR0004_4, R1115, 4	is op0510=0x3F & R1115 & SR0004_4; op1626=0x40 & op2731=0x04 { R1115 = SR0004_4; }
+:stsr SR0004_5, R1115, 5	is op0510=0x3F & R1115 & SR0004_5; op1626=0x40 & op2731=0x05 { R1115 = SR0004_5; }
+:stsr SR0004_6, R1115, 6	is op0510=0x3F & R1115 & SR0004_6; op1626=0x40 & op2731=0x06 { R1115 = SR0004_6; }
+:stsr SR0004_7, R1115, 7	is op0510=0x3F & R1115 & SR0004_7; op1626=0x40 & op2731=0x07 { R1115 = SR0004_7; }
 
-# STSR regID, reg2, 1
-:stsr SR1, r1115, selID is op0510=0x3F & r1115 & SR1; op1626=0x40 & op2731=0x01 & selID {
-        r1115 = SR1;
-}
-
-# STSR regID, reg2, 2
-:stsr SR2, r1115, selID is op0510=0x3F & r1115 & SR2; op1626=0x40 & op2731=0x02 & selID {
-        r1115 = SR2;
-}
-
-# STSR regID, reg2, 3
-:stsr SR0004, r1115, selID is op0510=0x3F & r1115 & SR0004; op1626=0x40 & op2731=0x03 & selID {
-        r1115 = SR0004;
-}
-
-# STSR regID, reg2, 4
-:stsr SR4, r1115, selID is op0510=0x3F & r1115 & SR4; op1626=0x40 & op2731=0x04 & selID {
-        r1115 = SR4;
-}
-
-# STSR regID, reg2, 5
-:stsr SR5, r1115, selID is op0510=0x3F & r1115 & SR5; op1626=0x40 & op2731=0x05 & selID {
-        r1115 = SR5;
-}
-
-# STSR regID, reg2, 6
-:stsr SR6, r1115, selID is op0510=0x3F & r1115 & SR6; op1626=0x40 & op2731=0x06 & selID {
-        r1115 = SR6;
-}
-
-# STSR regID, reg2, 7
-:stsr SR7, r1115, selID is op0510=0x3F & r1115 & SR7; op1626=0x40 & op2731=0x07 & selID {
-        r1115 = SR7;
-}
+# LDSR reg2, regID
+:ldsr R0004, SR1115_1, 1	is op0510=0x3F & SR1115_1 & R0004; op1626=0x20 & op2731=0x01 { SR1115_1 = R0004; }
+:ldsr R0004, SR1115_2, 2	is op0510=0x3F & SR1115_2 & R0004; op1626=0x20 & op2731=0x02 { SR1115_2 = R0004; }
+:ldsr R0004, SR1115, 3  	is op0510=0x3F & SR1115   & R0004; op1626=0x20 & op2731=0x03 { SR1115   = R0004; }
+:ldsr R0004, SR1115_4, 4	is op0510=0x3F & SR1115_4 & R0004; op1626=0x20 & op2731=0x04 { SR1115_4 = R0004; }
+:ldsr R0004, SR1115_5, 5	is op0510=0x3F & SR1115_5 & R0004; op1626=0x20 & op2731=0x05 { SR1115_5 = R0004; }
+:ldsr R0004, SR1115_6, 6	is op0510=0x3F & SR1115_6 & R0004; op1626=0x20 & op2731=0x06 { SR1115_6 = R0004; }
+:ldsr R0004, SR1115_7, 7	is op0510=0x3F & SR1115_7 & R0004; op1626=0x20 & op2731=0x07 { SR1115_7 = R0004; }
 
 
 
@@ -199,10 +177,6 @@ xcc0003: "gt"	is xop0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0
 #{ "jmp",	two (0x06e0, 0x0000),	two (0xffe0, 0x0001),	{D32_31, R1}, 		2, PROCESSOR_V850E3V5_UP },
 
 #{ "ldl.w",	two (0x07e0, 0x0378),	two (0xffe0, 0x07ff),	{R1, R3}, 		1, PROCESSOR_V850E3V5_UP },
-
-#{ "ldsr",	two (0x07e0, 0x0020),	two (0x07e0, 0x07ff),	{R1, SR2, SELID}, 	0, PROCESSOR_V850E3V5_UP },
-#{ "ldsr",	two (0x07e0, 0x0020),	two (0x07e0, 0x07ff),	{R1, SR2}, 		0, PROCESSOR_V850E3V5_UP },
-#{ "ldsr",	two (0x07e0, 0x0020),	two (0x07e0, 0x07ff),	{R1, OLDSR2}, 		0, (PROCESSOR_ALL & (~ PROCESSOR_V850E3V5_UP)) },
 
 #{ "ldtc.gr",	two (0x07e0, 0x0032),	two (0x07e0, 0xffff),	{R1, R2}, 		0, PROCESSOR_V850E3V5_UP },
 #{ "ldtc.sr",	two (0x07e0, 0x0030),	two (0x07e0, 0x07ff),	{R1, SR2, SELID}, 	0, PROCESSOR_V850E3V5_UP },

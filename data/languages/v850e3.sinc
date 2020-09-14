@@ -169,6 +169,25 @@ xcc0003: "gt"	is xop0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0
 	# TODO set R2731 to 0, if addr of previous ldl.w is not the same
 }
 
+# rotate left
+#{ "rotl",	two (0x07e0, 0x00c6),	two (0x07e0, 0x07ff), 	{R1, R2, R3}, 		0, PROCESSOR_V850E3V5_UP },
+#{ "rotl",	two (0x07e0, 0x00c4),	two (0x07e0, 0x07ff), 	{I5U, R2, R3}, 		0, PROCESSOR_V850E3V5_UP },
+macro rotate_left (res, _val, _shift) {
+	local val = _val;
+	local shift = _shift;
+	res = (val << shift) | (val >> (31 - shift));
+	set_nOV_S_Z (res);
+	local msb = res[0, 1];
+	set_C ((msb != 0) && (shift != 0));
+}
+:rotl R0004, R1115, R2731	is op0510=0x3F & R0004 & R1115; op1626=0x0C6 & R2731 {
+	rotate_left(R2731, R1115, R0004 & 0x1F);
+}
+:rotl op0004, R1115, R2731	is op0510=0x3F & op0004 & R1115; op1626=0x0C4 & R2731 {
+	rotate_left(R2731, R1115, op0004);
+}
+
+
 # TODOs
 
 #/* v850e3v5 bitfield instructions.  */
@@ -208,9 +227,6 @@ xcc0003: "gt"	is xop0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0
 #{ "pref",	two (0xdfe0, 0x0160),	two (0xffe0, 0x07ff),	{PREFOP, R1}, 		2, PROCESSOR_V850E3V5_UP },
 
 #{ "pushsp",	two (0x47e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3}, 		0, PROCESSOR_V850E3V5_UP },
-
-#{ "rotl",	two (0x07e0, 0x00c6),	two (0x07e0, 0x07ff), 	{R1, R2, R3}, 		0, PROCESSOR_V850E3V5_UP },
-#{ "rotl",	two (0x07e0, 0x00c4),	two (0x07e0, 0x07ff), 	{I5U, R2, R3}, 		0, PROCESSOR_V850E3V5_UP },
 
 #{ "snooze",	two (0x0fe0, 0x0120),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
 

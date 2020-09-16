@@ -286,7 +286,8 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 	# This instruction arithmetically converts the half-precision floating-point format contents 
 	# in the lower 16 bits of generalpurpose register reg2 to single-precision floating-point format, 
 	# rounding the result in accordance with the current rounding mode, and stores the result in general-purpose register reg3.
-	TODO();
+	local tmp:2 = R1115:2;
+	R2731 = float2float(tmp);
 }
 # Floating-point Convert Single to Half (Single)
 #{ "cvtf.sh",	two (0x07e3, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
@@ -294,7 +295,8 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 	# This instruction arithmetically converts the single-precision floating-point format contents in general-purpose register
 	# reg2 to half-precision floating-point format, rounding the result in accordance with the current rounding mode. The result
 	# is zero-extended to word length and stored in general-purpose register reg3.
-	TODO();
+	local tmp:2 = float2float(R1115);
+	R2731 = zext(tmp);
 }
 # Floating-point Fused-Multiply-add (Single)
 #{ "fmaf.s",	two (0x07e0, 0x04e0),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },

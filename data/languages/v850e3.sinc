@@ -255,15 +255,67 @@ macro rotate_left (res, _val, _shift) {
 #{ "tlbvi",	two (0x87e0, 0x8160),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
 #{ "tlbw",	two (0x87e0, 0xe160),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
 
-
-#{ "cvtf.hs",	two (0x07e2, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
-#{ "cvtf.sh",	two (0x07e3, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
-#{ "fmaf.s",	two (0x07e0, 0x04e0),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-#{ "fmsf.s",	two (0x07e0, 0x04e2),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-#{ "fnmaf.s",	two (0x07e0, 0x04e4),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-#{ "fnmsf.s",	two (0x07e0, 0x04e6),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-
 #{ "synci",	one (0x001c),		one (0xffff),		{0},					0, PROCESSOR_V850E3V5_UP },
+
+
+
+# Float-point instructions
+
+# Floating-point Convert Single to Half(Single)
+#{ "cvtf.hs",	two (0x07e2, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:cvtf.hs R1115, R2731	is op0010=0x7E2 & R1115 ; op1626=0x442 & R2731 {
+	# This instruction arithmetically converts the half-precision floating-point format contents 
+	# in the lower 16 bits of generalpurpose register reg2 to single-precision floating-point format, 
+	# rounding the result in accordance with the current rounding mode, and stores the result in general-purpose register reg3.
+	TODO();
+}
+# Floating-point Convert Single to Half (Single)
+#{ "cvtf.sh",	two (0x07e3, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:cvtf.sh R1115, R2731	is op0010=0x7E3 & R1115 ; op1626=0x442 & R2731 {
+	# This instruction arithmetically converts the single-precision floating-point format contents in general-purpose register
+	# reg2 to half-precision floating-point format, rounding the result in accordance with the current rounding mode. The result
+	# is zero-extended to word length and stored in general-purpose register reg3.
+	TODO();
+}
+# Floating-point Fused-Multiply-add (Single)
+#{ "fmaf.s",	two (0x07e0, 0x04e0),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fmaf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E0 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, adds the single-precision floating-point
+	# format contents in general-purpose register reg3, and stores the result in general-purpose register reg3. The operation is
+	# executed as if it were of infinite accuracy. The result of the multiply operation is not rounded, but the result of the add
+	# operation is rounded, in accordance with the current rounding mode.
+	R2731 = R0004 f* R1115 f+ R2731;
+}
+# Floating-point Fused-Multiply-subtract (Single)
+#{ "fmsf.s",	two (0x07e0, 0x04e2),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fmsf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E2 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, subtracts the single-precision floatingpoint format contents 
+	# in general-purpose register reg3, and stores the result in general-purpose register reg3. The operation is executed as if it were of infinite accuracy. 
+	# The result of the multiply operation is not rounded, but the result of the subtract operation is rounded, in accordance with the current rounding mode.
+	R2731 = R0004 f* R1115 f- R2731;
+}
+# Floating-point Fused-Negate-Multiply-add (Single)
+#{ "fnmaf.s",	two (0x07e0, 0x04e4),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fnmaf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E4 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, adds the single-precision floating-point
+	# format contents in general-purpose register reg3, inverts the sign, and stores the result in general-purpose register reg3.
+	# The operation is executed as if it were of infinite accuracy. The result of the multiply operation is not rounded, but the
+	# result of the add operation is rounded, in accordance with the current rounding mode.
+	R2731 = f- (R0004 f* R1115 f+ R2731);
+}
+# Floating-point Fused-Negate-Multiply-subtrat (Single)
+#{ "fnmsf.s",	two (0x07e0, 0x04e6),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fnmsf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E6 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, subtracts the single-precision floatingpoint format contents 
+	# in general-purpose register reg3, inverts the sign, and stores the result in general-purpose register reg3. 
+	# The operation is executed as if it were of infinite accuracy. The result of the multiply operation is not rounded, but
+	# the result of the subtract operation is rounded, in accordance with the current rounding mode.
+	R2731 = R2731 f- R0004 f* R1115;
+}
 
 
 

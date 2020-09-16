@@ -199,13 +199,33 @@ macro rotate_left (res, _val, _shift) {
 	rotate_left(R2731, R1115, op0004);
 }
 
-
-# TODOs
-
-#/* v850e3v5 bitfield instructions.  */
+# v850e3v5 bitfield instructions.
 #{ "bins",	two (0x07e0, 0x0090),	two (0x07e0, 0x07f1), {R1, POS_U, WIDTH_U, R2}, 		0, PROCESSOR_V850E3V5_UP },
 #{ "bins",	two (0x07e0, 0x00b0),	two (0x07e0, 0x07f1), {R1, POS_M, WIDTH_M, R2}, 		0, PROCESSOR_V850E3V5_UP },
 #{ "bins",	two (0x07e0, 0x00d0),	two (0x07e0, 0x07f1), {R1, POS_L, WIDTH_L, R2}, 		0, PROCESSOR_V850E3V5_UP },
+bins_pos: pos		is op2026=0x09 & op1719 & op2727 [ pos = 0x10 | (op2727 << 3) | op1719; ] { local tmp:1 = pos; export tmp; }
+bins_pos: pos		is op2026=0x0B & op1719 & op2727 [ pos = 0x00 | (op2727 << 3) | op1719; ] { local tmp:1 = pos; export tmp; }
+bins_pos: pos		is op2026=0x0D & op1719 & op2727 [ pos = 0x00 | (op2727 << 3) | op1719; ] { local tmp:1 = pos; export tmp; }
+bins_width: width	is op2026=0x09 & op2731 & op1719 & op2727
+[ width = (0x10 | op2731) - (0x10 | (op2727 << 3) | op1719) + 1; ] { local tmp:1 = width; export tmp; }
+bins_width: width	is op2026=0x0B & op2731 & op1719 & op2727
+[ width = (0x10 | op2731) - (0x00 | (op2727 << 3) | op1719) + 1; ] { local tmp:1 = width; export tmp; }
+bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
+[ width = (0x00 | op2731) - (0x00 | (op2727 << 3) | op1719) + 1; ] { local tmp:1 = width; export tmp; }
+
+:bins	R0004, bins_pos, bins_width, R1115	is op0510=0x3F & R0004 & R1115 ; bins_width & bins_pos & op1616=0 {
+	# Loads the lower width bits in general-purpose register reg1 and stores them from the bit position bit pos + width - 1 
+	# in the specified field in general-purpose register reg2 in bit pos. This instruction does not affect any fields in general-purpose 
+	# register reg2 except the specified field, nor does it affect general-purpose register reg1.
+	local mask:4 = (1 << bins_width) - 1;
+	local bits:4 = R0004 & mask;
+	local res:4 = (R1115 & ~(mask << bins_pos)) | (bits << bins_pos);
+	R1115 = res;
+	set_nOV_S_Z(res);
+}
+
+
+# TODOs
 
 #{ "cache",	two (0xe7e0, 0x0160),	two (0xe7e0, 0x07ff),	{CACHEOP, R1}, 		2, PROCESSOR_V850E3V5_UP },
 

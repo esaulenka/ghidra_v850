@@ -215,9 +215,14 @@ addr22: rel is s0005; op1631 & op1616=0
 [ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
 addr32: rel is op1631 & op1616=0; op3247
 [ rel = ((op3247 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+
 @if defined (V850E3)
 addr22b: rel is xs0404 & xop1731 & xop1616=1
 [ rel = (xs0404 << 16 | (xop1731 << 1)) + inst_start + 4; ] { export *:4 rel; }
+
+addr16loop: rel is op1731
+[ rel = inst_start - (op1731 << 1); ] { export *:4 rel; }
+
 @endif
 
 

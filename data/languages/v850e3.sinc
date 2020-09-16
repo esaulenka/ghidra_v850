@@ -146,6 +146,7 @@ xcc0003: "gt"	is xop0003=0xF		{ tmp:1 = ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)) == 0
 
 
 
+
 # STSR regID, reg2, selId
 :stsr SR0004_1, R1115, 1	is op0510=0x3F & R1115 & SR0004_1; op1626=0x40 & op2731=0x01 { R1115 = SR0004_1; }
 :stsr SR0004_2, R1115, 2	is op0510=0x3F & R1115 & SR0004_2; op1626=0x40 & op2731=0x02 { R1115 = SR0004_2; }
@@ -239,8 +240,6 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 
 #{ "hvcall",	two (0xd7e0, 0x4160),	two (0xffe0, 0x41ff),	{VECTOR8}, 		0, PROCESSOR_V850E3V5_UP },
 #{ "hvtrap",	two (0x07e0, 0x0110),	two (0xffe0, 0xffff),	{VECTOR5}, 		0, PROCESSOR_V850E3V5_UP },
-
-#{ "jmp",	two (0x06e0, 0x0000),	two (0xffe0, 0x0001),	{D32_31, R1}, 		2, PROCESSOR_V850E3V5_UP },
 
 #{ "ldtc.gr",	two (0x07e0, 0x0032),	two (0x07e0, 0xffff),	{R1, R2}, 		0, PROCESSOR_V850E3V5_UP },
 #{ "ldtc.sr",	two (0x07e0, 0x0030),	two (0x07e0, 0x07ff),	{R1, SR2, SELID}, 	0, PROCESSOR_V850E3V5_UP },

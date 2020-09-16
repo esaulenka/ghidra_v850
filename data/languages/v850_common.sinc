@@ -214,8 +214,10 @@ addr9: rel is op0406 & s1115
 [ rel = ((s1115 << 4) | (op0406 << 1)) + inst_start; ] { export *:4 rel; }
 addr22: rel is s0005; op1631 & op1616=0
 [ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
-addr32: rel is op1631 & op1616=0; op3247
-[ rel = ((op3247 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+addr32: rel is op1731 & op1616=0; op3247
+[ rel = ((op3247 << 16) | op1731 << 1) + inst_start; ] { export *:4 rel; }
+addr32abs: rel is op1731 & op1616=0; op3247
+[ rel = ((op3247 << 16) | op1731 << 1) + inst_start; ] { export *:4 rel; }
 
 @if defined (V850E3)
 addr22b: rel is xs0404 & xop1731 & xop1616=1

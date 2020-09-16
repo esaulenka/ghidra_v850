@@ -51,17 +51,6 @@ macro condition(res, cond, true_val, false_val) {
 	<end>
 }
 
-# When making a table instruction contructor, for some reason the '...' operator can't be used
-# Error: Pattern size cannot vary (missing ... ?): for table "instruction" constructor from v850_cond.sinc:62
-define token exinstr(32)
-       xop0003 = (0,3)
-       xop0414 = (4,14)
-       xop0514 = (5,14)
-       xop1731 = (17,31)
-       xop1616 = (16,16)
-       xs0404 = (4,4) signed
-;
-
 define token instr(16)
 	op0000 = (0,0)
 	op0003 = (0,3)
@@ -78,6 +67,7 @@ define token instr(16)
 	op0414 = (4,14)
 	op0505 = (5,5)
 	op0510 = (5,10)
+	op0514 = (5,14)
 	op0515 = (5,15)
 	op0610 = (6,10)
 	op0615 = (6,15)
@@ -220,8 +210,8 @@ addr32abs: rel is op1731 & op1616=0; op3247
 [ rel = ((op3247 << 16) | op1731 << 1) + inst_start; ] { export *:4 rel; }
 
 @if defined (V850E3)
-addr22b: rel is xs0404 & xop1731 & xop1616=1
-[ rel = (xs0404 << 16 | (xop1731 << 1)) + inst_start + 4; ] { export *:4 rel; }
+addr17b: rel is s0404 ; op1731 & op1616=1
+[ rel = ((s0404 << 16) | (op1731 << 1)) + inst_start; ] { export *:4 rel; }
 
 addr16loop: rel is op1731
 [ rel = inst_start - (op1731 << 1); ] { export *:4 rel; }

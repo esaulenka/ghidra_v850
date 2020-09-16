@@ -281,7 +281,7 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 }
 # Floating-point Fused-Multiply-add (Single)
 #{ "fmaf.s",	two (0x07e0, 0x04e0),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-:fmaf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E0 & R2731 {
+:fmaf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E0 & R2731 {
 	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
 	# single-precision floating-point format contents in general-purpose register reg1, adds the single-precision floating-point
 	# format contents in general-purpose register reg3, and stores the result in general-purpose register reg3. The operation is
@@ -291,7 +291,7 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 }
 # Floating-point Fused-Multiply-subtract (Single)
 #{ "fmsf.s",	two (0x07e0, 0x04e2),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-:fmsf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E2 & R2731 {
+:fmsf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E2 & R2731 {
 	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
 	# single-precision floating-point format contents in general-purpose register reg1, subtracts the single-precision floatingpoint format contents 
 	# in general-purpose register reg3, and stores the result in general-purpose register reg3. The operation is executed as if it were of infinite accuracy. 
@@ -300,7 +300,7 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 }
 # Floating-point Fused-Negate-Multiply-add (Single)
 #{ "fnmaf.s",	two (0x07e0, 0x04e4),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-:fnmaf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E4 & R2731 {
+:fnmaf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E4 & R2731 {
 	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
 	# single-precision floating-point format contents in general-purpose register reg1, adds the single-precision floating-point
 	# format contents in general-purpose register reg3, inverts the sign, and stores the result in general-purpose register reg3.
@@ -310,7 +310,7 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 }
 # Floating-point Fused-Negate-Multiply-subtrat (Single)
 #{ "fnmsf.s",	two (0x07e0, 0x04e6),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
-:fnmsf.s R0004, R1115, R2731		is op0510=0x03C & R0004 & R1115 ; op1626=0x4E6 & R2731 {
+:fnmsf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E6 & R2731 {
 	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
 	# single-precision floating-point format contents in general-purpose register reg1, subtracts the single-precision floatingpoint format contents 
 	# in general-purpose register reg3, inverts the sign, and stores the result in general-purpose register reg3. 

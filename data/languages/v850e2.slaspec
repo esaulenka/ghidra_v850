@@ -1,0 +1,13 @@
+@define V850E2M 1
+
+
+@include "v850_common.sinc"
+@include "v850_arithmetic.sinc"
+@include "v850_logical.sinc"
+@include "v850_data_manipulation.sinc"
+@include "v850_cond.sinc"
+@include "v850_func.sinc"
+@include "v850_special.sinc"
+@include "v850_load_store.sinc"
+@include "v850_float.sinc"
+

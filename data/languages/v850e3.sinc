@@ -1,0 +1,421 @@
+# V850E3 (RH850) specific instructions
+# got from gcc binutils sources
+
+
+# More special registers
+define register offset=0x104 size=4 [
+    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
+    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+
+	htcfg0   _   _   _   _  htctl  mea  asid
+    mei  ispr  pmr  icsr  intcfg   _   _   _
+    tlbsch   _   _   _   _   _   _  htscctl
+    htsctbl0 htsctbl1 htsctbl2 htsctbl3 htsctbl4 htsctbl5 htsctbl6 htsctbl7
+
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+
+	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
+    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
+    ictagl ictagh icdatl icdath dctagl dctagh dcdatl dcdath
+    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+
+    mpm mprc _ _ mpbrgn mptrgn _ _
+    mca mcs mcc mcr _ _ _ _
+    _ _ _ _ mpprt0 mpprt1 mpprt2 _
+    _ _ _ _ _ _ _ _
+
+	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
+    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
+    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
+    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+
+    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
+    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
+    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
+    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+
+	vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
+	vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15 
+	vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23 
+	vr24 vr25 vr26 vr27 vr28 vr29 vr30 vr31 
+];
+
+
+attach variables [ SR0004_1 SR1115_1 ] [
+	mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
+    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
+    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+];
+attach variables [ SR0004_2 SR1115_2 ] [
+	htcfg0   _   _   _   _  htctl  mea  asid
+    mei  ispr  pmr  icsr  intcfg   _   _   _
+    tlbsch   _   _   _   _   _   _  htscctl
+    htsctbl0 htsctbl1 htsctbl2 htsctbl3 htsctbl4 htsctbl5 htsctbl6 htsctbl7
+
+];
+attach variables [ SR0004_4 SR1115_4 ] [
+	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
+    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
+    ictagl ictagh icdatl icdath dctagl dctagh dcdatl dcdath
+    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+
+];
+attach variables [ SR0004_5 SR1115_5 ] [
+    mpm mprc _ _ mpbrgn mptrgn _ _
+    mca mcs mcc mcr _ _ _ _
+    _ _ _ _ mpprt0 mpprt1 mpprt2 _
+    _ _ _ _ _ _ _ _
+];
+attach variables [ SR0004_6 SR1115_6 ] [
+	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
+    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
+    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
+    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+];
+attach variables [ SR0004_7 SR1115_7 ] [
+    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
+    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
+    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
+    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+];
+
+attach variables [ VR0004 VR1115 ] [
+	vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
+	vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15 
+	vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23 
+	vr24 vr25 vr26 vr27 vr28 vr29 vr30 vr31 
+];
+
+
+# ST.DW reg3, disp23[reg1]
+:st.dw R2731odd, disp23[R0004] is op0515=0x3D & R0004; R2731odd & op2126 & op1620=0xF; s3247
+[ disp23 = (s3247 << 7) | (op2126 << 1); ] {
+	local addr:4 = disp23 + R0004;
+	*:8 addr = R2731odd;
+}
+
+# ld.dw 0x7a00009 0xffe0001f
+# LD.DW disp23[reg1], reg3
+:ld.dw disp23[R0004], R2731odd is op0515=0x03d & R0004; R2731odd & op2126 & op1620=0x09; s3247
+[ disp23 = (s3247 << 7) | (op2126 << 1); ] {
+      local addr:4 = disp23 + R0004;
+      R2731odd = *:8 addr;
+}
+
+
+#{ "jarl",	two (0xc7e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3_NOTR0},   	1, PROCESSOR_V850E3V5_UP},
+:jarl [R0004], R2731 is op0515=0x63f & R0004; R2731 {
+	R2731 = inst_next;
+	PC = R0004;
+	call [R0004];
+}
+
+#Bcond addr17b
+:b^cc0003 addr17b  is (op0514=0x03F & cc0003) ... & addr17b  {
+	if (cc0003) goto addr17b;
+}
+:br addr17b  is (op0514=0x03F & op0003=0x5) ... & addr17b {
+	goto addr17b;
+}
+
+
+# loop reg1, disp16
+#{ "loop",	two (0x06e0, 0x0001),	two (0xffe0, 0x0001), 	{R1, D16_LOOP}, 	0, PROCESSOR_V850E3V5_UP },
+:loop r0004, addr16loop		is op0515=0x037 & r0004 ; op1616=1 & addr16loop {
+	local cnt:4 = r0004 - 1;
+    if (cnt == 0) goto inst_next;
+	
+	flags_add(r0004, -1);	# carry as add, not sub!
+	r0004 = cnt;
+	
+	goto addr16loop;
+}
+
+
+
+
+# STSR regID, reg2, selId
+:stsr SR0004_1, R1115, 1	is op0510=0x3F & R1115 & SR0004_1; op1626=0x40 & op2731=0x01 { R1115 = SR0004_1; }
+:stsr SR0004_2, R1115, 2	is op0510=0x3F & R1115 & SR0004_2; op1626=0x40 & op2731=0x02 { R1115 = SR0004_2; }
+:stsr SR0004, R1115, 3  	is op0510=0x3F & R1115 & SR0004;   op1626=0x40 & op2731=0x03 { R1115 = SR0004; }
+:stsr SR0004_4, R1115, 4	is op0510=0x3F & R1115 & SR0004_4; op1626=0x40 & op2731=0x04 { R1115 = SR0004_4; }
+:stsr SR0004_5, R1115, 5	is op0510=0x3F & R1115 & SR0004_5; op1626=0x40 & op2731=0x05 { R1115 = SR0004_5; }
+:stsr SR0004_6, R1115, 6	is op0510=0x3F & R1115 & SR0004_6; op1626=0x40 & op2731=0x06 { R1115 = SR0004_6; }
+:stsr SR0004_7, R1115, 7	is op0510=0x3F & R1115 & SR0004_7; op1626=0x40 & op2731=0x07 { R1115 = SR0004_7; }
+
+# LDSR reg2, regID, selId
+:ldsr R0004, SR1115_1, 1	is op0510=0x3F & SR1115_1 & R0004; op1626=0x20 & op2731=0x01 { SR1115_1 = R0004; }
+:ldsr R0004, SR1115_2, 2	is op0510=0x3F & SR1115_2 & R0004; op1626=0x20 & op2731=0x02 { SR1115_2 = R0004; }
+:ldsr R0004, SR1115, 3  	is op0510=0x3F & SR1115   & R0004; op1626=0x20 & op2731=0x03 { SR1115   = R0004; }
+:ldsr R0004, SR1115_4, 4	is op0510=0x3F & SR1115_4 & R0004; op1626=0x20 & op2731=0x04 { SR1115_4 = R0004; }
+:ldsr R0004, SR1115_5, 5	is op0510=0x3F & SR1115_5 & R0004; op1626=0x20 & op2731=0x05 { SR1115_5 = R0004; }
+:ldsr R0004, SR1115_6, 6	is op0510=0x3F & SR1115_6 & R0004; op1626=0x20 & op2731=0x06 { SR1115_6 = R0004; }
+:ldsr R0004, SR1115_7, 7	is op0510=0x3F & SR1115_7 & R0004; op1626=0x20 & op2731=0x07 { SR1115_7 = R0004; }
+
+
+# load linked (atomic)
+#{ "ldl.w",	two (0x07e0, 0x0378),	two (0xffe0, 0x07ff),	{R1, R3}, 		1, PROCESSOR_V850E3V5_UP },
+:ldl.w [R0004], R2731	is op0515=0x03F & R0004; op1626=0x378 & R2731 {
+	local addr:4 = R0004;
+	R2731 = *:4 addr;
+	# TODO store address
+}
+# store conditional (atomic)
+#{ "stc.w",	two (0x07e0, 0x037a),	two (0xffe0, 0x07ff),	{R3, R1},		2, PROCESSOR_V850E3V5_UP },
+:stc.w R2731, [R0004]	is op0515=0x03F & R0004; op1626=0x37A & R2731 {
+	local addr:4 = R0004;
+	*:4 addr = R2731 : 4;
+	R2731 = 1;
+	# TODO set R2731 to 0, if addr of previous ldl.w is not the same
+}
+
+
+#{ "popsp",	two (0x67e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3}, 		0, PROCESSOR_V850E3V5_UP },
+:popsp R0004, R2731		is op0515=0x33F & R0004 ; op1626=0x160 & R2731 {
+	# popsp rh, rt
+	# Loads general-purpose register rt to rh from the stack in descending order (rt, rt - 1, rt - 2, ..., rh). After all the registers
+	# down to the specified register have been loaded, sp is updated (incremented)
+	# check for illegal syntax, when rh > rt
+	# sp (r3) value not restored
+	TODO();
+}
+#{ "pushsp",	two (0x47e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3}, 		0, PROCESSOR_V850E3V5_UP },
+:pushsp R0004, R2731	is op0515=0x23F & R0004 ; op1626=0x160 & R2731 {
+	# pushsp rh, rt
+	# Stores general-purpose register rh to rt in the stack in ascending order (rh, rh +1, rh + 2, ..., rt). After all the specified
+	# registers have been stored, sp is updated (decremented).
+	# check for illegal syntax, when rh > rt
+	TODO();
+}
+
+
+# rotate left
+#{ "rotl",	two (0x07e0, 0x00c6),	two (0x07e0, 0x07ff), 	{R1, R2, R3}, 		0, PROCESSOR_V850E3V5_UP },
+#{ "rotl",	two (0x07e0, 0x00c4),	two (0x07e0, 0x07ff), 	{I5U, R2, R3}, 		0, PROCESSOR_V850E3V5_UP },
+macro rotate_left (res, _val, _shift) {
+	local val = _val;
+	local shift = _shift;
+	res = (val << shift) | (val >> (31 - shift));
+	set_nOV_S_Z (res);
+	local msb = res[0, 1];
+	set_C ((msb != 0) && (shift != 0));
+}
+:rotl R0004, R1115, R2731	is op0510=0x3F & R0004 & R1115; op1626=0x0C6 & R2731 {
+	rotate_left(R2731, R1115, R0004 & 0x1F);
+}
+:rotl op0004, R1115, R2731	is op0510=0x3F & op0004 & R1115; op1626=0x0C4 & R2731 {
+	rotate_left(R2731, R1115, op0004);
+}
+
+# v850e3v5 bitfield instructions.
+#{ "bins",	two (0x07e0, 0x0090),	two (0x07e0, 0x07f1), {R1, POS_U, WIDTH_U, R2}, 		0, PROCESSOR_V850E3V5_UP },
+#{ "bins",	two (0x07e0, 0x00b0),	two (0x07e0, 0x07f1), {R1, POS_M, WIDTH_M, R2}, 		0, PROCESSOR_V850E3V5_UP },
+#{ "bins",	two (0x07e0, 0x00d0),	two (0x07e0, 0x07f1), {R1, POS_L, WIDTH_L, R2}, 		0, PROCESSOR_V850E3V5_UP },
+bins_pos: pos		is op2026=0x09 & op1719 & op2727 [ pos = 0x10 | (op2727 << 3) | op1719; ] { local tmp:1 = pos; export tmp; }
+bins_pos: pos		is op2026=0x0B & op1719 & op2727 [ pos = 0x00 | (op2727 << 3) | op1719; ] { local tmp:1 = pos; export tmp; }
+bins_pos: pos		is op2026=0x0D & op1719 & op2727 [ pos = 0x00 | (op2727 << 3) | op1719; ] { local tmp:1 = pos; export tmp; }
+bins_width: width	is op2026=0x09 & op2731 & op1719 & op2727
+[ width = (0x10 | op2731) - (0x10 | (op2727 << 3) | op1719) + 1; ] { local tmp:1 = width; export tmp; }
+bins_width: width	is op2026=0x0B & op2731 & op1719 & op2727
+[ width = (0x10 | op2731) - (0x00 | (op2727 << 3) | op1719) + 1; ] { local tmp:1 = width; export tmp; }
+bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
+[ width = (0x00 | op2731) - (0x00 | (op2727 << 3) | op1719) + 1; ] { local tmp:1 = width; export tmp; }
+
+:bins	R0004, bins_pos, bins_width, R1115	is op0510=0x3F & R0004 & R1115 ; bins_width & bins_pos & op1616=0 {
+	# Loads the lower width bits in general-purpose register reg1 and stores them from the bit position bit pos + width - 1 
+	# in the specified field in general-purpose register reg2 in bit pos. This instruction does not affect any fields in general-purpose 
+	# register reg2 except the specified field, nor does it affect general-purpose register reg1.
+	local mask:4 = (1 << bins_width) - 1;
+	local bits:4 = R0004 & mask;
+	local res:4 = (R1115 & ~(mask << bins_pos)) | (bits << bins_pos);
+	R1115 = res;
+	set_nOV_S_Z(res);
+}
+
+
+# special instructions
+#{ "snooze",	two (0x0fe0, 0x0120),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
+define pcodeop __snooze;
+:snooze		is op0015=0x0FE0 ; op1631=0x0120 {
+	# Temporarily halts operation of the CPU for the period defined by the hardware specifications
+	__snooze();
+}
+#{ "synci",	one (0x001c),		one (0xffff),		{0},					0, PROCESSOR_V850E3V5_UP },
+:synci		is op0015=0x001C {
+	__synchronize();
+}
+
+
+# unknown special instructions (documented in separate RH850 manual?..)
+
+#{ "cache",	two (0xe7e0, 0x0160),	two (0xe7e0, 0x07ff),	{CACHEOP, R1}, 		2, PROCESSOR_V850E3V5_UP },
+:cache cacheop, R0004	is op0510=0x3F & op1315=0x7 & R0004 & op1112 ; op1626=0x160 & op2731 [ cacheop = (op1112<<5) | op2731; ] unimpl
+
+#{ "dbcp",	one (0xe840),		one (0xffff),		{0},			0, PROCESSOR_V850E3V5_UP },
+:dbcp					is op0015=0xE840		unimpl
+#{ "dbhvtrap",	one (0xe040),		one (0xffff),		{0},			0, PROCESSOR_V850E3V5_UP },
+:dbhvtrap				is op0015=0xE040		unimpl
+#{ "dbpush",	two (0x5fe0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3}, 		0, PROCESSOR_V850E3V5_UP },
+:dbpush	R0004, R2731	is op0515=0x2FF & R0004 ; op1626=0x160 & R2731	unimpl
+#{ "dbtag",	two (0xcfe0, 0x0160),	two (0xffe0, 0x07ff),	{IMM10U},		0, PROCESSOR_V850E3V5_UP },
+:dbtag imm10			is op0515=0x67F & op0004 ; op1626=0x160 & op2731 [ imm10 = (op2731 << 5) | op0004; ]	unimpl
+
+#{ "dst",	two (0x07e0, 0x0134),	two (0xfffff, 0xffff),	{0}, 		0, PROCESSOR_V850E3V5_UP },
+:dst					is op0015=0x07E0 ; op1631=0x0134	unimpl
+#{ "est",	two (0x07e0, 0x0132),	two (0xfffff, 0xffff),	{0}, 		0, PROCESSOR_V850E3V5_UP },
+:est					is op0015=0x07E0 ; op1631=0x0132	unimpl
+
+#{ "hvcall",	two (0xd7e0, 0x4160),	two (0xffe0, 0x41ff),	{VECTOR8}, 		0, PROCESSOR_V850E3V5_UP },
+:hvcall vect8	is op0515=0x6BF & op0004 ; op1624=0x160 & op3030=1 & op2729 [ vect8 = (op2729 << 5) | op0004; ]	unimpl
+#{ "hvtrap",	two (0x07e0, 0x0110),	two (0xffe0, 0xffff),	{VECTOR5}, 		0, PROCESSOR_V850E3V5_UP },
+:hvtrap op0004	is op0515=0x03F & op0004 ; op1631=0x0110	unimpl
+
+#{ "ldtc.gr",	two (0x07e0, 0x0032),	two (0x07e0, 0xffff),	{R1, R2}, 		0, PROCESSOR_V850E3V5_UP },
+:ldtc.gr R0004, R1115	is op0510=0x3F & R0004 & R1115 ; op1631=0x0032		unimpl
+
+#{ "ldtc.sr",	two (0x07e0, 0x0030),	two (0x07e0, 0x07ff),	{R1, SR2},	 	0, PROCESSOR_V850E3V5_UP },
+:ldtc.sr R0004, SR1115		is op0510=0x03F & R0004 & SR1115   ; op1626=0x030 & op2731=0 unimpl
+#{ "ldtc.sr",	two (0x07e0, 0x0030),	two (0x07e0, 0x07ff),	{R1, SR2, SELID}, 	0, PROCESSOR_V850E3V5_UP },
+:ldtc.sr R0004, SR1115_1, 1	is op0510=0x03F & R0004 & SR1115_1 ; op1626=0x030 & op2731=1 unimpl
+:ldtc.sr R0004, SR1115_2, 2	is op0510=0x03F & R0004 & SR1115_2 ; op1626=0x030 & op2731=2 unimpl
+:ldtc.sr R0004, SR1115, 3	is op0510=0x03F & R0004 & SR1115   ; op1626=0x030 & op2731=3 unimpl
+:ldtc.sr R0004, SR1115_4, 4	is op0510=0x03F & R0004 & SR1115_4 ; op1626=0x030 & op2731=4 unimpl
+:ldtc.sr R0004, SR1115_5, 5	is op0510=0x03F & R0004 & SR1115_5 ; op1626=0x030 & op2731=5 unimpl
+:ldtc.sr R0004, SR1115_6, 6	is op0510=0x03F & R0004 & SR1115_6 ; op1626=0x030 & op2731=6 unimpl
+:ldtc.sr R0004, SR1115_7, 7	is op0510=0x03F & R0004 & SR1115_7 ; op1626=0x030 & op2731=7 unimpl
+
+#{ "ldtc.vr",	two (0x07e0, 0x0832),	two (0x07e0, 0xffff),	{R1, VR2}, 		0, PROCESSOR_V850E3V5_UP },
+:ldtc.vr R0004, VR1115	is op0515=0x03F & R0004 & VR1115 ; op1631=0x0832	unimpl
+
+#{ "ldtc.pc",	two (0x07e0, 0xf832),	two (0x07e0, 0xffff),	{R1}, 			0, PROCESSOR_V850E3V5_UP },
+:ldtc.pc R0004			is op0515=0x03F & R0004 ; op1631=0xF832				unimpl
+
+#{ "ldvc.sr",	two (0x07e0, 0x0034),	two (0x07e0, 0x07ff),	{R1, SR2}, 	0, PROCESSOR_V850E3V5_UP },
+:ldvc.sr R0004, SR1115		is op0510=0x03F & R0004 & SR1115   ; op1626=0x034 & op2731=0 unimpl
+#{ "ldvc.sr",	two (0x07e0, 0x0034),	two (0x07e0, 0x07ff),	{R1, SR2, SELID}, 	0, PROCESSOR_V850E3V5_UP },
+:ldvc.sr R0004, SR1115_1, 1	is op0510=0x03F & R0004 & SR1115_1 ; op1626=0x034 & op2731=1 unimpl
+:ldvc.sr R0004, SR1115_2, 2	is op0510=0x03F & R0004 & SR1115_2 ; op1626=0x034 & op2731=2 unimpl
+:ldvc.sr R0004, SR1115, 3	is op0510=0x03F & R0004 & SR1115   ; op1626=0x034 & op2731=3 unimpl
+:ldvc.sr R0004, SR1115_4, 4	is op0510=0x03F & R0004 & SR1115_4 ; op1626=0x034 & op2731=4 unimpl
+:ldvc.sr R0004, SR1115_5, 5	is op0510=0x03F & R0004 & SR1115_5 ; op1626=0x034 & op2731=5 unimpl
+:ldvc.sr R0004, SR1115_6, 6	is op0510=0x03F & R0004 & SR1115_6 ; op1626=0x034 & op2731=6 unimpl
+:ldvc.sr R0004, SR1115_7, 7	is op0510=0x03F & R0004 & SR1115_7 ; op1626=0x034 & op2731=7 unimpl
+
+#{ "pref",	two (0xdfe0, 0x0160),	two (0xffe0, 0x07ff),	{PREFOP, R1}, 		2, PROCESSOR_V850E3V5_UP },
+:pref op2731, R0004		is op0515=0x6FF & R0004 ; op1626=0x160 & op2731		unimpl
+
+#{ "sttc.gr",	two (0x07e0, 0x0052),	two (0x07e0, 0xffff),	{R1, R2}, 		0, PROCESSOR_V850E3V5_UP },
+:sttc.gr R0004, R1115	is op0515=0x03F & R0004 & R1115 ; op1631=0x0052		unimpl
+
+#{ "sttc.sr",	two (0x07e0, 0x0050),	two (0x07e0, 0x07ff),	{SR1, R2, SELID}, 	0, PROCESSOR_V850E3V5_UP },
+:sttc.sr SR0004, R1115		is op0510=0x03F & SR0004   & R1115 ; op1626=0x050 & op2731=0 unimpl
+#{ "sttc.sr",	two (0x07e0, 0x0050),	two (0x07e0, 0x07ff),	{SR1, R2, SELID}, 	0, PROCESSOR_V850E3V5_UP },
+:sttc.sr SR0004_1, R1115, 1	is op0510=0x03F & SR0004_1 & R1115 ; op1626=0x050 & op2731=1 unimpl
+:sttc.sr SR0004_2, R1115, 2	is op0510=0x03F & SR0004_2 & R1115 ; op1626=0x050 & op2731=2 unimpl
+:sttc.sr SR0004, R1115, 3	is op0510=0x03F & SR0004   & R1115 ; op1626=0x050 & op2731=3 unimpl
+:sttc.sr SR0004_4, R1115, 4	is op0510=0x03F & SR0004_4 & R1115 ; op1626=0x050 & op2731=4 unimpl
+:sttc.sr SR0004_5, R1115, 5	is op0510=0x03F & SR0004_5 & R1115 ; op1626=0x050 & op2731=5 unimpl
+:sttc.sr SR0004_6, R1115, 6	is op0510=0x03F & SR0004_6 & R1115 ; op1626=0x050 & op2731=6 unimpl
+:sttc.sr SR0004_7, R1115, 7	is op0510=0x03F & SR0004_7 & R1115 ; op1626=0x050 & op2731=7 unimpl
+
+#{ "sttc.vr",	two (0x07e0, 0x0852),	two (0x07e0, 0xffff),	{VR1, R2}, 		0, PROCESSOR_V850E3V5_UP },
+:sttc.vr VR0004, R1115	is op0515=0x03F & VR0004 & R1115 ; op1631=0x0852	unimpl
+
+#{ "sttc.pc",	two (0x07e0, 0xf852),	two (0x07e0, 0xffff),	{R2}, 			0, PROCESSOR_V850E3V5_UP },
+:sttc.pc R1115			is op0515=0x03F & R1115 ; op1631=0xF852				unimpl
+
+#{ "stvc.sr",	two (0x07e0, 0x0054),	two (0x07e0, 0x07ff),	{SR1, R2}, 	0, PROCESSOR_V850E3V5_UP },
+:stvc.sr SR0004, R1115		is op0510=0x03F & SR0004   & R1115 ; op1626=0x054 & op2731=0 unimpl
+#{ "stvc.sr",	two (0x07e0, 0x0054),	two (0x07e0, 0x07ff),	{SR1, R2, SELID}, 	0, PROCESSOR_V850E3V5_UP },
+:stvc.sr SR0004_1, R1115, 1	is op0510=0x03F & SR0004_1 & R1115 ; op1626=0x054 & op2731=1 unimpl
+:stvc.sr SR0004_2, R1115, 2	is op0510=0x03F & SR0004_2 & R1115 ; op1626=0x054 & op2731=2 unimpl
+:stvc.sr SR0004, R1115, 3	is op0510=0x03F & SR0004   & R1115 ; op1626=0x054 & op2731=3 unimpl
+:stvc.sr SR0004_4, R1115, 4	is op0510=0x03F & SR0004_4 & R1115 ; op1626=0x054 & op2731=4 unimpl
+:stvc.sr SR0004_5, R1115, 5	is op0510=0x03F & SR0004_5 & R1115 ; op1626=0x054 & op2731=5 unimpl
+:stvc.sr SR0004_6, R1115, 6	is op0510=0x03F & SR0004_6 & R1115 ; op1626=0x054 & op2731=6 unimpl
+:stvc.sr SR0004_7, R1115, 7	is op0510=0x03F & SR0004_7 & R1115 ; op1626=0x054 & op2731=7 unimpl
+
+
+#{ "tlbai",	two (0x87e0, 0x8960),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
+:tlbai		is op0015=0x87E0 ; op1631=0x8960	unimpl
+#{ "tlbr",	two (0x87e0, 0xe960),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
+:tlbr		is op0015=0x87E0 ; op1631=0xE960	unimpl
+#{ "tlbs",	two (0x87e0, 0xc160),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
+:tlbs		is op0015=0x87E0 ; op1631=0xC160	unimpl
+#{ "tlbvi",	two (0x87e0, 0x8160),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
+:tlbvi		is op0015=0x87E0 ; op1631=0x8160	unimpl
+#{ "tlbw",	two (0x87e0, 0xe160),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
+:tlbw		is op0015=0x87E0 ; op1631=0xE160	unimpl
+
+
+
+# Float-point instructions
+
+# Floating-point Convert Single to Half(Single)
+#{ "cvtf.hs",	two (0x07e2, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:cvtf.hs R1115, R2731	is op0010=0x7E2 & R1115 ; op1626=0x442 & R2731 {
+	# This instruction arithmetically converts the half-precision floating-point format contents 
+	# in the lower 16 bits of generalpurpose register reg2 to single-precision floating-point format, 
+	# rounding the result in accordance with the current rounding mode, and stores the result in general-purpose register reg3.
+	local tmp:2 = R1115:2;
+	R2731 = float2float(tmp);
+}
+# Floating-point Convert Single to Half (Single)
+#{ "cvtf.sh",	two (0x07e3, 0x0442),	two (0x07ff, 0x07ff),	{R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:cvtf.sh R1115, R2731	is op0010=0x7E3 & R1115 ; op1626=0x442 & R2731 {
+	# This instruction arithmetically converts the single-precision floating-point format contents in general-purpose register
+	# reg2 to half-precision floating-point format, rounding the result in accordance with the current rounding mode. The result
+	# is zero-extended to word length and stored in general-purpose register reg3.
+	local tmp:2 = float2float(R1115);
+	R2731 = zext(tmp);
+}
+# Floating-point Fused-Multiply-add (Single)
+#{ "fmaf.s",	two (0x07e0, 0x04e0),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fmaf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E0 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, adds the single-precision floating-point
+	# format contents in general-purpose register reg3, and stores the result in general-purpose register reg3. The operation is
+	# executed as if it were of infinite accuracy. The result of the multiply operation is not rounded, but the result of the add
+	# operation is rounded, in accordance with the current rounding mode.
+	R2731 = R0004 f* R1115 f+ R2731;
+}
+# Floating-point Fused-Multiply-subtract (Single)
+#{ "fmsf.s",	two (0x07e0, 0x04e2),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fmsf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E2 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, subtracts the single-precision floatingpoint format contents 
+	# in general-purpose register reg3, and stores the result in general-purpose register reg3. The operation is executed as if it were of infinite accuracy. 
+	# The result of the multiply operation is not rounded, but the result of the subtract operation is rounded, in accordance with the current rounding mode.
+	R2731 = R0004 f* R1115 f- R2731;
+}
+# Floating-point Fused-Negate-Multiply-add (Single)
+#{ "fnmaf.s",	two (0x07e0, 0x04e4),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fnmaf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E4 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, adds the single-precision floating-point
+	# format contents in general-purpose register reg3, inverts the sign, and stores the result in general-purpose register reg3.
+	# The operation is executed as if it were of infinite accuracy. The result of the multiply operation is not rounded, but the
+	# result of the add operation is rounded, in accordance with the current rounding mode.
+	R2731 = f- (R0004 f* R1115 f+ R2731);
+}
+# Floating-point Fused-Negate-Multiply-subtrat (Single)
+#{ "fnmsf.s",	two (0x07e0, 0x04e6),	two (0x07e0, 0x07ff),	{R1, R2, R3},				0, PROCESSOR_V850E3V5_UP },
+:fnmsf.s R0004, R1115, R2731		is op0510=0x03F & R0004 & R1115 ; op1626=0x4E6 & R2731 {
+	# This instruction multiplies the single-precision floating-point format contents in general-purpose register reg2 with the
+	# single-precision floating-point format contents in general-purpose register reg1, subtracts the single-precision floatingpoint format contents 
+	# in general-purpose register reg3, inverts the sign, and stores the result in general-purpose register reg3. 
+	# The operation is executed as if it were of infinite accuracy. The result of the multiply operation is not rounded, but
+	# the result of the subtract operation is rounded, in accordance with the current rounding mode.
+	R2731 = R2731 f- R0004 f* R1115;
+}
+
+
+
+
+

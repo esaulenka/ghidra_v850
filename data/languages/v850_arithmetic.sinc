@@ -13,9 +13,9 @@
 }
 
 # DIVH reg1, reg2
-:divh R0004, r1115 is op0510=0x02 & R0004 & r1115 {
+:divh r0004, r1115 is op0510=0x02 & r0004 & r1115 {
 	local reg2:4 = r1115;
-	local reg1:4 = sext(R0004:2);
+	local reg1:4 = sext(r0004:2);
 	setOV ((reg2 == 0x80000000 && reg1 == 0xFFFFFFFF) || reg1 == 0);
 	r1115 = reg2 / reg1;
 	set_S_Z (r1115);

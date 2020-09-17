@@ -20,6 +20,7 @@ define register offset=0x80 size=4 [
 
 define register offset=0x100 size=4 [ PC ];
 
+
 @define PSW_PP  "PSW[19,1]"
 @define PSW_NPW "PSW[18,1]"
 @define PSW_DMP "PSW[17,1]"
@@ -50,7 +51,6 @@ macro condition(res, cond, true_val, false_val) {
 	<end>
 }
 
-
 define token instr(16)
 	op0000 = (0,0)
 	op0003 = (0,3)
@@ -58,20 +58,25 @@ define token instr(16)
 	op0005 = (0,5)
 	op0006 = (0,6)
 	op0010 = (0,10)
+	op0014 = (0,14)
 	op0015 = (0,15)
 	op0105 = (1,5)
 	op0106 = (1,6)
 	op0406 = (4,6)
 	op0410 = (4,10)
+	op0414 = (4,14)
 	op0505 = (5,5)
 	op0510 = (5,10)
+	op0514 = (5,14)
 	op0515 = (5,15)
 	op0610 = (6,10)
 	op0615 = (6,15)
 	op0710 = (7,10)
+	op1112 = (11,12)
 	op1113 = (11,13)
 	op1114 = (11,14)
 	op1115 = (11,15)
+	op1315 = (13,15)
 	op1415 = (14,15)
 	op1515 = (15,15)
 	xR0004 = (0,4)
@@ -82,19 +87,39 @@ define token instr(16)
 	R1115odd = (11,15)
 	s0003 = (0,3) signed
 	s0004 = (0,4) signed
+	s0404 = (4,4) signed
 	s0005 = (0,5) signed
 	s1115 = (11,15) signed
 	SR0004 = (0,4)
+	SR0004_1 = (0,4)
+	SR0004_2 = (0,4)
+	SR0004_3 = (0,4)
+	SR0004_4 = (0,4)
+	SR0004_5 = (0,4)
+	SR0004_6 = (0,4)
+	SR0004_7 = (0,4)
+	VR0004 = (0,4)
 	SR1115 = (11,15)
+	SR1115_1 = (11,15)
+	SR1115_2 = (11,15)
+	SR1115_3 = (11,15)
+	SR1115_4 = (11,15)
+	SR1115_5 = (11,15)
+	SR1115_6 = (11,15)
+	SR1115_7 = (11,15)
+	VR1115 = (11,15)
 ;
 define token instr2(16)
 	op1616 = (0,0)
 	op1617 = (0,1)
 	op1619 = (0,3)
 	op1620 = (0,4)
+	op1624 = (0,8)
 	op1626 = (0,10)
 	op1631 = (0,15)
+	op1719 = (1,3)
 	op1720 = (1,4)
+	op1731 = (1,15)
 	op0_1720 = (1,4)
 	op1_1720 = (1,4)
 	op1821 = (2,5)
@@ -109,6 +134,7 @@ define token instr2(16)
 	op2727 = (11,11)
 	op2729 = (11,13)
 	op2731 = (11,15)
+	op3030 = (14,14)
 	op3031 = (14,15)
 	op3131 = (15,15)
 	r1620 = (0,4)
@@ -179,13 +205,24 @@ attach variables [ SR0004 SR1115 ] [
 	DBG24 DBG25 DBG26 DBG27 EIWR FEWR DBWR BSEL ];
 
 
+
 addr9: rel is op0406 & s1115
 [ rel = ((s1115 << 4) | (op0406 << 1)) + inst_start; ] { export *:4 rel; }
 addr22: rel is s0005; op1631 & op1616=0
 [ rel = ((s0005 << 16) | op1631) + inst_start; ] { export *:4 rel; }
-addr32: rel is op1631 & op1616=0; op3247
-[ rel = ((op3247 << 16) | op1631) + inst_start; ] { export *:4 rel; }
+addr32: rel is op1731 & op1616=0; op3247
+[ rel = ((op3247 << 16) | op1731 << 1) + inst_start; ] { export *:4 rel; }
+addr32abs: rel is op1731 & op1616=0; op3247
+[ rel = ((op3247 << 16) | op1731 << 1); ] { export *:4 rel; }
 
+@if defined (V850E3)
+addr17b: rel is s0404 ; op1731 & op1616=1
+[ rel = ((s0404 << 16) | (op1731 << 1)) + inst_start; ] { export *:4 rel; }
+
+addr16loop: rel is op1731
+[ rel = inst_start - (op1731 << 1); ] { export *:4 rel; }
+
+@endif
 
 
 # PSW flags manipulations
@@ -220,14 +257,4 @@ R1115: xR1115 is xR1115				{	export xR1115;	}
 
 R2731: xR2731 is xR2731 & xR2731=0	{	local x:4=0; export x;	}
 R2731: xR2731 is xR2731				{	export xR2731;	}
-
-
-@include "v850_arithmetic.sinc"
-@include "v850_logical.sinc"
-@include "v850_data_manipulation.sinc"
-@include "v850_cond.sinc"
-@include "v850_func.sinc"
-@include "v850_special.sinc"
-@include "v850_load_store.sinc"
-@include "v850_float.sinc"
 

@@ -5,7 +5,7 @@
 # More special registers
 define register offset=0x104 size=4 [
     mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
-    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    _ _ tcsel _ _ hvccfg hvcbp vsel
     vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
     vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
 
@@ -48,7 +48,7 @@ define register offset=0x104 size=4 [
 
 attach variables [ SR0004_1 SR1115_1 ] [
 	mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
-    _ _ tcsel sccfg scbp hvccfg hvcbp vsel
+    _ _ tcsel _ _ hvccfg hvcbp vsel
     vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
     vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
 ];

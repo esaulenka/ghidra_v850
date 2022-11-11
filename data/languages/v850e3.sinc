@@ -117,10 +117,10 @@ attach variables [ VR0004 VR1115 ] [
 }
 
 #Bcond addr17b
-:b^cc0003 addr17b  is (op0514=0x03F & cc0003) ... & addr17b  {
+:b^cc0003 addr17b  is (op0515=0x03F & cc0003) ... & addr17b  {
 	if (cc0003) goto addr17b;
 }
-:br addr17b  is (op0514=0x03F & op0003=0x5) ... & addr17b {
+:br addr17b  is (op0515=0x03F & op0003=0x5) ... & addr17b {
 	goto addr17b;
 }
 

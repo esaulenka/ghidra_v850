@@ -3,138 +3,145 @@
 
 
 # More special registers
-define register offset=0x104 size=4 [
-    mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
-    _ _ tcsel _ _ hvccfg hvcbp vsel
-    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
-    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+define register offset=0x180 size=4 [
+    # selID = 0
+    # the same as common special regs in v850_common.sinc
 
-	htcfg0   _   _   _   _  htctl  mea  asid
-    mei  ispr  pmr  icsr  intcfg   _   _   _
-    tlbsch   _   _   _   _   _   _  htscctl
-    htsctbl0 htsctbl1 htsctbl2 htsctbl3 htsctbl4 htsctbl5 htsctbl6 htsctbl7
+    # selID = 1
+    MCFG0   MCFG1   RBASE   EBASE   INTBP   MCTL    PID     FPIPR
+    _       _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
+    VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
+    VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
 
+    # selID = 2
+    HTCFG0  _       _       _       _       HTCTL   MEA     ASID
+    MEI     _       ISPR    PMR     ICSR    INTCFG  _       _
+    TBLSCH  _       _       _       _       _       _       HTSCCTL
+    HTSCTBL0 HTSCTBL1 HTSCTBL2 HTSCTBL3 HTSCTBL4 HTSCTBL5 HTSCTBL6 HTSCTBL7
+
+    # selID = 3
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
 
-	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
-    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
-    ictagl ictagh icdatl icdath dctagl dctagh dcdatl dcdath
-    icctrl dcctrl iccfg dccfg icerr dcerr _ _
+    # selID = 4
+    TBLIDX  _       _       _       TELO0   TELO1   TEHI0   TEHI1
+    _       _       TBLCFG  _       BWERRL  BWERRH  BRERRL  BRERRH
+    ICTAGL  ICTAGH  ICDATL  ICDATH  DCTAGL  DCTAGH  DCDATL  DCDATH
+    ICCTRL  DCCTRL  ICCFG   DCCFG   ICERR   DCERR   _       _
 
-    mpm mprc _ _ mpbrgn mptrgn _ _
-    mca mcs mcc mcr _ _ _ _
-    _ _ _ _ mpprt0 mpprt1 mpprt2 _
-    _ _ _ _ _ _ _ _
+    # selID = 5
+    MPM     MPRC    _       _       MPBRGN  MPTRGN  _       _
+    MCA     MCS     MCC     MCR     _       _       _       _
+    _       _       _       _       MPPRT0  MPPRT1  MPPRT2  _
+    _       _       _       _       _       _       _       _
 
-	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
-    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
-    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
-    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+    # selID = 6, MPU registers
+    MPLA0   MPUA0   MPAT0   _       MPLA1   MPUA1   MPAT1   _
+    MPLA2   MPUA2   MPAT2   _       MPLA3   MPUA3   MPAT3   _
+    MPLA4   MPUA4   MPAT4   _       MPLA5   MPUA5   MPAT5   _
+    MPLA6   MPUA6   MPAT6   _       MPLA7   MPUA7   MPAT7   _
 
-    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
-    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
-    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
-    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+    # selID = 7, MPU registers
+    MPLA8   MPUA8   MPAT8   _       MPLA9   MPUA9   MPAT9   _
+    MPLA10  MPUA10  MPAT10  _       MPLA11  MPUA11  MPAT11  _
+    MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
+    MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 
-	vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
-	vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15 
-	vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23 
-	vr24 vr25 vr26 vr27 vr28 vr29 vr30 vr31 
+    vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
+    vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15
+    vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23
+    vr24 vr25 vr26 vr27 vr28 vr29 vr30 vr31
 ];
 
 
 attach variables [ SR0004_1 SR1115_1 ] [
-	mcfg0 mcfg1 rbase ebase intbp mctl pid fpipr
-    _ _ tcsel _ _ hvccfg hvcbp vsel
-    vmprt0 vmprt1 vmprt2 _ _ _ _ vmscctl
-    vmsctbl0 vmsctbl1 vmsctbl2 vmsctbl3 _ _ _ _
+    MCFG0   MCFG1   RBASE   EBASE   INTBP   MCTL    PID     FPIPR
+    _       _       TCSEL   _       _       HVCCFG  HVCBP   VSEL
+    VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
+    VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
 ];
 attach variables [ SR0004_2 SR1115_2 ] [
-	htcfg0   _   _   _   _  htctl  mea  asid
-    mei  ispr  pmr  icsr  intcfg   _   _   _
-    tlbsch   _   _   _   _   _   _  htscctl
-    htsctbl0 htsctbl1 htsctbl2 htsctbl3 htsctbl4 htsctbl5 htsctbl6 htsctbl7
-
+    HTCFG0  _       _       _       _       HTCTL   MEA     ASID
+    MEI     _       ISPR    PMR     ICSR    INTCFG  _       _
+    TBLSCH  _       _       _       _       _       _       HTSCCTL
+    HTSCTBL0 HTSCTBL1 HTSCTBL2 HTSCTBL3 HTSCTBL4 HTSCTBL5 HTSCTBL6 HTSCTBL7
 ];
 attach variables [ SR0004_4 SR1115_4 ] [
-	tlbidx _ _ _ telo0 telo1 tehi0 tehi1
-    _ _ tlbcfg _ bwerrl bwerrh brerrl brerrh
-    ictagl ictagh icdatl icdath dctagl dctagh dcdatl dcdath
-    icctrl dcctrl iccfg dccfg icerr dcerr _ _
-
+    TBLIDX  _       _       _       TELO0   TELO1   TEHI0   TEHI1
+    _       _       TBLCFG  _       BWERRL  BWERRH  BRERRL  BRERRH
+    ICTAGL  ICTAGH  ICDATL  ICDATH  DCTAGL  DCTAGH  DCDATL  DCDATH
+    ICCTRL  DCCTRL  ICCFG   DCCFG   ICERR   DCERR   _       _
 ];
 attach variables [ SR0004_5 SR1115_5 ] [
-    mpm mprc _ _ mpbrgn mptrgn _ _
-    mca mcs mcc mcr _ _ _ _
-    _ _ _ _ mpprt0 mpprt1 mpprt2 _
-    _ _ _ _ _ _ _ _
+    MPM     MPRC    _       _       MPBRGN  MPTRGN  _       _
+    MCA     MCS     MCC     MCR     _       _       _       _
+    _       _       _       _       MPPRT0  MPPRT1  MPPRT2  _
+    _       _       _       _       _       _       _       _
 ];
 attach variables [ SR0004_6 SR1115_6 ] [
-	mpla0 mpua0 mpat0 _ mpla1 mpua1 mpat1 _
-    mpla2 mpua2 mpat2 _ mpla3 mpua3 mpat3 _
-    mpla4 mpua4 mpat4 _ mpla5 mpua5 mpat5 _
-    mpla6 mpua6 mpat6 _ mpla7 mpua7 mpat7 _
+    MPLA0   MPUA0   MPAT0   _       MPLA1   MPUA1   MPAT1   _
+    MPLA2   MPUA2   MPAT2   _       MPLA3   MPUA3   MPAT3   _
+    MPLA4   MPUA4   MPAT4   _       MPLA5   MPUA5   MPAT5   _
+    MPLA6   MPUA6   MPAT6   _       MPLA7   MPUA7   MPAT7   _
 ];
 attach variables [ SR0004_7 SR1115_7 ] [
-    mpla8 mpua8 mpat8 _ mpla9 mpua9 mpat9 _
-    mpla10 mpua10 mpat10 _ mpla11 mpua11 mpat11 _
-    mpla12 mpua12 mpat12 _ mpla13 mpua13 mpat13 _
-    mpla14 mpua14 mpat14 _ mpla15 mpua15 mpat15 _
+    MPLA8   MPUA8   MPAT8   _       MPLA9   MPUA9   MPAT9   _
+    MPLA10  MPUA10  MPAT10  _       MPLA11  MPUA11  MPAT11  _
+    MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
+    MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 ];
-
 attach variables [ VR0004 VR1115 ] [
-	vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
-	vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15 
-	vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23 
-	vr24 vr25 vr26 vr27 vr28 vr29 vr30 vr31 
+    vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
+    vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15
+    vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23
+    vr24 vr25 vr26 vr27 vr28 vr29 vr30 vr31
 ];
 
 
 # ST.DW reg3, disp23[reg1]
 :st.dw R2731odd, disp23[R0004] is op0515=0x3D & R0004; R2731odd & op2126 & op1620=0xF; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
-	local addr:4 = disp23 + R0004;
-	*:8 addr = R2731odd;
+    local addr:4 = disp23 + R0004;
+    *:8 addr = R2731odd;
 }
 
 # ld.dw 0x7a00009 0xffe0001f
 # LD.DW disp23[reg1], reg3
 :ld.dw disp23[R0004], R2731odd is op0515=0x03d & R0004; R2731odd & op2126 & op1620=0x09; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
-      local addr:4 = disp23 + R0004;
-      R2731odd = *:8 addr;
+    local addr:4 = disp23 + R0004;
+    R2731odd = *:8 addr;
 }
 
 
 #{ "jarl",	two (0xc7e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3_NOTR0},   	1, PROCESSOR_V850E3V5_UP},
 :jarl [R0004], R2731 is op0515=0x63f & R0004; R2731 {
-	R2731 = inst_next;
-	PC = R0004;
-	call [R0004];
+    R2731 = inst_next;
+    PC = R0004;
+    call [R0004];
 }
 
 #Bcond addr17b
 :b^cc0003 addr17b  is (op0515=0x03F & cc0003) ... & addr17b  {
-	if (cc0003) goto addr17b;
+    if (cc0003) goto addr17b;
 }
 :br addr17b  is (op0515=0x03F & op0003=0x5) ... & addr17b {
-	goto addr17b;
+    goto addr17b;
 }
 
 
 # loop reg1, disp16
 #{ "loop",	two (0x06e0, 0x0001),	two (0xffe0, 0x0001), 	{R1, D16_LOOP}, 	0, PROCESSOR_V850E3V5_UP },
 :loop r0004, addr16loop		is op0515=0x037 & r0004 ; op1616=1 & addr16loop {
-	local cnt:4 = r0004 - 1;
+    local cnt:4 = r0004 - 1;
     if (cnt == 0) goto inst_next;
-	
-	flags_add(r0004, -1);	# carry as add, not sub!
-	r0004 = cnt;
-	
-	goto addr16loop;
+
+    flags_add(r0004, -1);	# carry as add, not sub!
+    r0004 = cnt;
+
+    goto addr16loop;
 }
 
 
@@ -241,7 +248,6 @@ bins_width: width	is op2026=0x0D & op2731 & op1719 & op2727
 
 # special instructions
 #{ "snooze",	two (0x0fe0, 0x0120),	two (0xffff, 0xffff),	{0},	 		0, PROCESSOR_V850E3V5_UP },
-define pcodeop __snooze;
 :snooze		is op0015=0x0FE0 ; op1631=0x0120 {
 	# Temporarily halts operation of the CPU for the period defined by the hardware specifications
 	__snooze();

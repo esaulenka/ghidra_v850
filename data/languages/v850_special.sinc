@@ -7,13 +7,11 @@
 
 
 # NOP
-define pcodeop __nop;
 :nop is op0015=0x0000 {
 	__nop();
 }
 
 # SYNCE
-define pcodeop __synchronize;
 :synce is op0015=0x001D {
 	__synchronize();
 }
@@ -100,7 +98,6 @@ define pcodeop __synchronize;
 }
 
 # HALT
-define pcodeop __halt;
 :halt is op0515=0x3F; op1631=0x0120 {
 	__halt();
 }
@@ -138,13 +135,11 @@ define pcodeop __halt;
 }
 
 # DI
-define pcodeop __disable_irq;
 :di is op0015=0x07E0; op1631=0x0160 {
 	$(PSW_ID) = 1;
 	__disable_irq();
 }
 # EI
-define pcodeop __enable_irq;
 :ei is op0015=0x87E0; op1631=0x0160 {
 	$(PSW_ID) = 0;
 	__enable_irq();

@@ -14,11 +14,23 @@ define register offset=0x00 size=8
 	[ r0r1  r2sp  _     r6r7  r8r9  r10r11  r12r13  r14r15  r16r17  r18r19  r20r21  r22r23  r24r25  r26r27  r28r29  _  ];
 
 # special registers
-define register offset=0x80 size=4 [ 
-	EIPC EIPSW FEPC FEPSW ECR PSW FPSR FPEPC FPST FPCC FPCFG SCCFG SCBP EIIC FEIC DBIC 
-	CTPC CTPSW DBPC DBPSW CTBP DIR DBG22 DBG23 DBG24 DBG25 DBG26 DBG27 EIWR FEWR DBWR BSEL ];
+@if defined(V850E2M)
+define register offset=0x80 size=4 [
+    EIPC    EIPSW   FEPC    FEPSW   ECR     PSW     FPSR    FPEPC
+    FPST    FPCC    FPCFG   SCCFG   SCBP    EIIC    FEIC    DBIC
+    CTPC    CTPSW   DBPC    DBPSW   CTBP    DIR     DBG22   DBG23
+    DBG24   DBG25   DBG26   DBG27   EIWR    FEWR    DBWR    BSEL
+];
+@elif defined(V850E3)
+define register offset=0x80 size=4 [
+    EIPC    EIPSW   FEPC    FEPSW   ECR     PSW     FPSR    FPEPC
+    FPST    FPCC    FPCFG   _       _       EIIC    FEIC    DBIC
+    CTPC    CTPSW   DBPC    DBPSW   CTBP    DIR     DBG22   DBG23
+    DBG24   DBG25   DBG26   DBG27   EIWR    FEWR    DBWR    BSEL
+];
+@endif
 
-define register offset=0x100 size=4 [ PC ];
+define register offset=0x1000 size=4 [ PC ];
 
 
 @define PSW_PP  "PSW[19,1]"
@@ -37,6 +49,14 @@ define register offset=0x100 size=4 [ PC ];
 
 
 define pcodeop TODO;
+
+define pcodeop __nop;
+define pcodeop __synchronize;
+define pcodeop __halt;
+define pcodeop __snooze;
+define pcodeop __disable_irq;
+define pcodeop __enable_irq;
+
 
 
 macro ternary(res, cond, avar, bvar) {
@@ -197,11 +217,23 @@ attach variables [ R0004odd R1115odd R1620odd R2731odd ]
 attach names [fcond2730]
   ["f" "un" "eq" "ueq" "olt" "ult" "ole" "ule" "sd" "ngle" "seq" "ngl" "lt" "nge" "le" "ngt"];
 
+
+@if defined(V850E2M)
 attach variables [ SR0004 SR1115 ] [
-	EIPC EIPSW FEPC FEPSW ECR PSW FPSR FPEPC
-	FPST FPCC FPCFG SCCFG SCBP EIIC FEIC DBIC
-	CTPC CTPSW DBPC DBPSW CTBP DIR DBG22 DBG23
-	DBG24 DBG25 DBG26 DBG27 EIWR FEWR DBWR BSEL ];
+    EIPC    EIPSW   FEPC    FEPSW   ECR     PSW     FPSR    FPEPC
+    FPST    FPCC    FPCFG   SCCFG   SCBP    EIIC    FEIC    DBIC
+    CTPC    CTPSW   DBPC    DBPSW   CTBP    DIR     DBG22   DBG23
+    DBG24   DBG25   DBG26   DBG27   EIWR    FEWR    DBWR    BSEL
+];
+@elif defined(V850E3)
+# looks like in the latest MCUs SCCFG/SCBP is in another place
+attach variables [ SR0004 SR1115 ] [
+    EIPC    EIPSW   FEPC    FEPSW   ECR     PSW     FPSR    FPEPC
+    FPST    FPCC    FPCFG   _       _       EIIC    FEIC    DBIC
+    CTPC    CTPSW   DBPC    DBPSW   CTBP    DIR     DBG22   DBG23
+    DBG24   DBG25   DBG26   DBG27   EIWR    FEWR    DBWR    BSEL
+];
+@endif
 
 
 

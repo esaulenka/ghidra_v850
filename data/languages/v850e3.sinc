@@ -49,6 +49,12 @@ define register offset=0x180 size=4 [
     MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
     MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 
+    # selID = 13
+    _       _ _ _ _ _ _ _
+    _       _ _ _ _ _ _ _
+    _       _ _ _ _ _ _ _
+    CDBCR   _ _ _ _ _ _ _
+
     vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
     vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15
     vr16 vr17 vr18 vr19 vr20 vr21 vr22 vr23
@@ -91,6 +97,13 @@ attach variables [ SR0004_7 SR1115_7 ] [
     MPLA10  MPUA10  MPAT10  _       MPLA11  MPUA11  MPAT11  _
     MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
     MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
+];
+attach variables [ SR0004_d SR1115_d ] [
+    # selID = 13
+    _       _ _ _ _ _ _ _
+    _       _ _ _ _ _ _ _
+    _       _ _ _ _ _ _ _
+    CDBCR   _ _ _ _ _ _ _
 ];
 attach variables [ VR0004 VR1115 ] [
     vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
@@ -155,6 +168,7 @@ attach variables [ VR0004 VR1115 ] [
 :stsr SR0004_5, R1115, 5	is op0510=0x3F & R1115 & SR0004_5; op1626=0x40 & op2731=0x05 { R1115 = SR0004_5; }
 :stsr SR0004_6, R1115, 6	is op0510=0x3F & R1115 & SR0004_6; op1626=0x40 & op2731=0x06 { R1115 = SR0004_6; }
 :stsr SR0004_7, R1115, 7	is op0510=0x3F & R1115 & SR0004_7; op1626=0x40 & op2731=0x07 { R1115 = SR0004_7; }
+:stsr SR0004_d, R1115, 13	is op0510=0x3F & R1115 & SR0004_d; op1626=0x40 & op2731=0x0D { R1115 = SR0004_d; }
 
 # LDSR reg2, regID, selId
 :ldsr R0004, SR1115_1, 1	is op0510=0x3F & SR1115_1 & R0004; op1626=0x20 & op2731=0x01 { SR1115_1 = R0004; }
@@ -164,6 +178,7 @@ attach variables [ VR0004 VR1115 ] [
 :ldsr R0004, SR1115_5, 5	is op0510=0x3F & SR1115_5 & R0004; op1626=0x20 & op2731=0x05 { SR1115_5 = R0004; }
 :ldsr R0004, SR1115_6, 6	is op0510=0x3F & SR1115_6 & R0004; op1626=0x20 & op2731=0x06 { SR1115_6 = R0004; }
 :ldsr R0004, SR1115_7, 7	is op0510=0x3F & SR1115_7 & R0004; op1626=0x20 & op2731=0x07 { SR1115_7 = R0004; }
+:ldsr R0004, SR1115_d, 13	is op0510=0x3F & SR1115_d & R0004; op1626=0x20 & op2731=0x0D { SR1115_d = R0004; }
 
 
 # load linked (atomic)

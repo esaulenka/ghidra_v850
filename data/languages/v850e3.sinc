@@ -117,7 +117,7 @@ attach variables [ VR0004 VR1115 ] [
 
 
 #{ "jarl",	two (0xc7e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3_NOTR0},   	1, PROCESSOR_V850E3V5_UP},
-:jarl [R0004], R2731 is op0515=0x63f & R0004; R2731 {
+:jarl [R0004], R2731 is op0515=0x63f & R0004; op1626=0x160 & R2731 {
     R2731 = inst_next;
     PC = R0004;
     call [R0004];

@@ -64,7 +64,7 @@ define register offset=0x180 size=4 [
 
 attach variables [ SR0004_1 SR1115_1 ] [
     MCFG0   MCFG1   RBASE   EBASE   INTBP   MCTL    PID     FPIPR
-    _       _       TCSEL   _       _       HVCCFG  HVCBP   VSEL
+    _       _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
     VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
     VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
 ];

@@ -185,8 +185,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # CVTF.WD reg2, reg3
-:cvtf.wd R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00000; R2731odd & op2126=0b100010 & op1620=0b10010 {
-  R2731odd = int2float(R1115odd);
+:cvtf.wd R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00000; R2731odd & op2126=0b100010 & op1620=0b10010 {
+  R2731odd = int2float(R1115);
 }
 
 # CVTF.WS reg2, reg3

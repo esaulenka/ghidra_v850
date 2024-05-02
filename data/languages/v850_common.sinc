@@ -247,7 +247,7 @@ addr22: rel is s0005; op1631 & op1616=0
 addr32: rel is op1731 & op1616=0; op3247
 [ rel = ((op3247 << 16) | op1731 << 1) + inst_start; ] { export *:4 rel; }
 addr32abs: rel is op1731 & op1616=0; op3247
-[ rel = ((op3247 << 16) | op1731 << 1); ] { export *:4 rel; }
+[ rel = ((op3247 << 16) | op1731 << 1); ] { export *[const]:4 rel; }
 
 @if defined (V850E3)
 addr17b: rel is s0404 ; op1731 & op1616=1

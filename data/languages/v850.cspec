@@ -7,23 +7,26 @@
   <stackpointer register="sp" space="ram" growth="negative"/>
 
   <default_proto>
-    <prototype name="__stdcall" extrapop="0" stackshift="0" strategy="register">
+    <prototype name="__stdcall" strategy="register" extrapop="0" stackshift="0">
       <input>
-        <pentry minsize="1" maxsize="4">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="r6"/>
         </pentry>
-        <pentry minsize="1" maxsize="4">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="r7"/>
         </pentry>
-        <pentry minsize="1" maxsize="4">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="r8"/>
         </pentry>
-        <pentry minsize="1" maxsize="4">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="r9"/>
+        </pentry>
+        <pentry minsize="1" maxsize="500" align="4">
+          <addr offset="0" space="stack"/>
         </pentry>
       </input>
       <output>
-        <pentry minsize="1" maxsize="4">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="r10"/>
         </pentry>
       </output>
@@ -32,8 +35,7 @@
         <register name="gp"/>
         <register name="tp"/>
       </unaffected>
-
-
     </prototype>
+
   </default_proto>
 </compiler_spec>

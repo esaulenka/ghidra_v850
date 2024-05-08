@@ -6,6 +6,11 @@
   </global>
   <stackpointer register="sp" space="ram" growth="negative"/>
 
+  <prefersplit style="inhalf">
+    <register name="gptp"/>
+    <register name="eplp"/>
+  </prefersplit>
+
   <default_proto>
     <prototype name="__stdcall" strategy="register" extrapop="0" stackshift="0">
       <input>

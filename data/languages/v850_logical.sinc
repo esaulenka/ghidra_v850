@@ -73,28 +73,28 @@
 	setZ(var & (1 << op1113));
 }
 
-# SET1 reg1, [reg2]
-:set1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE0 {
+# SET1 reg2, [reg1]
+:set1 R1115, [R0004] is op0510=0x3F & R0004 & R1115; op1631=0xE0 {
 	local var = *:1 R0004;
-	*:1 R0004 = var | (1 << R0004);
-	setZ(var & (1 << R0004));
+	*:1 R0004 = var | (1 << R1115);
+	setZ(var & (1 << R1115));
 }
-# NOT1 reg1, [reg2]
-:not1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE2 {
+# NOT1 reg2, [reg1]
+:not1 R1115, [R0004] is op0510=0x3F & R0004 & R1115; op1631=0xE2 {
 	local var = *:1 R0004;
-	*:1 R0004 = var ^ (1 << R0004);
-	setZ(var & (1 << R0004));
+	*:1 R0004 = var ^ (1 << R1115);
+	setZ(var & (1 << R1115));
 }
-# CLR1 reg1, [reg2]
-:clr1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE4 {
+# CLR1 reg2, [reg1]
+:clr1 R1115, [R0004] is op0510=0x3F & R0004 & R1115; op1631=0xE4 {
 	local var = *:1 R0004;
-	*:1 R0004 = var & ~(1 << R0004);
-	setZ(var & (1 << R0004));
+	*:1 R0004 = var & ~(1 << R1115);
+	setZ(var & (1 << R1115));
 }
-# TST1 reg1, [reg2]
-:tst1 R0004, [R1115] is op0510=0x3F & R0004 & R1115; op1631=0xE6 {
+# TST1 reg2, [reg1]
+:tst1 R1115, [R0004] is op0510=0x3F & R0004 & R1115; op1631=0xE6 {
 	local var = *:1 R0004;
-	setZ(var & (1 << R0004));
+	setZ(var & (1 << R1115));
 }
 
 

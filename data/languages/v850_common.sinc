@@ -269,14 +269,14 @@ macro set_nOV_S_Z(res)	{	clrOV(); set_S_Z(res);	}
 macro set_C(res) 		{	$(PSW_CY) = (res != 0);	}
 macro flags_add(op1,op2) {
 	local A:4 = op1;		local B:4 = op2;		local R = A + B;
-	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];
+	local sA  = A s< 0;		local sB  = B s< 0;		local sR = R s< 0;
 	$(PSW_OV) = (sA == sB) && (sB != sR);
 	$(PSW_CY) = carry(A, B);
 	set_S_Z (R);
 }
 macro flags_sub(op1,op2) {
 	local A:4 = op1;		local B:4 = op2;		local R = A - B;
-	local sA  = A[31,1];	local sB  = B[31,1];	local sR = R[31,1];
+	local sA  = A s< 0;		local sB  = B s< 0;		local sR = R s< 0;
 	$(PSW_OV) = (sA != sB) && (sB == sR);
 	$(PSW_CY) = (A < B);
 	set_S_Z (R);

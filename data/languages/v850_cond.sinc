@@ -78,23 +78,22 @@ cc1720: "gt"	is op1720=0xF		{ tmp:1 = !($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z));	expo
 
 # SBF cccc, reg1, reg2, reg3
 :sbf^cc1720 R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op2126=0x1C & op1616=0 & cc1720 & R2731 {
-	local lsb:5 = zext(cc1720);
-	local res:5 = sext(R1115) - sext(R0004) - lsb;
-	R2731 = res:4;
+	local lsb:4 = zext(cc1720);
+	local res:4 = R1115 - R0004 - lsb;
 	set_S_Z (res);
-	local sA  = R0004[31,1];	local sB  = R1115[31,1];	local sR = res[31,1];
+	local sA = R0004 s< 0; local sB = R1115 s< 0; local sR = res s< 0;
 	$(PSW_OV) = (sA != sB) && (sB == sR);
-	$(PSW_CY) = (R1115 < (R0004 + lsb:4));
+	$(PSW_CY) = (R1115 < (R0004 + lsb));
+	R2731 = res;
 }
 # ADF cccc, reg1, reg2, reg3
 :adf^cc1720 R0004, R1115, R2731 is op0510=0x3F & R0004 & R1115; op2126=0x1D & op1616=0 & cc1720 & R2731 {
-	local lsb:5 = zext(cc1720);
-	local res:5 = sext(R1115) + sext(R0004) + lsb;
-	R2731 = res:4;
+	local lsb:4 = zext(cc1720);
+	local res:4 = R1115 + R0004 + lsb;
 	set_S_Z (res);
-	$(PSW_CY) = res[32,1];
-	local sA  = R0004[31,1];	local sB  = R1115[31,1];	local sR = res[31,1];
+	$(PSW_CY) = carry(R1115, R0004) || carry(R1115 + R0004, lsb);
+	local sA = R0004 s< 0; local sB = R1115 s< 0; local sR = res s< 0;
 	$(PSW_OV) = (sA == sB) && (sB != sR);
+	R2731 = res;
 }
-
 

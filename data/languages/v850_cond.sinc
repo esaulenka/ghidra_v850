@@ -16,10 +16,10 @@ cc0003: "n"		is op0003=0x4		{ tmp:1 =  ($(PSW_S)); 							export tmp; }
 cc0003: "p"		is op0003=0xC		{ tmp:1 = !($(PSW_S)); 							export tmp; }
 cc0003: "r"		is op0003=0x5		{ tmp:1 = 1; 									export tmp; }
 cc0003: "sa"	is op0003=0xD		{ tmp:1 =  ($(PSW_SAT));						export tmp; }
-cc0003: "lt"	is op0003=0x6		{ tmp:1 =  ($(PSW_S) == $(PSW_OV));				export tmp; }
-cc0003: "ge"	is op0003=0xE		{ tmp:1 = !($(PSW_S) == $(PSW_OV));				export tmp; }
-cc0003: "le"	is op0003=0x7		{ tmp:1 =  ($(PSW_S) == $(PSW_OV) || $(PSW_Z)); export tmp; }
-cc0003: "gt"	is op0003=0xF		{ tmp:1 = !($(PSW_S) == $(PSW_OV) || $(PSW_Z));	export tmp; }
+cc0003: "lt"	is op0003=0x6		{ tmp:1 =  ($(PSW_S) ^^ $(PSW_OV));				export tmp; }
+cc0003: "ge"	is op0003=0xE		{ tmp:1 = !($(PSW_S) ^^ $(PSW_OV));				export tmp; }
+cc0003: "le"	is op0003=0x7		{ tmp:1 =  ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)); export tmp; }
+cc0003: "gt"	is op0003=0xF		{ tmp:1 = !($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z));	export tmp; }
 
 # same as cc0003 with another condition bits
 cc1720: "v"		is op1720=0x0		{ tmp:1 =  ($(PSW_OV));							export tmp; }
@@ -34,10 +34,10 @@ cc1720: "n"		is op1720=0x4		{ tmp:1 =  ($(PSW_S)); 							export tmp; }
 cc1720: "p"		is op1720=0xC		{ tmp:1 = !($(PSW_S)); 							export tmp; }
 cc1720: "r"		is op1720=0x5		{ tmp:1 = 1; 									export tmp; }
 cc1720: "sa"	is op1720=0xD		{ tmp:1 =  ($(PSW_SAT));						export tmp; }
-cc1720: "lt"	is op1720=0x6		{ tmp:1 =  ($(PSW_S) == $(PSW_OV));				export tmp; }
-cc1720: "ge"	is op1720=0xE		{ tmp:1 = !($(PSW_S) == $(PSW_OV));				export tmp; }
-cc1720: "le"	is op1720=0x7		{ tmp:1 =  ($(PSW_S) == $(PSW_OV) || $(PSW_Z)); export tmp; }
-cc1720: "gt"	is op1720=0xF		{ tmp:1 = !($(PSW_S) == $(PSW_OV) || $(PSW_Z));	export tmp; }
+cc1720: "lt"	is op1720=0x6		{ tmp:1 =  ($(PSW_S) ^^ $(PSW_OV));				export tmp; }
+cc1720: "ge"	is op1720=0xE		{ tmp:1 = !($(PSW_S) ^^ $(PSW_OV));				export tmp; }
+cc1720: "le"	is op1720=0x7		{ tmp:1 =  ($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z)); export tmp; }
+cc1720: "gt"	is op1720=0xF		{ tmp:1 = !($(PSW_S) ^^ $(PSW_OV) || $(PSW_Z));	export tmp; }
 
 
 #Bcond addr9

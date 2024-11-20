@@ -99,11 +99,11 @@ define token instr(16)
 	op1415 = (14,15)
 	op1515 = (15,15)
 	xR0004 = (0,4)
-	R0004odd = (0,4)
+	R0004pair = (0,4)
 	xR1115 = (11,15)
 	r0004 = (0,4)
 	r1115 = (11,15)
-	R1115odd = (11,15)
+	R1115pair = (11,15)
 	s0003 = (0,3) signed
 	s0004 = (0,4) signed
 	s0404 = (4,4) signed
@@ -161,8 +161,8 @@ define token instr2(16)
 	op3131 = (15,15)
 	r1620 = (0,4)
 	xR2731 = (11,15)
-	R1620odd = (0,4)
-	R2731odd = (11,15)
+	R1620pair = (0,4)
+	R2731pair = (11,15)
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
 	s1821 = (2,5) signed
@@ -214,7 +214,7 @@ attach variables [ xR0004 xR1115 xR2731]
 	[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
 attach variables [ r0004 r1115 r1620 prep1620r ]
 	[ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
-attach variables [ R0004odd R1115odd R1620odd R2731odd ]
+attach variables [ R0004pair R1115pair R1620pair R2731pair ]
 	[ r0r1 _ r2sp _ gptp _ r6r7 _ r8r9 _ r10r11 _ r12r13 _ r14r15 _ r16r17 _ r18r19 _ r20r21 _ r22r23 _ r24r25 _ r26r27 _ r28r29 _ eplp _ ];
 
 attach names [fcond2730]

@@ -1,6 +1,6 @@
 # ABSF.D reg2, reg3
-:absf.d R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00000; R2731odd & op2126=0b100010 & op1620=0b11000 {
-  R2731odd = abs(R1115odd);
+:absf.d R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00000; R2731pair & op2126=0b100010 & op1620=0b11000 {
+  R2731pair = abs(R1115pair);
 }
 
 # ABSF.S reg2, reg3
@@ -9,8 +9,8 @@
 }
 
 # ADDF.D reg1, reg2, reg3
-:addf.d R0004odd, R1115odd, R2731odd is R1115odd & op0510=0x3F & R0004odd ; R2731odd & op2126=0b100011 & op1620=0b10000 {
-  R2731odd = R1115odd f+ R0004odd;
+:addf.d R0004pair, R1115pair, R2731pair is R1115pair & op0510=0x3F & R0004pair ; R2731pair & op2126=0b100011 & op1620=0b10000 {
+  R2731pair = R1115pair f+ R0004pair;
 }
 
 # ADDF.S reg1, reg2, reg3
@@ -19,37 +19,37 @@
 }
 
 # CEILF.DL reg2, reg3
-:ceilf.dl R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00010; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  local tmp:8 = ceil(float2float(R1115odd));
-  R2731odd = trunc(tmp);
+:ceilf.dl R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00010; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  local tmp:8 = ceil(float2float(R1115pair));
+  R2731pair = trunc(tmp);
 }
 
 # CEILF.DUL reg2, reg3
-:ceilf.dul R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b10010; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  local tmp:8 = ceil(float2float(R1115odd));
-  R2731odd = trunc(tmp);
+:ceilf.dul R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b10010; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  local tmp:8 = ceil(float2float(R1115pair));
+  R2731pair = trunc(tmp);
 }
 
 # CEILF.DUW reg2, reg3
-:ceilf.duw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b10010; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(ceil(R1115odd));
+:ceilf.duw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b10010; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(ceil(R1115pair));
 }
 
 # CEILF.DW reg2, reg3
-:ceilf.dw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00010; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(ceil(R1115odd));
+:ceilf.dw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b00010; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(ceil(R1115pair));
 }
 
 # CEILF.SL reg2, reg3
-:ceilf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00010; R2731odd & op2126=0b100010 & op1620=0b00100 {
+:ceilf.sl R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b00010; R2731pair & op2126=0b100010 & op1620=0b00100 {
   local tmp:8 = ceil(float2float(R1115));
-  R2731odd = trunc(tmp);
+  R2731pair = trunc(tmp);
 }
 
 # CEILF.SUL reg2, reg3
-:ceilf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10010; R2731odd & op2126=0b100010 & op1620=0b00100 {
+:ceilf.sul R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b10010; R2731pair & op2126=0b100010 & op1620=0b00100 {
   local tmp:8 = ceil(float2float(R1115));
-  R2731odd = trunc(tmp);
+  R2731pair = trunc(tmp);
 }
 
 # CEILF.SUW reg2, reg3
@@ -63,9 +63,9 @@
 }
 
 # CMOVF.D fcbit, reg1, reg2, reg3
-:cmovf.d fcbit1719, R1115odd, R0004odd, R2731odd is R1115odd & op0510=0x3F & R0004odd; R2731odd & op2126=0b100000 & op2020=1 & fcbit1719 & op1616=0 {
+:cmovf.d fcbit1719, R1115pair, R0004pair, R2731pair is R1115pair & op0510=0x3F & R0004pair; R2731pair & op2126=0b100000 & op2020=1 & fcbit1719 & op1616=0 {
   local tmp:8 = zext(FPSR >> (fcbit1719:1 + 24:1)) & 0x1;
-  R2731odd = (tmp * R1115odd) | ((1-tmp) * R0004odd);
+  R2731pair = (tmp * R1115pair) | ((1-tmp) * R0004pair);
 }
 
 # CMOVF.S fcbit, reg1, reg2, reg3
@@ -84,9 +84,9 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # CMPF.D reg2, reg3
-:cmpf.d fcond2730, R1115odd, R0004odd, fcbit1719 is R1115odd & op0510=0x3F & R0004odd; op3131=0 & fcond2730 & op2126=0b100001 & op2020=1 & fcbit1719 & op1616=0 {
+:cmpf.d fcond2730, R1115pair, R0004pair, fcbit1719 is R1115pair & op0510=0x3F & R0004pair; op3131=0 & fcond2730 & op2126=0b100001 & op2020=1 & fcbit1719 & op1616=0 {
   local res:4 = 0;
-  compare_float (fcond2730:1, R1115odd, R0004odd, res);
+  compare_float (fcond2730:1, R1115pair, R0004pair, res);
 
   local newbit:4 = res << (24 + fcbit1719);
   local ones:4 = 1 << (24 + fcbit1719);
@@ -105,53 +105,53 @@ macro compare_float(fcond, reg2, reg1, result) {
 
 # TODO: do something with the current rounding mode
 # CVTF.DL reg2, reg3
-:cvtf.dl R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00100; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  R2731odd = int2float(R1115odd);
+:cvtf.dl R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00100; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  R2731pair = int2float(R1115pair);
 }
 
 # CVTF.DS reg2, reg3
-:cvtf.ds R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00011; R2731 & op2126=0b100010 & op1620=0b10010 {
-  R2731 = float2float(R1115odd);
+:cvtf.ds R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b00011; R2731 & op2126=0b100010 & op1620=0b10010 {
+  R2731 = float2float(R1115pair);
 }
 
 # CVTF.DUL reg2, reg3
-:cvtf.dul R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b10100; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  R2731odd = trunc(R1115odd);
+:cvtf.dul R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b10100; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  R2731pair = trunc(R1115pair);
 }
 
 # CVTF.DUW reg2, reg3
-:cvtf.duw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b10100; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(R1115odd);
+:cvtf.duw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b10100; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(R1115pair);
 }
 
 # CVTF.DW reg2, reg3
-:cvtf.sw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00100; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(R1115odd);
+:cvtf.sw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b00100; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(R1115pair);
 }
 
 # CVTF.LD reg2, reg3
-:cvtf.ls R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00001; R2731odd & op2126=0b100010 & op1620=0b10010 {
-  R2731odd = int2float(R1115odd);
+:cvtf.ls R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00001; R2731pair & op2126=0b100010 & op1620=0b10010 {
+  R2731pair = int2float(R1115pair);
 }
 
 # CVTF.LS reg2, reg3
-:cvtf.ls R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00010 {
-  R2731 = int2float(R1115odd);
+:cvtf.ls R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(R1115pair);
 }
 
 # CVTF.SD reg2, reg3
-:cvtf.sd R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00010; R2731odd & op2126=0b100010 & op1620=0b10010 {
-  R2731odd = float2float(R1115);
+:cvtf.sd R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b00010; R2731pair & op2126=0b100010 & op1620=0b10010 {
+  R2731pair = float2float(R1115);
 }
 
 # CVTF.SL reg2, reg3
-:cvtf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00100; R2731odd & op2126=0b100010 & op1620=0b00100 {
-  R2731odd = trunc(R1115);
+:cvtf.sl R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b00100; R2731pair & op2126=0b100010 & op1620=0b00100 {
+  R2731pair = trunc(R1115);
 }
 
 # CVTF.SUL reg2, reg3
-:cvtf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10100; R2731odd & op2126=0b100010 & op1620=0b00100 {
-  R2731odd = trunc(R1115);
+:cvtf.sul R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b10100; R2731pair & op2126=0b100010 & op1620=0b00100 {
+  R2731pair = trunc(R1115);
 }
 
 # CVTF.SUW reg2, reg3
@@ -165,18 +165,18 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # CVTF.ULD reg2, reg3
-:cvtf.uls R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b10001; R2731odd & op2126=0b100010 & op1620=0b10010 {
-  R2731odd = int2float(R1115odd);
+:cvtf.uls R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b10001; R2731pair & op2126=0b100010 & op1620=0b10010 {
+  R2731pair = int2float(R1115pair);
 }
 
 # CVTF.ULS reg2, reg3
-:cvtf.uls R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b00010 {
-  R2731 = int2float(R1115odd);
+:cvtf.uls R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b00010 {
+  R2731 = int2float(R1115pair);
 }
 
 # CVTF.UWD reg2, reg3
-:cvtf.uwd R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10000; R2731odd & op2126=0b100010 & op1620=0b10010 {
-  R2731odd = int2float(R1115);
+:cvtf.uwd R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b10000; R2731pair & op2126=0b100010 & op1620=0b10010 {
+  R2731pair = int2float(R1115);
 }
 
 # CVTF.UWS reg2, reg3
@@ -185,8 +185,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # CVTF.WD reg2, reg3
-:cvtf.wd R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00000; R2731odd & op2126=0b100010 & op1620=0b10010 {
-  R2731odd = int2float(R1115);
+:cvtf.wd R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b00000; R2731pair & op2126=0b100010 & op1620=0b10010 {
+  R2731pair = int2float(R1115);
 }
 
 # CVTF.WS reg2, reg3
@@ -195,8 +195,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # DIVF.D reg1, reg2, reg3
-:divf.s R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b11110 {
-  R2731odd = R1115odd f/ R0004odd;
+:divf.s R0004pair, R1115pair, R2731pair is R0004pair & op0510=0x3F & R1115pair; R2731pair & op2126=0b100011 & op1620=0b11110 {
+  R2731pair = R1115pair f/ R0004pair;
 }
 
 # DIVF.S reg1, reg2, reg3
@@ -205,37 +205,37 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # FLOORF.DL reg2, reg3
-:floorf.dl R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00011; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  local tmp:8 = floor(float2float(R1115odd));
-  R2731odd = trunc(tmp);
+:floorf.dl R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00011; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  local tmp:8 = floor(float2float(R1115pair));
+  R2731pair = trunc(tmp);
 }
 
 # FLOORF.DUL reg2, reg3
-:floorf.dul R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b10011; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  local tmp:8 = floor(float2float(R1115odd));
-  R2731odd = trunc(tmp);
+:floorf.dul R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b10011; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  local tmp:8 = floor(float2float(R1115pair));
+  R2731pair = trunc(tmp);
 }
 
 # FLOORF.DUW reg2, reg3
-:floorf.duw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b10011; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(floor(R1115odd));
+:floorf.duw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b10011; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(floor(R1115pair));
 }
 
 # FLOORF.DW reg2, reg3
-:floorf.dw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00011; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(floor(R1115odd));
+:floorf.dw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b00011; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(floor(R1115pair));
 }
 
 # FLOORF.SL reg2, reg3
-:floorf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00011; R2731odd & op2126=0b100010 & op1620=0b00100 {
+:floorf.sl R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b00011; R2731pair & op2126=0b100010 & op1620=0b00100 {
   local tmp:8 = floor(float2float(R1115));
-  R2731odd = trunc(tmp);
+  R2731pair = trunc(tmp);
 }
 
 # FLOORF.SUL reg2, reg3
-:floorf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10011; R2731odd & op2126=0b100010 & op1620=0b00100 {
+:floorf.sul R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b10011; R2731pair & op2126=0b100010 & op1620=0b00100 {
   local tmp:8 = floor(float2float(R1115));
-  R2731odd = trunc(tmp);
+  R2731pair = trunc(tmp);
 }
 
 # FLOORF.SUW reg2, reg3
@@ -254,10 +254,10 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # MAXF.D reg1, reg2, reg3
-:maxf.d R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b11000 {
-  tmp_cond:1 = R1115odd f> R0004odd;
-  # R2731odd = (R1115odd * zext(tmp_cond == 1)) | (R0004odd * zext(tmp_cond == 0) );
-  condition(R2731odd, tmp_cond, R1115odd, R0004odd);
+:maxf.d R0004pair, R1115pair, R2731pair is R0004pair & op0510=0x3F & R1115pair; R2731pair & op2126=0b100011 & op1620=0b11000 {
+  tmp_cond:1 = R1115pair f> R0004pair;
+  # R2731pair = (R1115pair * zext(tmp_cond == 1)) | (R0004pair * zext(tmp_cond == 0) );
+  condition(R2731pair, tmp_cond, R1115pair, R0004pair);
 }
 
 # MAXF.S reg1, reg2, reg3
@@ -268,10 +268,10 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # MINF.D reg1, reg2, reg3
-:minf.d R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b11010 {
-  tmp_cond:1 = R1115odd f< R0004odd;
-  # R2731odd = (R1115odd * zext(tmp_cond == 1)) | (R0004odd * zext(tmp_cond == 0) );
-  condition(R2731odd, tmp_cond, R1115odd, R0004odd);
+:minf.d R0004pair, R1115pair, R2731pair is R0004pair & op0510=0x3F & R1115pair; R2731pair & op2126=0b100011 & op1620=0b11010 {
+  tmp_cond:1 = R1115pair f< R0004pair;
+  # R2731pair = (R1115pair * zext(tmp_cond == 1)) | (R0004pair * zext(tmp_cond == 0) );
+  condition(R2731pair, tmp_cond, R1115pair, R0004pair);
 }
 
 # MINF.S reg1, reg2, reg3
@@ -287,8 +287,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # MULF.D reg1, reg2, reg3
-:mulf.d R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b10100 {
-  R2731odd = R1115odd f* R0004odd;
+:mulf.d R0004pair, R1115pair, R2731pair is R0004pair & op0510=0x3F & R1115pair; R2731pair & op2126=0b100011 & op1620=0b10100 {
+  R2731pair = R1115pair f* R0004pair;
 }
 
 # MULF.S reg1, reg2, reg3
@@ -297,8 +297,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # NEGF.D reg2, reg3
-:negf.d R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00001; R2731odd & op2126=0b100010 & op1620=0b11000 {
-  R2731odd = f- R1115odd;
+:negf.d R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00001; R2731pair & op2126=0b100010 & op1620=0b11000 {
+  R2731pair = f- R1115pair;
 }
 
 # NEGF.S reg2, reg3
@@ -317,8 +317,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # RECIPF.D reg2, reg3
-:recipf.d R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00001; R2731odd & op2126=0b100010 & op1620=0b11110 {
-  R2731odd = 1 f/ R1115odd;
+:recipf.d R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00001; R2731pair & op2126=0b100010 & op1620=0b11110 {
+  R2731pair = 1 f/ R1115pair;
 }
 
 # RECIPF.S reg2, reg3
@@ -327,8 +327,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # RSQRTF.D reg2, reg3
-:rsqrtf.d R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00010; R2731odd & op2126=0b100010 & op1620=0b11110 {
-  R2731odd = 1 f/ sqrt(R1115odd);
+:rsqrtf.d R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00010; R2731pair & op2126=0b100010 & op1620=0b11110 {
+  R2731pair = 1 f/ sqrt(R1115pair);
 }
 
 # RSQRTF.S reg2, reg3
@@ -337,8 +337,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # SQRTF.D reg2, reg3
-:sqrtf.d R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00000; R2731odd & op2126=0b100010 & op1620=0b11110 {
-  R2731odd = sqrt(R1115odd);
+:sqrtf.d R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00000; R2731pair & op2126=0b100010 & op1620=0b11110 {
+  R2731pair = sqrt(R1115pair);
 }
 
 # SQRTF.S reg2, reg3
@@ -348,8 +348,8 @@ macro compare_float(fcond, reg2, reg1, result) {
 
 
 # SUBF.D reg1, reg2, reg3
-:subf.d R0004odd, R1115odd, R2731odd is R0004odd & op0510=0x3F & R1115odd; R2731odd & op2126=0b100011 & op1620=0b10010 {
-  R2731odd = R1115odd f- R0004odd;
+:subf.d R0004pair, R1115pair, R2731pair is R0004pair & op0510=0x3F & R1115pair; R2731pair & op2126=0b100011 & op1620=0b10010 {
+  R2731pair = R1115pair f- R0004pair;
 }
 
 # SUBF.S reg1, reg2, reg3
@@ -364,33 +364,33 @@ macro compare_float(fcond, reg2, reg1, result) {
 }
 
 # TRNCF.DL reg2, reg3
-:trncf.dl R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b00001; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  R2731odd = trunc(R1115odd);
+:trncf.dl R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b00001; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  R2731pair = trunc(R1115pair);
 }
 
 # TRNCF.DUL reg2, reg3
-:trncf.dul R1115odd, R2731odd is R1115odd & op0510=0x3F & op0004=0b10001; R2731odd & op2126=0b100010 & op1620=0b10100 {
-  R2731odd = trunc(R1115odd);
+:trncf.dul R1115pair, R2731pair is R1115pair & op0510=0x3F & op0004=0b10001; R2731pair & op2126=0b100010 & op1620=0b10100 {
+  R2731pair = trunc(R1115pair);
 }
 
 # TRNCF.DUW reg2, reg3
-:trncf.duw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(R1115odd);
+:trncf.duw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b10001; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(R1115pair);
 }
 
 # TRNCF.DW reg2, reg3
-:trncf.dw R1115odd, R2731 is R1115odd & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b10000 {
-  R2731 = trunc(R1115odd);
+:trncf.dw R1115pair, R2731 is R1115pair & op0510=0x3F & op0004=0b00001; R2731 & op2126=0b100010 & op1620=0b10000 {
+  R2731 = trunc(R1115pair);
 }
 
 # TRNCF.SL reg2, reg3
-:trncf.sl R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b00001; R2731odd & op2126=0b100010 & op1620=0b00100 {
-  R2731odd = trunc(R1115);
+:trncf.sl R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b00001; R2731pair & op2126=0b100010 & op1620=0b00100 {
+  R2731pair = trunc(R1115);
 }
 
 # TRNCF.SUL reg2, reg3
-:trncf.sul R1115, R2731odd is R1115 & op0510=0x3F & op0004=0b10001; R2731odd & op2126=0b100010 & op1620=0b00100 {
-  R2731odd = trunc(R1115);
+:trncf.sul R1115, R2731pair is R1115 & op0510=0x3F & op0004=0b10001; R2731pair & op2126=0b100010 & op1620=0b00100 {
+  R2731pair = trunc(R1115);
 }
 
 # TRNCF.SUW reg2, reg3

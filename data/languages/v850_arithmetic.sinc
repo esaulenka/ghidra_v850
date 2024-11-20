@@ -251,11 +251,11 @@ macro saturate(value) {
 }
 
 # MAC reg1, reg2, reg3, reg4
-:mac R0004, R1115, R2731odd, R1620odd is op0510=0x3F & R0004 & R1115; op2126=0x1E & op1616=0 & R1620odd & R2731odd {
-	R1620odd = R2731odd + sext(R0004) * sext(R1115);
+:mac R0004, R1115, R2731pair, R1620pair is op0510=0x3F & R0004 & R1115; op2126=0x1E & op1616=0 & R1620pair & R2731pair {
+	R1620pair = R2731pair + sext(R0004) * sext(R1115);
 }
 # MACU reg1, reg2, reg3, reg4
-:macu R0004, R1115, R2731odd, R1620odd is op0510=0x3F & R0004 & R1115; op2126=0x1F & op1616=0 & R1620odd & R2731odd {
-	R1620odd = R2731odd + zext(R0004) * zext(R1115);
+:macu R0004, R1115, R2731pair, R1620pair is op0510=0x3F & R0004 & R1115; op2126=0x1F & op1616=0 & R1620pair & R2731pair {
+	R1620pair = R2731pair + zext(R0004) * zext(R1115);
 }
 

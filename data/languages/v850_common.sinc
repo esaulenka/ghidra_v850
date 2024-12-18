@@ -32,6 +32,18 @@ define register offset=0x80 size=4 [
 
 define register offset=0x1000 size=4 [ PC ];
 
+@if defined(V850E3)
+# internal registers to use with POPSP / PUSHSP
+define register offset=0x10000 size=4 [
+	mult_addr		# actual address for multiple store/load
+	popspContext
+];
+define context popspContext
+	regNum = (0,4)
+	counter	= (5,9)
+;
+@endif
+
 
 @define PSW_PP  "PSW[19,1]"
 @define PSW_NPW "PSW[18,1]"

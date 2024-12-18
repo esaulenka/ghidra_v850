@@ -197,23 +197,94 @@ attach variables [ VR0004 VR1115 ] [
 	# TODO set R2731 to 0, if addr of previous ldl.w is not the same
 }
 
+# popsp / pushsp section
 
+
+# attach registers to regNum
+#[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
+rXX: r0		is r0 & regNum=0	{ export r0; }
+rXX: r1		is r1 & regNum=1	{ export r1; }
+rXX: r2		is r2 & regNum=2	{ export r2; }
+rXX: sp		is sp & regNum=3	{ export sp; }
+rXX: gp		is gp & regNum=4	{ export gp; }
+rXX: tp		is tp & regNum=5	{ export tp; }
+rXX: r6		is r6 & regNum=6	{ export r6; }
+rXX: r7		is r7 & regNum=7	{ export r7; }
+rXX: r8		is r8 & regNum=8	{ export r8; }
+rXX: r9		is r9 & regNum=9	{ export r9; }
+rXX: r10	is r10 & regNum=10	{ export r10; }
+rXX: r11	is r11 & regNum=11	{ export r11; }
+rXX: r12	is r12 & regNum=12	{ export r12; }
+rXX: r13	is r13 & regNum=13	{ export r13; }
+rXX: r14	is r14 & regNum=14	{ export r14; }
+rXX: r15	is r15 & regNum=15	{ export r15; }
+rXX: r16	is r16 & regNum=16	{ export r16; }
+rXX: r17	is r17 & regNum=17	{ export r17; }
+rXX: r18	is r18 & regNum=18	{ export r18; }
+rXX: r19	is r19 & regNum=19	{ export r19; }
+rXX: r20	is r20 & regNum=20	{ export r20; }
+rXX: r21	is r21 & regNum=21	{ export r21; }
+rXX: r22	is r22 & regNum=22	{ export r22; }
+rXX: r23	is r23 & regNum=23	{ export r23; }
+rXX: r24	is r24 & regNum=24	{ export r24; }
+rXX: r25	is r25 & regNum=25	{ export r25; }
+rXX: r26	is r26 & regNum=26	{ export r26; }
+rXX: r27	is r27 & regNum=27	{ export r27; }
+rXX: r28	is r28 & regNum=28	{ export r28; }
+rXX: r29	is r29 & regNum=29	{ export r29; }
+rXX: ep		is ep & regNum=30	{ export ep; }
+rXX: lp		is lp & regNum=31	{ export lp; }
+
+
+buildPopSp: is counter=0 { }
+buildPopSp: is counter=1 & rXX [ counter=0; regNum=regNum-1; ]
+{
+	rXX = *mult_addr;
+	mult_addr = mult_addr + 4;
+}
+buildPopSp: is rXX & buildPopSp [ counter=counter-1; regNum=regNum-1; ]
+{
+	rXX = *mult_addr;
+	mult_addr = mult_addr + 4;
+	build buildPopSp;
+}
 #{ "popsp",	two (0x67e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3}, 		0, PROCESSOR_V850E3V5_UP },
-:popsp R0004, R2731		is op0515=0x33F & R0004 ; op1626=0x160 & R2731 {
+:popsp R0004, R2731		is op0515=0x33F & R0004 & op0004 ; op1626=0x160 & R2731 & op2731 & buildPopSp
+[ counter=op2731-op0004+1; regNum=op2731+1; ] {
 	# popsp rh, rt
 	# Loads general-purpose register rt to rh from the stack in descending order (rt, rt - 1, rt - 2, ..., rh). After all the registers
 	# down to the specified register have been loaded, sp is updated (incremented)
 	# check for illegal syntax, when rh > rt
 	# sp (r3) value not restored
-	TODO();
+	mult_addr = sp;
+	local tmp = sp + (op2731-op0004+1) * 4;
+	build buildPopSp;
+	sp = tmp;
+}
+
+buildPushSp: is counter=0 { }
+buildPushSp: is counter=1 & rXX [ counter=0; regNum=regNum+1; ]
+{
+	mult_addr = mult_addr - 4;
+	*mult_addr = rXX;
+}
+buildPushSp: is rXX & buildPushSp [ counter=counter-1; regNum=regNum+1; ]
+{
+	mult_addr = mult_addr - 4;
+	*mult_addr = rXX;
+	build buildPushSp;
 }
 #{ "pushsp",	two (0x47e0, 0x0160),	two (0xffe0, 0x07ff),	{R1, R3}, 		0, PROCESSOR_V850E3V5_UP },
-:pushsp R0004, R2731	is op0515=0x23F & R0004 ; op1626=0x160 & R2731 {
+:pushsp R0004, R2731	is op0515=0x23F & R0004 & op0004 ; op1626=0x160 & R2731 & op2731 & buildPushSp
+[ counter=op2731-op0004+1; regNum=op0004-1; ] {
 	# pushsp rh, rt
 	# Stores general-purpose register rh to rt in the stack in ascending order (rh, rh +1, rh + 2, ..., rt). After all the specified
 	# registers have been stored, sp is updated (decremented).
 	# check for illegal syntax, when rh > rt
-	TODO();
+	mult_addr = sp;
+	local tmp = sp - (op2731-op0004+1) * 4;
+	build buildPushSp;
+	sp = tmp;	
 }
 
 

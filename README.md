@@ -11,15 +11,12 @@ and **RH850G3KH User’s Manual: Software** [link](https://www.renesas.com/us/en/d
 
 ## Installation
 
-1. compile SLEIGH with 
-`$(GHIDRA_HOME)\support\sleigh.bat data\languages\[v850e2 v850e3].slaspec`
-
-2. copy files to
+Just copy files to
 `$(GHIDRA_HOME)\Ghidra\Extensions\`
-
+(do not mess with `$(GHIDRA_HOME)\Extensions\` !)
 
 
 ## TODOs
 
 * fix a lot of bugs
-
+* complete RH850 support

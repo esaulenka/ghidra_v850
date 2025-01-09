@@ -197,8 +197,93 @@ attach variables [ VR0004 VR1115 ] [
 	# TODO set R2731 to 0, if addr of previous ldl.w is not the same
 }
 
-# popsp / pushsp section
 
+# extended load/store
+
+# LD.B [reg1]+, reg3
+:ld.b [R0004]+, R2731	is op0515=0x0BF & R0004 ; op1626=0x370 & R2731 {
+	R2731 = sext(*:1 R0004);
+	R0004 = R0004 + 1;
+}
+# LD.B [reg1]-, reg3
+:ld.b [R0004]-, R2731	is op0515=0x13F & R0004 ; op1626=0x370 & R2731 {
+	R2731 = sext(*:1 R0004);
+	R0004 = R0004 - 1;
+}
+# LD.H [reg1]+, reg3
+:ld.h [R0004]+, R2731	is op0515=0x0BF & R0004 ; op1626=0x374 & R2731 {
+	R2731 = sext(*:2 R0004);
+	R0004 = R0004 + 2;
+}
+# LD.H [reg1]-, reg3
+:ld.h [R0004]-, R2731	is op0515=0x13F & R0004 ; op1626=0x374 & R2731 {
+	R2731 = sext(*:2 R0004);
+	R0004 = R0004 - 2;
+}
+# LD.BU [reg1]+, reg3
+:ld.bu [R0004]+, R2731	is op0515=0x0FF & R0004 ; op1626=0x370 & R2731 {
+	R2731 = zext(*:1 R0004);
+	R0004 = R0004 + 1;
+}
+# LD.BU [reg1]-, reg3
+:ld.bu [R0004]-, R2731	is op0515=0x17F & R0004 ; op1626=0x370 & R2731 {
+	R2731 = zext(*:1 R0004);
+	R0004 = R0004 - 1;
+}
+# LD.HU [reg1]+, reg3
+:ld.hu [R0004]+, R2731	is op0515=0x0FF & R0004 ; op1626=0x374 & R2731 {
+	R2731 = zext(*:2 R0004);
+	R0004 = R0004 + 2;
+}
+# LD.HU [reg1]-, reg3
+:ld.hu [R0004]-, R2731	is op0515=0x17F & R0004 ; op1626=0x374 & R2731 {
+	R2731 = zext(*:2 R0004);
+	R0004 = R0004 - 2;
+}
+# LD.W [reg1]+, reg3
+:ld.w [R0004]+, R2731	is op0515=0x0BF & R0004 ; op1626=0x378 & R2731 {
+	R2731 = *:4 R0004;
+	R0004 = R0004 + 4;
+}
+# LD.W [reg1]-, reg3
+:ld.w [R0004]-, R2731	is op0515=0x13F & R0004 ; op1626=0x378 & R2731 {
+	R2731 = *:4 R0004;
+	R0004 = R0004 - 4;
+}
+
+# ST.B reg3, [reg1]+
+:st.b R2731, [R0004]+	is op0515=0x0BF & R0004 ; op1626=0x372 & R2731 {
+	*:1 R0004 = R2731;
+	R0004 = R0004 + 1;
+}
+# ST.B reg3, [reg1]-
+:st.b R2731, [R0004]-	is op0515=0x13F & R0004 ; op1626=0x372 & R2731 {
+	*:1 R0004 = R2731;
+	R0004 = R0004 - 1;
+}
+# ST.H reg3, [reg1]+
+:st.h R2731, [R0004]+	is op0515=0x0BF & R0004 ; op1626=0x376 & R2731 {
+	*:2 R0004 = R2731;
+	R0004 = R0004 + 2;
+}
+# ST.H reg3, [reg1]-
+:st.h R2731, [R0004]-	is op0515=0x13F & R0004 ; op1626=0x376 & R2731 {
+	*:2 R0004 = R2731;
+	R0004 = R0004 - 2;
+}
+# ST.W reg3, [reg1]+
+:st.w R2731, [R0004]+	is op0515=0x0BF & R0004 ; op1626=0x37A & R2731 {
+	*:4 R0004 = R2731;
+	R0004 = R0004 + 4;
+}
+# ST.W reg3, [reg1]-
+:st.w R2731, [R0004]-	is op0515=0x13F & R0004 ; op1626=0x37A & R2731 {
+	*:4 R0004 = R2731;
+	R0004 = R0004 - 4;
+}
+
+
+# popsp / pushsp section
 
 # attach registers to regNum
 #[ r0 r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];

@@ -114,18 +114,18 @@ attach variables [ VR0004 VR1115 ] [
 
 
 # ST.DW reg3, disp23[reg1]
-:st.dw R2731pair, disp23[R0004] is op0515=0x3D & R0004; R2731pair & op2126 & op1620=0xF; s3247
+:st.dw R2731pairEx, disp23[R0004] is op0515=0x3D & R0004; R2731pairEx & op2126 & op1620=0xF; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
     local addr:4 = disp23 + R0004;
-    *:8 addr = R2731pair;
+    *:8 addr = R2731pairEx;
 }
 
 # ld.dw 0x7a00009 0xffe0001f
 # LD.DW disp23[reg1], reg3
-:ld.dw disp23[R0004], R2731pair is op0515=0x03d & R0004; R2731pair & op2126 & op1620=0x09; s3247
+:ld.dw disp23[R0004], R2731pairEx is op0515=0x03d & R0004; R2731pairEx & op2126 & op1620=0x09; s3247
 [ disp23 = (s3247 << 7) | (op2126 << 1); ] {
     local addr:4 = disp23 + R0004;
-    R2731pair = *:8 addr;
+    R2731pairEx = *:8 addr;
 }
 
 

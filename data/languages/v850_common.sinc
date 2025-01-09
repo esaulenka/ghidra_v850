@@ -175,6 +175,7 @@ define token instr2(16)
 	xR2731 = (11,15)
 	R1620pair = (0,4)
 	R2731pair = (11,15)
+	R2731pairEx = (12,15)
 	s1631 = (0,15) signed
 	s1731 = (1,15) signed
 	s1821 = (2,5) signed
@@ -228,6 +229,8 @@ attach variables [ r0004 r1115 r1620 prep1620r ]
 	[ _  r1 r2 sp gp tp r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 ep lp ];
 attach variables [ R0004pair R1115pair R1620pair R2731pair ]
 	[ r0r1 _ r2sp _ gptp _ r6r7 _ r8r9 _ r10r11 _ r12r13 _ r14r15 _ r16r17 _ r18r19 _ r20r21 _ r22r23 _ r24r25 _ r26r27 _ r28r29 _ eplp _ ];
+attach variables [ R2731pairEx ]  # the same as R2731pair, but LSB is ignored
+	[ r0r1 r2sp gptp r6r7 r8r9 r10r11 r12r13 r14r15 r16r17 r18r19 r20r21 r22r23 r24r25 r26r27 r28r29 eplp ];
 
 attach names [fcond2730]
   ["f" "un" "eq" "ueq" "olt" "ult" "ole" "ule" "sd" "ngle" "seq" "ngl" "lt" "nge" "le" "ngt"];

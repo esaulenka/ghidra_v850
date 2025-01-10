@@ -10,10 +10,10 @@ define register offset=0x180 size=4 [
     # the same as common special regs in v850_common.sinc
 
     # selID = 1
-    SPID   SPIDLIST RBASE   EBASE   INTBP   MCTL    PID     FPIPR
-    SVLOCK  _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
-    VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
-    VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
+    SPID    SPIDLIST RBASE   EBASE   INTBP   MCTL    PID     FPIPR
+    SVLOCK  _        TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
+    HVCFG   GMCFG    VMPRT2  _       HVSB    _       _       VMSCCTL
+    VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _    _       _       _
 
     # selID = 2
     PEID    BMID    _       _       _       HTCTL   MEA     ASID
@@ -51,6 +51,12 @@ define register offset=0x180 size=4 [
     MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
     MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 
+    # selID = 9, Guest Context registers
+    GMEIPC   GMEIPSW    GMFEPC GMFEPSW _       GMPSW    GMMEA   _
+    GMMEI    _          _      _       _       GMEIIC   GMFEIC  _
+    GMSPID   GMSPIDLIST _      GMEBASE GMINTBP GMINTCFG GMPLMR  _
+    GMSVLOCK GMMPM      _      _       GMEIWR  GMFEWR   GMEID   _
+
     # selID = 10, Extended Floating-point Funtion (FXU) system registers
     _ _ _ _ _ _ FXSR _
     FXST FXINFO FXCFG _ FXXC FXXP _ _
@@ -59,7 +65,7 @@ define register offset=0x180 size=4 [
 
     # selID = 11, Count function registers
     TSCOUNTL TSCOUNTH TSCTRL _ _ _ _ _
-    PMUMCTRL _ _ _ _ _ _ _
+    PMUMCTRL PMGMCTRL _ _ _ _ _ _
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
 
@@ -97,10 +103,10 @@ define register offset=0x180 size=4 [
 
 attach variables [ SR0004_1 SR1115_1 ] [
     # selID = 1
-    SPID   SPIDLIST RBASE   EBASE   INTBP   MCTL    PID     FPIPR
-    SVLOCK  _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
-    VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
-    VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
+    SPID    SPIDLIST RBASE   EBASE   INTBP   MCTL    PID     FPIPR
+    SVLOCK  _        TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
+    HVCFG   GMCFG    VMPRT2  _       HVSB    _       _       VMSCCTL
+    VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _    _       _       _
 ];
 attach variables [ SR0004_2 SR1115_2 ] [
     # selID = 2
@@ -137,6 +143,13 @@ attach variables [ SR0004_7 SR1115_7 ] [
     MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
     MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 ];
+attach variables [ SR0004_9 SR1115_9 ] [
+    # selID = 9, Guest Context registers
+    GMEIPC   GMEIPSW    GMFEPC GMFEPSW _       GMPSW    GMMEA   _
+    GMMEI    _          _      _       _       GMEIIC   GMFEIC  _
+    GMSPID   GMSPIDLIST _      GMEBASE GMINTBP GMINTCFG GMPLMR  _
+    GMSVLOCK GMMPM      _      _       GMEIWR  GMFEWR   GMEID   _
+];
 attach variables [ SR0004_a SR1115_a ] [
     # selID = 10, Extended Floating-point Funtion (FXU) system registers
     _ _ _ _ _ _ FXSR _
@@ -147,7 +160,7 @@ attach variables [ SR0004_a SR1115_a ] [
 attach variables [ SR0004_b SR1115_b ] [
     # selID = 11, Count function registers
     TSCOUNTL TSCOUNTH TSCTRL _ _ _ _ _
-    PMUMCTRL _ _ _ _ _ _ _
+    PMUMCTRL PMGMCTRL _ _ _ _ _ _
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
 ];
@@ -242,6 +255,7 @@ attach variables [ VR0004 VR1115 ] [
 :stsr SR0004_5, R1115, 5	is op0510=0x3F & R1115 & SR0004_5; op1626=0x40 & op2731=0x05 { R1115 = SR0004_5; }
 :stsr SR0004_6, R1115, 6	is op0510=0x3F & R1115 & SR0004_6; op1626=0x40 & op2731=0x06 { R1115 = SR0004_6; }
 :stsr SR0004_7, R1115, 7	is op0510=0x3F & R1115 & SR0004_7; op1626=0x40 & op2731=0x07 { R1115 = SR0004_7; }
+:stsr SR0004_9, R1115, 9	is op0510=0x3F & R1115 & SR0004_9; op1626=0x40 & op2731=0x09 { R1115 = SR0004_9; }
 :stsr SR0004_a, R1115, 10	is op0510=0x3F & R1115 & SR0004_a; op1626=0x40 & op2731=0x0A { R1115 = SR0004_a; }
 :stsr SR0004_b, R1115, 11	is op0510=0x3F & R1115 & SR0004_b; op1626=0x40 & op2731=0x0B { R1115 = SR0004_b; }
 :stsr SR0004_c, R1115, 12	is op0510=0x3F & R1115 & SR0004_c; op1626=0x40 & op2731=0x0C { R1115 = SR0004_c; }
@@ -257,6 +271,7 @@ attach variables [ VR0004 VR1115 ] [
 :ldsr R0004, SR1115_5, 5	is op0510=0x3F & SR1115_5 & R0004; op1626=0x20 & op2731=0x05 { SR1115_5 = R0004; }
 :ldsr R0004, SR1115_6, 6	is op0510=0x3F & SR1115_6 & R0004; op1626=0x20 & op2731=0x06 { SR1115_6 = R0004; }
 :ldsr R0004, SR1115_7, 7	is op0510=0x3F & SR1115_7 & R0004; op1626=0x20 & op2731=0x07 { SR1115_7 = R0004; }
+:ldsr R0004, SR1115_9, 9	is op0510=0x3F & SR1115_9 & R0004; op1626=0x20 & op2731=0x09 { SR1115_9 = R0004; }
 :ldsr R0004, SR1115_a, 10	is op0510=0x3F & SR1115_a & R0004; op1626=0x20 & op2731=0x0A { SR1115_a = R0004; }
 :ldsr R0004, SR1115_b, 11	is op0510=0x3F & SR1115_b & R0004; op1626=0x20 & op2731=0x0B { SR1115_b = R0004; }
 :ldsr R0004, SR1115_c, 12	is op0510=0x3F & SR1115_c & R0004; op1626=0x20 & op2731=0x0C { SR1115_c = R0004; }

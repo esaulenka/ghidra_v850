@@ -1,5 +1,7 @@
 # V850E3 (RH850) specific instructions
 # got from gcc binutils sources
+# RH850/U2A-EVA Group User's Manual: Hardware (RH850G4MH2 cores)
+# RH850G3M User’s Manual: Software
 
 
 # More special registers
@@ -8,15 +10,15 @@ define register offset=0x180 size=4 [
     # the same as common special regs in v850_common.sinc
 
     # selID = 1
-    MCFG0   MCFG1   RBASE   EBASE   INTBP   MCTL    PID     FPIPR
-    _       _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
+    SPID   SPIDLIST RBASE   EBASE   INTBP   MCTL    PID     FPIPR
+    SVLOCK  _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
     VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
     VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
 
     # selID = 2
-    HTCFG0  _       _       _       _       HTCTL   MEA     ASID
-    MEI     _       ISPR    PMR     ICSR    INTCFG  _       _
-    TBLSCH  _       _       _       _       _       _       HTSCCTL
+    PEID    BMID    _       _       _       HTCTL   MEA     ASID
+    MEI     _       ISPR    IMSR    ICSR    INTCFG  PLMR    RBCR0
+    RBCR1   RBNR    RBIP    _       _       _       _       HTSCCTL
     HTSCTBL0 HTSCTBL1 HTSCTBL2 HTSCTBL3 HTSCTBL4 HTSCTBL5 HTSCTBL6 HTSCTBL7
 
     # selID = 3
@@ -25,17 +27,17 @@ define register offset=0x180 size=4 [
     _ _ _ _ _ _ _ _
     _ _ _ _ _ _ _ _
 
-    # selID = 4
+    # selID = 4 Cache operation registers
     TBLIDX  _       _       _       TELO0   TELO1   TEHI0   TEHI1
     _       _       TBLCFG  _       BWERRL  BWERRH  BRERRL  BRERRH
     ICTAGL  ICTAGH  ICDATL  ICDATH  DCTAGL  DCTAGH  DCDATL  DCDATH
     ICCTRL  DCCTRL  ICCFG   DCCFG   ICERR   DCERR   _       _
 
-    # selID = 5
-    MPM     MPRC    _       _       MPBRGN  MPTRGN  _       _
-    MCA     MCS     MCC     MCR     _       _       _       _
-    _       _       _       _       MPPRT0  MPPRT1  MPPRT2  _
-    _       _       _       _       _       _       _       _
+    # selID = 5, MPU registers
+    MPM     MPRC    MPCFG   _       MPBRGN  MPTRGN  _       _
+    MCA     MCS     MCC     MCR     MCI     _       _       _
+    MPIDX   MPBK    _       _       MPLA    MPUA    MPAT    _
+    MPID0   MPID1   MPID2   MPID3   MPID4   MPID5   MPID6   MPID7
 
     # selID = 6, MPU registers
     MPLA0   MPUA0   MPAT0   _       MPLA1   MPUA1   MPAT1   _
@@ -49,11 +51,42 @@ define register offset=0x180 size=4 [
     MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
     MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 
-    # selID = 13
-    _       _ _ _ _ _ _ _
-    _       _ _ _ _ _ _ _
-    _       _ _ _ _ _ _ _
-    CDBCR   _ _ _ _ _ _ _
+    # selID = 10, Extended Floating-point Funtion (FXU) system registers
+    _ _ _ _ _ _ FXSR _
+    FXST FXINFO FXCFG _ FXXC FXXP _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+
+    # selID = 11, Count function registers
+    TSCOUNTL TSCOUNTH TSCTRL _ _ _ _ _
+    PMUMCTRL _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+
+    # selID = 12, Hardware function registers
+    LSTEST0 LSTEST1 LSCFG _ IFCR _ _ _
+    BRPCTRL0 _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+
+    # selID = 13, Hardware function registers
+    _ _ _ _ _ _ _ _
+    _ _ _ _ L1CFG _ _ _
+    _ _ _ _ _ _ _ _
+    RDBCR _ _ _ _ _ _ _
+
+    # selID = 14 Performance counters
+    PMCTRL0 PMCTRL1 PMCTRL2 PMCTRL3 PMCTRL4 PMCTRL5 PMCTRL6 PMCTRL7
+    _ _ _ _ _ _ _ _
+    PMCOUNT0 PMCOUNT1 PMCOUNT2 PMCOUNT3 PMCOUNT4 PMCOUNT5 PMCOUNT6 PMCOUNT7
+    _ _ _ _ _ _ _ _
+	
+    # selID = 15 Performance counters
+    PMSUBCND0 PMSUBCND1 PMSUBCND2 PMSUBCND3 PMSUBCND4 PMSUBCND5 PMSUBCND6 PMSUBCND7
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+	
 
     vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
     vr8  vr9  vr10 vr11 vr12 vr13 vr14 vr15
@@ -63,47 +96,88 @@ define register offset=0x180 size=4 [
 
 
 attach variables [ SR0004_1 SR1115_1 ] [
-    MCFG0   MCFG1   RBASE   EBASE   INTBP   MCTL    PID     FPIPR
-    _       _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
+    # selID = 1
+    SPID   SPIDLIST RBASE   EBASE   INTBP   MCTL    PID     FPIPR
+    SVLOCK  _       TCSEL   SCCFG   SCBP    HVCCFG  HVCBP   VSEL
     VMPRT0  VMPRT1  VMPRT2  _       _       _       _       VMSCCTL
     VMSCTBL0 VMSCTBL1 VMSCTBL2 VMSCTBL3 _   _       _       _
 ];
 attach variables [ SR0004_2 SR1115_2 ] [
-    HTCFG0  _       _       _       _       HTCTL   MEA     ASID
-    MEI     _       ISPR    PMR     ICSR    INTCFG  _       _
-    TBLSCH  _       _       _       _       _       _       HTSCCTL
+    # selID = 2
+    PEID    BMID    _       _       _       HTCTL   MEA     ASID
+    MEI     _       ISPR    IMSR    ICSR    INTCFG  PLMR    RBCR0
+    RBCR1   RBNR    RBIP    _       _       _       _       HTSCCTL
     HTSCTBL0 HTSCTBL1 HTSCTBL2 HTSCTBL3 HTSCTBL4 HTSCTBL5 HTSCTBL6 HTSCTBL7
 ];
 attach variables [ SR0004_4 SR1115_4 ] [
+    # selID = 4 Cache operation registers
     TBLIDX  _       _       _       TELO0   TELO1   TEHI0   TEHI1
     _       _       TBLCFG  _       BWERRL  BWERRH  BRERRL  BRERRH
     ICTAGL  ICTAGH  ICDATL  ICDATH  DCTAGL  DCTAGH  DCDATL  DCDATH
     ICCTRL  DCCTRL  ICCFG   DCCFG   ICERR   DCERR   _       _
 ];
 attach variables [ SR0004_5 SR1115_5 ] [
-    MPM     MPRC    _       _       MPBRGN  MPTRGN  _       _
-    MCA     MCS     MCC     MCR     _       _       _       _
-    _       _       _       _       MPPRT0  MPPRT1  MPPRT2  _
-    _       _       _       _       _       _       _       _
+    # selID = 5, MPU registers
+    MPM     MPRC    MPCFG   _       MPBRGN  MPTRGN  _       _
+    MCA     MCS     MCC     MCR     MCI     _       _       _
+    MPIDX   MPBK    _       _       MPLA    MPUA    MPAT    _
+    MPID0   MPID1   MPID2   MPID3   MPID4   MPID5   MPID6   MPID7
 ];
 attach variables [ SR0004_6 SR1115_6 ] [
+    # selID = 6, MPU registers
     MPLA0   MPUA0   MPAT0   _       MPLA1   MPUA1   MPAT1   _
     MPLA2   MPUA2   MPAT2   _       MPLA3   MPUA3   MPAT3   _
     MPLA4   MPUA4   MPAT4   _       MPLA5   MPUA5   MPAT5   _
     MPLA6   MPUA6   MPAT6   _       MPLA7   MPUA7   MPAT7   _
 ];
 attach variables [ SR0004_7 SR1115_7 ] [
+    # selID = 7, MPU registers
     MPLA8   MPUA8   MPAT8   _       MPLA9   MPUA9   MPAT9   _
     MPLA10  MPUA10  MPAT10  _       MPLA11  MPUA11  MPAT11  _
     MPLA12  MPUA12  MPAT12  _       MPLA13  MPUA13  MPAT13  _
     MPLA14  MPUA14  MPAT14  _       MPLA15  MPUA15  MPAT15  _
 ];
+attach variables [ SR0004_a SR1115_a ] [
+    # selID = 10, Extended Floating-point Funtion (FXU) system registers
+    _ _ _ _ _ _ FXSR _
+    FXST FXINFO FXCFG _ FXXC FXXP _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+];
+attach variables [ SR0004_b SR1115_b ] [
+    # selID = 11, Count function registers
+    TSCOUNTL TSCOUNTH TSCTRL _ _ _ _ _
+    PMUMCTRL _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+];
+attach variables [ SR0004_c SR1115_c ] [
+    # selID = 12, Hardware function registers
+    LSTEST0 LSTEST1 LSCFG _ IFCR _ _ _
+    BRPCTRL0 _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+];
 attach variables [ SR0004_d SR1115_d ] [
-    # selID = 13
-    _       _ _ _ _ _ _ _
-    _       _ _ _ _ _ _ _
-    _       _ _ _ _ _ _ _
-    CDBCR   _ _ _ _ _ _ _
+    # selID = 13, Hardware function registers
+    _ _ _ _ _ _ _ _
+    _ _ _ _ L1CFG _ _ _
+    _ _ _ _ _ _ _ _
+    RDBCR _ _ _ _ _ _ _
+];
+attach variables [ SR0004_e SR1115_e ] [
+    # selID = 14 Performance counters
+    PMCTRL0 PMCTRL1 PMCTRL2 PMCTRL3 PMCTRL4 PMCTRL5 PMCTRL6 PMCTRL7
+    _ _ _ _ _ _ _ _
+    PMCOUNT0 PMCOUNT1 PMCOUNT2 PMCOUNT3 PMCOUNT4 PMCOUNT5 PMCOUNT6 PMCOUNT7
+    _ _ _ _ _ _ _ _
+];
+attach variables [ SR0004_f SR1115_f ] [
+    # selID = 15 Performance counters
+    PMSUBCND0 PMSUBCND1 PMSUBCND2 PMSUBCND3 PMSUBCND4 PMSUBCND5 PMSUBCND6 PMSUBCND7
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _
 ];
 attach variables [ VR0004 VR1115 ] [
     vr0  vr1  vr2  vr3  vr4  vr5  vr6  vr7
@@ -168,7 +242,12 @@ attach variables [ VR0004 VR1115 ] [
 :stsr SR0004_5, R1115, 5	is op0510=0x3F & R1115 & SR0004_5; op1626=0x40 & op2731=0x05 { R1115 = SR0004_5; }
 :stsr SR0004_6, R1115, 6	is op0510=0x3F & R1115 & SR0004_6; op1626=0x40 & op2731=0x06 { R1115 = SR0004_6; }
 :stsr SR0004_7, R1115, 7	is op0510=0x3F & R1115 & SR0004_7; op1626=0x40 & op2731=0x07 { R1115 = SR0004_7; }
+:stsr SR0004_a, R1115, 10	is op0510=0x3F & R1115 & SR0004_a; op1626=0x40 & op2731=0x0A { R1115 = SR0004_a; }
+:stsr SR0004_b, R1115, 11	is op0510=0x3F & R1115 & SR0004_b; op1626=0x40 & op2731=0x0B { R1115 = SR0004_b; }
+:stsr SR0004_c, R1115, 12	is op0510=0x3F & R1115 & SR0004_c; op1626=0x40 & op2731=0x0C { R1115 = SR0004_c; }
 :stsr SR0004_d, R1115, 13	is op0510=0x3F & R1115 & SR0004_d; op1626=0x40 & op2731=0x0D { R1115 = SR0004_d; }
+:stsr SR0004_e, R1115, 14	is op0510=0x3F & R1115 & SR0004_e; op1626=0x40 & op2731=0x0E { R1115 = SR0004_e; }
+:stsr SR0004_f, R1115, 15	is op0510=0x3F & R1115 & SR0004_f; op1626=0x40 & op2731=0x0F { R1115 = SR0004_f; }
 
 # LDSR reg2, regID, selId
 :ldsr R0004, SR1115_1, 1	is op0510=0x3F & SR1115_1 & R0004; op1626=0x20 & op2731=0x01 { SR1115_1 = R0004; }
@@ -178,7 +257,12 @@ attach variables [ VR0004 VR1115 ] [
 :ldsr R0004, SR1115_5, 5	is op0510=0x3F & SR1115_5 & R0004; op1626=0x20 & op2731=0x05 { SR1115_5 = R0004; }
 :ldsr R0004, SR1115_6, 6	is op0510=0x3F & SR1115_6 & R0004; op1626=0x20 & op2731=0x06 { SR1115_6 = R0004; }
 :ldsr R0004, SR1115_7, 7	is op0510=0x3F & SR1115_7 & R0004; op1626=0x20 & op2731=0x07 { SR1115_7 = R0004; }
+:ldsr R0004, SR1115_a, 10	is op0510=0x3F & SR1115_a & R0004; op1626=0x20 & op2731=0x0A { SR1115_a = R0004; }
+:ldsr R0004, SR1115_b, 11	is op0510=0x3F & SR1115_b & R0004; op1626=0x20 & op2731=0x0B { SR1115_b = R0004; }
+:ldsr R0004, SR1115_c, 12	is op0510=0x3F & SR1115_c & R0004; op1626=0x20 & op2731=0x0C { SR1115_c = R0004; }
 :ldsr R0004, SR1115_d, 13	is op0510=0x3F & SR1115_d & R0004; op1626=0x20 & op2731=0x0D { SR1115_d = R0004; }
+:ldsr R0004, SR1115_e, 14	is op0510=0x3F & SR1115_e & R0004; op1626=0x20 & op2731=0x0E { SR1115_e = R0004; }
+:ldsr R0004, SR1115_f, 15	is op0510=0x3F & SR1115_f & R0004; op1626=0x20 & op2731=0x0F { SR1115_f = R0004; }
 
 
 # load linked (atomic)

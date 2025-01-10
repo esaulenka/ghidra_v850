@@ -25,7 +25,7 @@ define register offset=0x80 size=4 [
 define register offset=0x80 size=4 [
     EIPC    EIPSW   FEPC    FEPSW   ECR     PSW     FPSR    FPEPC
     FPST    FPCC    FPCFG   FPEC    _       EIIC    FEIC    DBIC
-    CTPC    CTPSW   DBPC    DBPSW   CTBP    DIR     DBG22   DBG23
+    CTPC    CTPSW   DBPC    DBPSW   CTBP    SNZCFG  DBG22   DBG23
     DBG24   DBG25   DBG26   DBG27   EIWR    FEWR    DBWR    BSEL
 ];
 @endif
@@ -129,7 +129,12 @@ define token instr(16)
 	SR0004_5 = (0,4)
 	SR0004_6 = (0,4)
 	SR0004_7 = (0,4)
+	SR0004_a = (0,4)
+	SR0004_b = (0,4)
+	SR0004_c = (0,4)
 	SR0004_d = (0,4)
+	SR0004_e = (0,4)
+	SR0004_f = (0,4)
 	VR0004 = (0,4)
 	SR1115 = (11,15)
 	SR1115_1 = (11,15)
@@ -139,7 +144,12 @@ define token instr(16)
 	SR1115_5 = (11,15)
 	SR1115_6 = (11,15)
 	SR1115_7 = (11,15)
+	SR1115_a = (11,15)
+	SR1115_b = (11,15)
+	SR1115_c = (11,15)
 	SR1115_d = (11,15)
+	SR1115_e = (11,15)
+	SR1115_f = (11,15)
 	VR1115 = (11,15)
 ;
 define token instr2(16)
@@ -248,7 +258,7 @@ attach variables [ SR0004 SR1115 ] [
 attach variables [ SR0004 SR1115 ] [
     EIPC    EIPSW   FEPC    FEPSW   ECR     PSW     FPSR    FPEPC
     FPST    FPCC    FPCFG   FPEC    _       EIIC    FEIC    DBIC
-    CTPC    CTPSW   DBPC    DBPSW   CTBP    DIR     DBG22   DBG23
+    CTPC    CTPSW   DBPC    DBPSW   CTBP    SNZCFG  DBG22   DBG23
     DBG24   DBG25   DBG26   DBG27   EIWR    FEWR    DBWR    BSEL
 ];
 @endif

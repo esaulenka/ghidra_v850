@@ -66,7 +66,7 @@ define register offset=0x180 size=4 [
     # selID = 11, Count function registers
     TSCOUNTL TSCOUNTH TSCTRL _ _ _ _ _
     PMUMCTRL PMGMCTRL _ _ _ _ _ _
-    _ _ _ _ _ _ _ _
+    PMCOUNT0_11 PMCTRL0_11 PMCOUNT1_11 PMCTRL1_11 PMCOUNT2_11 PMCTRL2_11 PMCOUNT3_11 PMCTRL3_11
     _ _ _ _ _ _ _ _
 
     # selID = 12, Hardware function registers
@@ -82,9 +82,9 @@ define register offset=0x180 size=4 [
     RDBCR _ _ _ _ _ _ _
 
     # selID = 14 Performance counters
-    PMCTRL0 PMCTRL1 PMCTRL2 PMCTRL3 PMCTRL4 PMCTRL5 PMCTRL6 PMCTRL7
+    PMCTRL0_14 PMCTRL1_14 PMCTRL2_14 PMCTRL3_14 PMCTRL4_14 PMCTRL5_14 PMCTRL6_14 PMCTRL7_14
     _ _ _ _ _ _ _ _
-    PMCOUNT0 PMCOUNT1 PMCOUNT2 PMCOUNT3 PMCOUNT4 PMCOUNT5 PMCOUNT6 PMCOUNT7
+    PMCOUNT0_14 PMCOUNT1_14 PMCOUNT2_14 PMCOUNT3_14 PMCOUNT4_14 PMCOUNT5_14 PMCOUNT6_14 PMCOUNT7_14
     _ _ _ _ _ _ _ _
 	
     # selID = 15 Performance counters
@@ -161,7 +161,7 @@ attach variables [ SR0004_b SR1115_b ] [
     # selID = 11, Count function registers
     TSCOUNTL TSCOUNTH TSCTRL _ _ _ _ _
     PMUMCTRL PMGMCTRL _ _ _ _ _ _
-    _ _ _ _ _ _ _ _
+    PMCOUNT0_11 PMCTRL0_11 PMCOUNT1_11 PMCTRL1_11 PMCOUNT2_11 PMCTRL2_11 PMCOUNT3_11 PMCTRL3_11
     _ _ _ _ _ _ _ _
 ];
 attach variables [ SR0004_c SR1115_c ] [
@@ -180,9 +180,9 @@ attach variables [ SR0004_d SR1115_d ] [
 ];
 attach variables [ SR0004_e SR1115_e ] [
     # selID = 14 Performance counters
-    PMCTRL0 PMCTRL1 PMCTRL2 PMCTRL3 PMCTRL4 PMCTRL5 PMCTRL6 PMCTRL7
+    PMCTRL0_14 PMCTRL1_14 PMCTRL2_14 PMCTRL3_14 PMCTRL4_14 PMCTRL5_14 PMCTRL6_14 PMCTRL7_14
     _ _ _ _ _ _ _ _
-    PMCOUNT0 PMCOUNT1 PMCOUNT2 PMCOUNT3 PMCOUNT4 PMCOUNT5 PMCOUNT6 PMCOUNT7
+    PMCOUNT0_14 PMCOUNT1_14 PMCOUNT2_14 PMCOUNT3_14 PMCOUNT4_14 PMCOUNT5_14 PMCOUNT6_14 PMCOUNT7_14
     _ _ _ _ _ _ _ _
 ];
 attach variables [ SR0004_f SR1115_f ] [

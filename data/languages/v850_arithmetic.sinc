@@ -8,8 +8,8 @@
 
 
 # MOV reg1, reg2
-:mov R0004, r1115 is op0510=0x00 & R0004 & r1115 {
-	r1115 = R0004;
+:mov R0004, R1115 is op0510=0x00 & R0004 & R1115 {
+	R1115 = R0004;
 }
 
 # DIVH reg1, reg2
